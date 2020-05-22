@@ -1,0 +1,9 @@
+.kanception-card {
+  margin: 10px;
+  background: #4043b9;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+}
