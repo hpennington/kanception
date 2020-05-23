@@ -1,0 +1,72 @@
+.kanban {
+  overflow: auto;
+  height: calc(100% - 50px);
+}
+
+#kanbanRoot {
+  display: flex;
+  color: white;
+  text-align: center;
+}
+
+#kanbanRoot button {
+  background: inherit;
+  border: none;
+  color: white;
+  font-size: 2em;
+}
+
+.column {
+  width: 400px;
+  min-height: 50px;
+  max-height: calc(100vh - 250px);
+  background: #242628;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  overflow-y: auto;
+  scrollbar-width: none;  /* Firefox */
+}
+
+.column::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
+}
+
+.pointer:hover {
+  cursor: pointer;
+}
+
+#kanbanRoot .add-group-btn {
+  font-size: 1em;
+  background: #242628;
+}
+
+.group-title-input {
+  font-size: 1.5em;
+  background: inherit;
+  color: white;
+  border: none;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  white-space: nowrap;
+}
+
+.hide {
+  visibility: hidden;
+}
+
+#context-menu {
+ position: absolute;
+ width: 200px;
+ height: 250px;
+ background: white;
+ border-radius: 5px;
+ color: black;
+ box-shadow: 0 0 0 2px #222;
+}
+
+#context-menu h6 {
+  padding: 10px;
+  border-bottom: 1px solid black;
+}

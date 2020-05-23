@@ -1,0 +1,19 @@
+.kanception-card {
+  margin: 10px;
+  background: #4043b9;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+}
+
+.kanception-card textarea {
+  overflow: visible;
+  scrollbar-width: none;  /* Firefox */
+}
+
+textarea::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
+}
+

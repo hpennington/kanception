@@ -1,17 +1,24 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import Kanban from './kanban'
+import {
+  setGroups,
+  setBoards,
+  addGroup,
+  addBoard,
+  updateBoard,
+  updateGroup,
+} from './kanbanSlice'
 
-export default class KanbanContainer extends React.Component {
+class KanbanContainer extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      boards: [],
-      groups: [],
       selectedNode: null
     }
 
-    this.owner = '5ec72e737651b82e08df7358'
+    this.owner = '5ec85660aca5a5115eda6c56'
   }
 
   constructQueryArray(url, array, name) {
@@ -54,15 +61,16 @@ export default class KanbanContainer extends React.Component {
       const boards = await boardsResult.json()
 
       const groupIds = boards.find(board => board._id === root.board).groups
+      console.log(groupIds)
+      console.log(boards)
       const groupsUrl = this.constructQueryArray(api + '/groups', groupIds, 'ids')
 
       const groupsResult = await fetch(groupsUrl)
       const groups = await groupsResult.json()
+      console.log(groups)
 
-      this.setState({
-        groups: groups,
-        boards: boards,
-      })
+      this.props.dispatch(setGroups({groups: groups}))
+      this.props.dispatch(setBoards({boards: boards}))
 
       return root._id
 
@@ -92,37 +100,44 @@ export default class KanbanContainer extends React.Component {
     const addResult = await fetch(url, {method: 'POST'})
     const result = await addResult.json()
 
+    this.props.dispatch(addBoard({board: result.board}))
 
-    this.setState(state => {
-      return {
-        boards: [result.board, ...state.boards]
-      }
-    })
   }
 
   async onUpdateCard(id, object) {
     console.log(id)
     console.log(object)
 
-    this.setState(state => {
+    this.props.dispatch(updateBoard({id: id, object: object}))
+    const api = 'http://localhost:4000'
+    const url = api + '/boards/update'
+    object._id = this.props.boards.find(board => board._id === id)._id
+    console.log(object)
 
-      const updatedBoard = Object.assign(state.boards.find(board => board._id === id), object)
-      return {
-        boards: [updatedBoard, ...state.boards.filter(board => board._id !== id)]
-      }
-    }, async () => {
-      const api = 'http://localhost:4000'
-      const url = api + '/boards/update'
-      object._id = this.state.boards.find(board => board._id === id)._id
-      console.log(object)
-
-      const updateResult = await fetch(url,
-        {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(object)}
-      )
-
-      console.log(updateResult)
+    const updateResult = await fetch(url, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(object)
     })
 
+    console.log(updateResult)
+
+  }
+
+  async onUpdateGroup(id, object) {
+    console.log(id)
+    console.log(object)
+    this.props.dispatch(updateGroup({id: id, object: object}))
+    const api = 'http://localhost:4000'
+    const url = api + '/groups/update'
+    object._id = this.props.groups.find(group => group._id === id)._id
+    console.log(object)
+
+    const updateResult = await fetch(url, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(object)
+    })
   }
 
   async fetchBoardsThrowAwayReturn() {
@@ -175,7 +190,9 @@ export default class KanbanContainer extends React.Component {
             const selectedNode = tree.find(node => node.board === cardId)._id
 
             console.log(selectedNode)
-            this.setState({groups: groups, boards: boards, selectedNode: selectedNode})
+            this.setState({selectedNode: selectedNode})
+            this.props.dispatch(setGroups({groups: groups}))
+            this.props.dispatch(setBoards({boards: boards}))
           }
 
 
@@ -188,15 +205,43 @@ export default class KanbanContainer extends React.Component {
 
   }
 
+  async onAddGroup() {
+    const owner = this.owner
+    const api = 'http://localhost:4000'
+    const url = api + '/groups/add?owner=' + owner + '&board=' + this.state.selectedNode
+
+    const addResult = await fetch(url, {method: 'POST'})
+    const group = await addResult.json()
+
+    console.log(group)
+
+    this.props.dispatch(addGroup({group: group}))
+
+  }
+
   render() {
     return (
       <Kanban
+        boards={this.props.boards}
+        groups={this.props.groups}
         onCardClick={this.onCardClick.bind(this)}
         onAddCard={this.onAddCard.bind(this)}
         onUpdateCard={this.onUpdateCard.bind(this)}
-        boards={this.state.boards}
-        groups={this.state.groups}
+        onAddGroupClick={this.onAddGroup.bind(this)}
+        onUpdateGroup={this.onUpdateGroup.bind(this)}
       />
     )
   }
 }
+
+const mapStateToProps = state => {
+  const groups = state.kanban.groups
+  const boards = state.kanban.boards
+
+  return {
+    groups,
+    boards,
+  }
+}
+
+export default connect(mapStateToProps)(KanbanContainer)

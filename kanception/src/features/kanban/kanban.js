@@ -1,15 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import Card from './card'
 import './kanban.css'
 
 export default function Kanban(props) {
+  const [contextMenuOpen, setContextMenuOpen] = useState(false)
+
   const onAddCard = e => {
-    props.onAddCard(e.target.id)
+    props.onAddCard(e.target.dataset.groupId)
   }
 
   const onUpdateCardTitle = e => {
     props.onUpdateCard(e.target.parentNode.id, {title: e.target.value})
+  }
+
+  const onUpdateGroupTitle = e => {
+    props.onUpdateGroup(e.target.dataset.groupId, {title: e.target.value})
   }
 
   return (
@@ -24,8 +30,15 @@ export default function Kanban(props) {
           >
             {props.groups.map((group, index) =>
             <div>
-              <h4>{group.title}</h4>
-              <button id={group._id} onClick={onAddCard}>+</button>
+              <button className="hide">+</button>
+              <input placeholder="Group Title"
+                className="group-title-input"
+                type="text"
+                onChange={onUpdateGroupTitle}
+                value={group.title}
+                data-group-id={group._id}
+              ></input>
+              <button data-group-id={group._id} onClick={onAddCard}>+</button>
               <Draggable draggableId={'c-' + index.toString()} index={index} type="COLUMN">
                 {dragProvided =>
                 <div
@@ -44,9 +57,14 @@ export default function Kanban(props) {
                       props.boards
                       .filter(board => board.group === group._id)
                       .map((column, cardIndex) =>
-                        <Card onCardClick={props.onCardClick}
-                          id={column._id} onUpdateCardTitle={onUpdateCardTitle}
-                          title={column.title} column={index} index={cardIndex} />
+                        <Card
+                          onCardClick={props.onCardClick}
+                          id={column._id}
+                          onUpdateCardTitle={onUpdateCardTitle}
+                          title={column.title}
+                          column={index}
+                          index={cardIndex}
+                        />
                       )
                       }
                       {provided2.placeholder}
@@ -58,6 +76,23 @@ export default function Kanban(props) {
               </Draggable>
             </div>
             )}
+            <diV>
+              <button className="hide">+</button>
+              <input
+                placeholder="Group Title"
+                className="group-title-input hide"
+                type="text"
+              ></input>
+              <button onClick={props.onAddGroupClick}
+                className="column pointer add-group-btn"
+                style={{height: "fit-content"}}
+              >
+              {
+                'Add New Group'
+              }
+              </button>
+            </diV>
+            <ContextMenu />
           </div>
           )}
           </Droppable>
@@ -66,3 +101,10 @@ export default function Kanban(props) {
   )
 }
 
+const ContextMenu = props => {
+  return (
+    <div id="context-menu">
+      <h6>Delete Card</h6>
+    </div>
+  )
+}

@@ -1,9 +1,22 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import TextAreaAutoSize from 'react-textarea-autosize'
 import './card.css'
 
 export default function Card(props) {
+  const container = useRef(null)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    if (mounted !== true) {
+      document.getElementById(props.id).oncontextmenu = e => {
+        e.preventDefault()
+        console.log(e)
+      }
+      setMounted(true)
+    }
+  })
+
   return (
     <Draggable
       draggableId={'card-' + props.column.toString() + props.index.toString()} index={props.index}

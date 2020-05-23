@@ -1,6 +1,6 @@
 import React from 'react'
 import Toolbar from './toolbar'
-import KanbanContainer from './kanban-container'
+import KanbanContainer from './features/kanban/kanban-container'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 
