@@ -45,12 +45,14 @@ export default function Kanban(props) {
   const onContextMenuCardClick = (id, event) => {
     setContextCardId(id)
     setContextMenuCardOpen(!contextMenuCardOpen)
+    setContextMenuGroupOpen(false)
     setContextMenuCardPosition({x: event.clientX, y: event.clientY})
   }
 
   const onContextMenuGroupClick = (id, event) => {
     setContextGroupId(id)
     setContextMenuGroupOpen(!contextMenuGroupOpen)
+    setContextMenuCardOpen(false)
     setContextMenuGroupPosition({x: event.clientX, y: event.clientY})
   }
 

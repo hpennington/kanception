@@ -18,7 +18,7 @@ class KanbanContainer extends React.Component {
       selectedNode: null
     }
 
-    this.owner = '5ec8a4f0316148360114f57d'
+    this.owner = '5ec85660aca5a5115eda6c56'
   }
 
   constructQueryArray(url, array, name) {
