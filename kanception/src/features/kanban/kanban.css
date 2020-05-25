@@ -80,3 +80,8 @@
 .context-menu .border-top {
   border-top: 1px solid #aaa;
 }
+
+.group {
+  width: 400px;
+  margin: 10px;
+}

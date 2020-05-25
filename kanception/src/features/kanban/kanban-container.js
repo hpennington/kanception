@@ -18,7 +18,7 @@ class KanbanContainer extends React.Component {
       selectedNode: null
     }
 
-    this.owner = '5ecc2ea73d0d530e64bb5e51'
+    this.owner = '5ecc321a843dbc117a2a8bd9'
   }
 
   constructQueryArray(url, array, name) {
@@ -70,6 +70,7 @@ class KanbanContainer extends React.Component {
       console.log(groups)
 
       groups.sort((a, b) => a.order - b.order)
+      boards.sort((a, b) => b.order - a.order)
 
       this.props.dispatch(setGroups({groups: groups}))
       this.props.dispatch(setBoards({boards: boards}))

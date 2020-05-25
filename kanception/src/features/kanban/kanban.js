@@ -77,7 +77,7 @@ export default function Kanban(props) {
             {...provided.droppableProps}
           >
             {props.groups.map((group, index) =>
-            <div>
+            <div className="group">
               <button className="hide">+</button>
               <input placeholder="Group Title"
                 className="group-title-input"
@@ -126,7 +126,7 @@ export default function Kanban(props) {
               </Draggable>
             </div>
             )}
-            <diV>
+            <diV className="group">
               <button className="hide">+</button>
               <input
                 placeholder="Group Title"
