@@ -10,9 +10,13 @@ export default function Card(props) {
   useEffect(() => {
     if (mounted !== true) {
       document.getElementById(props.id).oncontextmenu = e => {
+        console.log('card context menu')
         e.preventDefault()
-        console.log(e)
+        e.stopPropagation()
+
+        props.onContextClick(props.id, e)
       }
+
       setMounted(true)
     }
   })

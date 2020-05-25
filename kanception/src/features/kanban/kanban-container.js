@@ -18,7 +18,7 @@ class KanbanContainer extends React.Component {
       selectedNode: null
     }
 
-    this.owner = '5ec85660aca5a5115eda6c56'
+    this.owner = '5ec8a4f0316148360114f57d'
   }
 
   constructQueryArray(url, array, name) {
@@ -219,6 +219,22 @@ class KanbanContainer extends React.Component {
 
   }
 
+  onCardDelete(id) {
+    const deleteCard = window.confirm('Hit OK to delete the card')
+
+    if (deleteCard === true) {
+      console.log('delete ' + id)
+    }
+  }
+
+  onGroupDelete(id, title) {
+    const deleteGroup = window.prompt('Confirm group name to delete:')
+
+    if (deleteGroup === title) {
+      console.log('detete group: ' + id)
+    }
+  }
+
   render() {
     return (
       <Kanban
@@ -229,6 +245,8 @@ class KanbanContainer extends React.Component {
         onUpdateCard={this.onUpdateCard.bind(this)}
         onAddGroupClick={this.onAddGroup.bind(this)}
         onUpdateGroup={this.onUpdateGroup.bind(this)}
+        onCardDelete={this.onCardDelete.bind(this)}
+        onGroupDelete={this.onGroupDelete.bind(this)}
       />
     )
   }

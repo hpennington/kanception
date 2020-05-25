@@ -1,10 +1,34 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import Card from './card'
 import './kanban.css'
 
 export default function Kanban(props) {
-  const [contextMenuOpen, setContextMenuOpen] = useState(false)
+  const [contextMenuCardOpen, setContextMenuCardOpen] = useState(false)
+  const [contextCardId, setContextCardId] = useState(null)
+  const [contextMenuCardPosition, setContextMenuCardPosition] = useState({x: 0, y: 0})
+  const [contextMenuGroupPosition, setContextMenuGroupPosition] = useState({x: 0, y: 0})
+  const [contextMenuGroupOpen, setContextMenuGroupOpen] = useState(false)
+  const [contextGroupId, setContextGroupId] = useState(null)
+
+  useEffect(() => {
+    const groups = document.getElementsByClassName('column')
+
+    if (groups.length > 1) {
+      console.log(groups.length)
+      for (const group of groups) {
+
+        group.oncontextmenu = e => {
+          console.log('group contextmenu')
+          e.preventDefault()
+          e.stopPropagation()
+          onContextMenuGroupClick(e.target.dataset.groupId, e)
+        }
+      }
+
+    }
+
+  })
 
   const onAddCard = e => {
     props.onAddCard(e.target.dataset.groupId)
@@ -18,8 +42,30 @@ export default function Kanban(props) {
     props.onUpdateGroup(e.target.dataset.groupId, {title: e.target.value})
   }
 
+  const onContextMenuCardClick = (id, event) => {
+    setContextCardId(id)
+    setContextMenuCardOpen(!contextMenuCardOpen)
+    setContextMenuCardPosition({x: event.clientX, y: event.clientY})
+  }
+
+  const onContextMenuGroupClick = (id, event) => {
+    setContextGroupId(id)
+    setContextMenuGroupOpen(!contextMenuGroupOpen)
+    setContextMenuGroupPosition({x: event.clientX, y: event.clientY})
+  }
+
+  const onGroupDelete = e => {
+    setContextMenuGroupOpen(false)
+    props.onGroupDelete(contextGroupId, props.groups.find(group => group._id === contextGroupId).title)
+  }
+
+  const onBoardClick = () => {
+    setContextMenuCardOpen(false)
+    setContextMenuGroupOpen(false)
+  }
+
   return (
-    <div className="kanban">
+    <div className="kanban" onClick={onBoardClick}>
       <DragDropContext>
         <Droppable droppableId="kanbanRoot" direction="horizontal" type="COLUMN">
           {provided => (
@@ -42,6 +88,7 @@ export default function Kanban(props) {
               <Draggable draggableId={'c-' + index.toString()} index={index} type="COLUMN">
                 {dragProvided =>
                 <div
+                  data-group-id={group._id}
                   className="column"
                   ref={dragProvided.innerRef}
                   {...dragProvided.draggableProps}
@@ -64,6 +111,7 @@ export default function Kanban(props) {
                           title={column.title}
                           column={index}
                           index={cardIndex}
+                          onContextClick={onContextMenuCardClick}
                         />
                       )
                       }
@@ -92,7 +140,20 @@ export default function Kanban(props) {
               }
               </button>
             </diV>
-            <ContextMenu />
+            <CardContextMenu
+              cardId={contextCardId}
+              isOpen={contextMenuCardOpen}
+              onClose={e => setContextMenuCardOpen(false)}
+              onCardDelete={e => props.onCardDelete(contextCardId)}
+              position={contextMenuCardPosition}
+            />
+            <GroupContextMenu
+              groupId={contextGroupId}
+              isOpen={contextMenuGroupOpen}
+              onClose={e => setContextMenuGroupOpen(false)}
+              onGroupDelete={onGroupDelete}
+              position={contextMenuGroupPosition}
+            />
           </div>
           )}
           </Droppable>
@@ -101,10 +162,52 @@ export default function Kanban(props) {
   )
 }
 
-const ContextMenu = props => {
+const CardContextMenu = props => {
+  const style = {
+    visibility: props.isOpen === true ? 'visible' : 'hidden',
+    top: props.position.y,
+    left: props.position.x,
+  }
+
+  const onContextMenu = e => {
+    e.preventDefault()
+    props.onClose(e)
+  }
+
   return (
-    <div id="context-menu">
-      <h6>Delete Card</h6>
+    <div
+      data-card-id={props.cardId}
+      className="context-menu"
+      style={style}
+      onContextMenu={onContextMenu}
+    >
+      <h6 onClick={props.onCardDelete} className="border-bottom">Delete Card</h6>
+      <h6 onClick={props.onClose} className="border-top">Close</h6>
+    </div>
+  )
+}
+
+const GroupContextMenu = props => {
+  const style = {
+    visibility: props.isOpen === true ? 'visible' : 'hidden',
+    top: props.position.y,
+    left: props.position.x,
+  }
+
+  const onContextMenu = e => {
+    e.preventDefault()
+    props.onClose(e)
+  }
+
+  return (
+    <div
+      data-group-id={props.groupId}
+      className="context-menu"
+      style={style}
+      onContextMenu={onContextMenu}
+    >
+      <h6 onClick={props.onGroupDelete} className="border-bottom">Delete Group</h6>
+      <h6 onClick={props.onClose} className="border-top">Close</h6>
     </div>
   )
 }
