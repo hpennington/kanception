@@ -18,7 +18,7 @@ class KanbanContainer extends React.Component {
       selectedNode: null
     }
 
-    this.owner = '5ec85660aca5a5115eda6c56'
+    this.owner = '5ecc2ea73d0d530e64bb5e51'
   }
 
   constructQueryArray(url, array, name) {
@@ -69,6 +69,8 @@ class KanbanContainer extends React.Component {
       const groups = await groupsResult.json()
       console.log(groups)
 
+      groups.sort((a, b) => a.order - b.order)
+
       this.props.dispatch(setGroups({groups: groups}))
       this.props.dispatch(setBoards({boards: boards}))
 
@@ -101,7 +103,6 @@ class KanbanContainer extends React.Component {
     const result = await addResult.json()
 
     this.props.dispatch(addBoard({board: result.board}))
-
   }
 
   async onUpdateCard(id, object) {
@@ -121,7 +122,6 @@ class KanbanContainer extends React.Component {
     })
 
     console.log(updateResult)
-
   }
 
   async onUpdateGroup(id, object) {
@@ -194,15 +194,12 @@ class KanbanContainer extends React.Component {
             this.props.dispatch(setGroups({groups: groups}))
             this.props.dispatch(setBoards({boards: boards}))
           }
-
-
         }
       }
 
     } catch(error) {
       console.log(error)
     }
-
   }
 
   async onAddGroup() {
@@ -216,7 +213,6 @@ class KanbanContainer extends React.Component {
     console.log(group)
 
     this.props.dispatch(addGroup({group: group}))
-
   }
 
   onCardDelete(id) {

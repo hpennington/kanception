@@ -30,6 +30,7 @@ export const kanbanSlice = createSlice({
       let group = state.groups.find(group => group._id === action.payload.id)
       group = Object.assign(group, action.payload.object)
       state.groups = [group, ...state.groups.filter(group => group._id !== action.payload.id)]
+      state.groups.sort((a, b) => a.order - b.order)
     },
   },
 });
