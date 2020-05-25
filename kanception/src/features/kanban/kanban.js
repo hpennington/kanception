@@ -78,15 +78,17 @@ export default function Kanban(props) {
           >
             {props.groups.map((group, index) =>
             <div className="group">
-              <button className="hide">+</button>
-              <input placeholder="Group Title"
-                className="group-title-input"
-                type="text"
-                onChange={onUpdateGroupTitle}
-                value={group.title}
-                data-group-id={group._id}
-              ></input>
-              <button data-group-id={group._id} onClick={onAddCard}>+</button>
+              <div className="group-control">
+                <button className="hide">+</button>
+                <input placeholder="Group Title"
+                  className="group-title-input"
+                  type="text"
+                  onChange={onUpdateGroupTitle}
+                  value={group.title}
+                  data-group-id={group._id}
+                ></input>
+                <button data-group-id={group._id} onClick={onAddCard}>+</button>
+              </div>
               <Draggable draggableId={'c-' + index.toString()} index={index} type="COLUMN">
                 {dragProvided =>
                 <div

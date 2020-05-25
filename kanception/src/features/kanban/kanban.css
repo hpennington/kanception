@@ -85,3 +85,8 @@
   width: 400px;
   margin: 10px;
 }
+
+.group-control {
+  display: flex;
+  justify-content: center;
+}
