@@ -23,7 +23,7 @@ export default function Card(props) {
 
   return (
     <Draggable
-      draggableId={'card-' + props.column.toString() + props.index.toString()} index={props.index}
+      draggableId={props.id} index={props.index}
     >
       {provided => (
       <div className="kanception-card"

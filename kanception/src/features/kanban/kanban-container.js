@@ -18,7 +18,7 @@ class KanbanContainer extends React.Component {
       selectedNode: null
     }
 
-    this.owner = '5ecc6be5bac28f1362f64da2'
+    this.owner = '5ecc942a48c60c6051d2d9b4'
   }
 
   constructQueryArray(url, array, name) {
@@ -112,8 +112,7 @@ class KanbanContainer extends React.Component {
 
     this.props.dispatch(updateBoard({id: id, object: object}))
     const api = 'http://localhost:4000'
-    const url = api + '/boards/update'
-    object._id = this.props.boards.find(board => board._id === id)._id
+    const url = api + '/boards/update' + '?id=' + id
     console.log(object)
 
     const updateResult = await fetch(url, {
@@ -130,8 +129,7 @@ class KanbanContainer extends React.Component {
     console.log(object)
     this.props.dispatch(updateGroup({id: id, object: object}))
     const api = 'http://localhost:4000'
-    const url = api + '/groups/update'
-    object._id = this.props.groups.find(group => group._id === id)._id
+    const url = api + '/groups/update' + '?id=' + id
     console.log(object)
 
     const updateResult = await fetch(url, {
@@ -238,7 +236,7 @@ class KanbanContainer extends React.Component {
 
     // Splice groups
     const newGroupsOrder = Array.from(this.props.groups)
-    console.log(newGroupsOrder)
+
     newGroupsOrder.splice(source, 1)
     newGroupsOrder.splice(destination, 0, this.props.groups
       .filter(group => group._id === id)[0])
@@ -246,6 +244,50 @@ class KanbanContainer extends React.Component {
     newGroupsOrder.forEach((group, index) => {
       this.onUpdateGroup(group._id, {order: index})
     })
+  }
+
+  onCardOrderUpdate(id, groupId, source, destination) {
+    const newCardsOrder = Array.from(this.props.boards
+      .filter(board => board.group === groupId)
+      .sort((a, b) => b.order - a.order))
+
+    newCardsOrder.splice(source, 1)
+    newCardsOrder.splice(destination, 0,
+      this.props.boards.find(board => board._id === id)
+    )
+
+    newCardsOrder.forEach((board, index) => {
+      this.onUpdateCard(board._id, {order: newCardsOrder.length - index - 1})
+    })
+  }
+
+  onCardGroupUpdate(id, destinationId, destination) {
+    const order = Math.max(...this.props.boards
+      .filter(board => board.group === destinationId)
+      .map(board => board.order)) + 1
+
+    const object = {group: destinationId, order: order}
+    this.props.dispatch(updateBoard({id: id, object: object}))
+
+    const boards = this.props.boards
+      .filter(board => board.group === destinationId)
+      .sort((a, b) => b.order - a.order)
+    console.log(boards)
+
+    boards.splice(order, 1)
+    boards.splice(destination, 0,
+      this.props.boards.find(board => board._id === id)
+    )
+
+    console.log(boards)
+
+    boards.forEach((board, index) => {
+      console.log('setting board ')
+      const newOrder = boards.length - 1 - index
+      console.log(newOrder)
+      this.onUpdateCard(board._id, {order: newOrder})
+    })
+
   }
 
   render() {
@@ -261,6 +303,8 @@ class KanbanContainer extends React.Component {
         onCardDelete={this.onCardDelete.bind(this)}
         onGroupDelete={this.onGroupDelete.bind(this)}
         onGroupOrderUpdate={this.onGroupOrderUpdate.bind(this)}
+        onCardOrderUpdate={this.onCardOrderUpdate.bind(this)}
+        onCardGroupUpdate={this.onCardGroupUpdate.bind(this)}
       />
     )
   }

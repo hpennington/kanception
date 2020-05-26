@@ -91,3 +91,7 @@
   display: flex;
   justify-content: center;
 }
+
+.rbd-droppable-context {
+  min-height: 40px;
+}

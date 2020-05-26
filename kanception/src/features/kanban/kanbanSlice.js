@@ -23,6 +23,7 @@ export const kanbanSlice = createSlice({
       state.boards.sort((a, b) => b.order - a.order)
     },
     updateBoard: (state, action) => {
+      console.log(action.payload)
       let board = state.boards.find(board => board._id === action.payload.id)
       board = Object.assign(board, action.payload.object)
       state.boards = [board, ...state.boards.filter(board => board._id !== action.payload.id)]

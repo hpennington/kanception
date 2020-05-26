@@ -80,12 +80,27 @@ export default function Kanban(props) {
     if (e.source.index !== e.destination.index) {
       props.onGroupOrderUpdate(
         e.draggableId,
-        e.source.index, e.destination.index
+        e.source.index,
+        e.destination.index
       )
     }
   }
 
   const onCardDrop = e => {
+    if (e.source.droppableId === e.destination.droppableId) {
+      props.onCardOrderUpdate(
+        e.draggableId,
+        e.source.droppableId,
+        e.source.index,
+        e.destination.index,
+      )
+    } else {
+      props.onCardGroupUpdate(
+        e.draggableId,
+        e.destination.droppableId,
+        e.destination.index,
+      )
+    }
   }
 
   return (
@@ -126,6 +141,7 @@ export default function Kanban(props) {
                   <Droppable droppableId={group._id}>
                     {provided2 => (
                     <div
+                      className="rbd-droppable-context"
                       {...provided2.droppableProps}
                       ref={provided2.innerRef}
                     >
@@ -134,6 +150,7 @@ export default function Kanban(props) {
                       .filter(board => board.group === group._id)
                       .map((column, cardIndex) =>
                         <Card
+                          key={column._id}
                           onCardClick={props.onCardClick}
                           id={column._id}
                           onUpdateCardTitle={onUpdateCardTitle}
