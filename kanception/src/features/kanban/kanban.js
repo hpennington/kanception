@@ -20,6 +20,7 @@ export default function Kanban(props) {
 
         group.oncontextmenu = e => {
           console.log('group contextmenu')
+          console.log(e.target)
           e.preventDefault()
           e.stopPropagation()
           onContextMenuGroupClick(e.target.dataset.groupId, e)
@@ -142,6 +143,7 @@ export default function Kanban(props) {
                     {provided2 => (
                     <div
                       className="rbd-droppable-context"
+                      data-group-id={group._id}
                       {...provided2.droppableProps}
                       ref={provided2.innerRef}
                     >
