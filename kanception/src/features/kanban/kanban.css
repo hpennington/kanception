@@ -23,7 +23,7 @@
   max-height: calc(100vh - 250px);
   background: #242628;
   margin: 10px;
-  padding: 10px;
+  border: solid #242628 10px;
   border-radius: 5px;
   overflow-y: auto;
   scrollbar-width: none;  /* Firefox */
@@ -83,8 +83,7 @@
 }
 
 .group {
-  width: 400px;
-  margin: 10px;
+  width: 420px;
 }
 
 .group-control {
