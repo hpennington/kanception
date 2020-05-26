@@ -12,15 +12,13 @@ export default function Kanban(props) {
   const [contextGroupId, setContextGroupId] = useState(null)
 
   useEffect(() => {
-    const groups = document.getElementsByClassName('column')
+    const groups = document.getElementsByClassName('group-container')
 
     if (groups.length > 1) {
       console.log(groups.length)
       for (const group of groups) {
 
         group.oncontextmenu = e => {
-          console.log('group contextmenu')
-          console.log(e.target)
           e.preventDefault()
           e.stopPropagation()
           onContextMenuGroupClick(e.target.dataset.groupId, e)
@@ -119,14 +117,19 @@ export default function Kanban(props) {
                 <Draggable key={group._id}
                   draggableId={group._id}
                   index={index} type="COLUMN"
+                  data-group-id={group._id}
                 >
                   {dragProvided =>
                 <div
+                  className="group-container"
                   ref={dragProvided.innerRef}
+                  data-group-id={group._id}
                   {...dragProvided.draggableProps}
                   {...dragProvided.dragHandleProps}
                 >
-                  <div className="group-control">
+                  <div className="group-control"
+                    data-group-id={group._id}
+                  >
                     <button className="hide">+</button>
                     <input placeholder="Group Title"
                       className="group-title-input"
