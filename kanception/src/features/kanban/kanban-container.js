@@ -15,10 +15,9 @@ class KanbanContainer extends React.Component {
     super(props)
 
     this.state = {
-      selectedNode: null
+      prevSelectedNode: null,
     }
 
-    this.owner = '5ecc942a48c60c6051d2d9b4'
   }
 
   constructQueryArray(url, array, name) {
@@ -38,12 +37,20 @@ class KanbanContainer extends React.Component {
   }
 
   async componentWillMount() {
-    const nodeId = await this.fetchBoards()
-    this.setState({selectedNode: nodeId})
+    const nodeId = await this.fetchBoardsInit()
+    this.props.setSelectedNode(nodeId)
   }
 
-  async fetchBoards() {
-    const owner = this.owner
+  async componentDidUpdate() {
+    console.log('did update')
+    if (this.state.prevSelectedNode !== this.props.selectedNode) {
+      this.setState({prevSelectedNode: this.props.selectedNode})
+      this.fetchBoards()
+    }
+  }
+
+  async fetchBoardsInit() {
+    const owner = this.props.owner
     const api = 'http://localhost:4000'
     const treeUrl = api + '/tree?owner=' + owner
 
@@ -84,18 +91,60 @@ class KanbanContainer extends React.Component {
     return null
   }
 
+  async fetchBoards() {
+    const owner = this.props.owner
+    const api = 'http://localhost:4000'
+    const treeUrl = api + '/tree?owner=' + owner
+
+    try {
+      const treeResult = await fetch(treeUrl)
+      const tree = await treeResult.json()
+      console.log(tree)
+      const root = tree.find(node => node._id === this.props.selectedNode)
+      let boardIds = tree.filter(node => node.parent === root._id).map(node => node.board)
+      boardIds.push(root.board)
+
+      const boardsUrl = this.constructQueryArray(api + '/boards', boardIds, 'ids')
+
+      const boardsResult = await fetch(boardsUrl)
+      const boards = await boardsResult.json()
+
+      const groupIds = boards.find(board => board._id === root.board).groups
+      console.log(groupIds)
+      console.log(boards)
+      const groupsUrl = this.constructQueryArray(api + '/groups', groupIds, 'ids')
+
+      const groupsResult = await fetch(groupsUrl)
+      const groups = await groupsResult.json()
+      console.log(groups)
+
+      groups.sort((a, b) => a.order - b.order)
+      boards.sort((a, b) => b.order - a.order)
+
+      this.props.dispatch(setGroups({groups: groups}))
+      this.props.dispatch(setBoards({boards: boards}))
+
+      return root._id
+
+    } catch(error) {
+      console.log(error)
+    }
+
+    return null
+  }
+
   async onAddCard(groupId) {
     console.log(groupId)
-    console.log(this.state.selectedNode)
+    console.log(this.props.selectedNode)
     const api = 'http://localhost:4000'
     const title = ''
-    const owner = this.owner
+    const owner = this.props.owner
     const treeUrl = api + '/tree?owner=' + owner
     const treeResult = await fetch(treeUrl)
     const tree = await treeResult.json()
     console.log(tree)
 
-    const parent = this.state.selectedNode
+    const parent = this.props.selectedNode
     console.log(parent)
     const url = api + '/boards/add?group=' + groupId
       + '&title=' + title + '&owner=' + owner + '&parent=' + parent
@@ -139,14 +188,10 @@ class KanbanContainer extends React.Component {
     })
   }
 
-  async fetchBoardsThrowAwayReturn() {
-    const nodeId = await this.fetchBoards()
-  }
-
   async onCardClick(cardId) {
     console.log(cardId)
 
-    const owner = this.owner
+    const owner = this.props.owner
     const api = 'http://localhost:4000'
     const clickedBoardUrl = this.constructQueryArray(api + '/boards', [cardId], 'ids')
 
@@ -189,7 +234,7 @@ class KanbanContainer extends React.Component {
             const selectedNode = tree.find(node => node.board === cardId)._id
 
             console.log(selectedNode)
-            this.setState({selectedNode: selectedNode})
+            this.props.setSelectedNode( selectedNode)
             this.props.dispatch(setGroups({groups: groups}))
             this.props.dispatch(setBoards({boards: boards}))
           }
@@ -202,9 +247,9 @@ class KanbanContainer extends React.Component {
   }
 
   async onAddGroup() {
-    const owner = this.owner
+    const owner = this.props.owner
     const api = 'http://localhost:4000'
-    const url = api + '/groups/add?owner=' + owner + '&board=' + this.state.selectedNode
+    const url = api + '/groups/add?owner=' + owner + '&board=' + this.props.selectedNode
 
     const addResult = await fetch(url, {method: 'POST'})
     const group = await addResult.json()
