@@ -109,66 +109,69 @@ export default function Kanban(props) {
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="kanbanRoot" direction="horizontal" type="COLUMN">
           {provided => (
-          <div
-            id="kanbanRoot"
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-          >
-            {props.groups.map((group, index) =>
-            <div className="group">
-              <div className="group-control">
-                <button className="hide">+</button>
-                <input placeholder="Group Title"
-                  className="group-title-input"
-                  type="text"
-                  onChange={onUpdateGroupTitle}
-                  value={group.title}
-                  data-group-id={group._id}
-                ></input>
-                <button data-group-id={group._id} onClick={onAddCard}>+</button>
-              </div>
-              <Draggable key={group._id}
-                draggableId={group._id}
-                index={index} type="COLUMN"
-              >
-                {dragProvided =>
+            <div
+              id="kanbanRoot"
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+            >
+              {props.groups.map((group, index) =>
+              <div className="group">
+                <Draggable key={group._id}
+                  draggableId={group._id}
+                  index={index} type="COLUMN"
+                >
+                  {dragProvided =>
                 <div
-                  data-group-id={group._id}
-                  className="column"
                   ref={dragProvided.innerRef}
                   {...dragProvided.draggableProps}
                   {...dragProvided.dragHandleProps}
                 >
-                  <Droppable droppableId={group._id}>
-                    {provided2 => (
-                    <div
-                      className="rbd-droppable-context"
+                  <div className="group-control">
+                    <button className="hide">+</button>
+                    <input placeholder="Group Title"
+                      className="group-title-input"
+                      type="text"
+                      onChange={onUpdateGroupTitle}
+                      value={group.title}
                       data-group-id={group._id}
-                      {...provided2.droppableProps}
-                      ref={provided2.innerRef}
+                    ></input>
+                    <button data-group-id={group._id} onClick={onAddCard}>+</button>
+                  </div>
+                    <div
+                      data-group-id={group._id}
+                      className="column"
                     >
-                     {
-                      props.boards
-                      .filter(board => board.group === group._id)
-                      .map((column, cardIndex) =>
-                        <Card
-                          key={column._id}
-                          onCardClick={props.onCardClick}
-                          id={column._id}
-                          onUpdateCardTitle={onUpdateCardTitle}
-                          title={column.title}
-                          column={index}
-                          index={cardIndex}
-                          onContextClick={onContextMenuCardClick}
-                        />
-                      )
-                      }
-                      {provided2.placeholder}
+                      <Droppable droppableId={group._id}>
+                        {provided2 => (
+                        <div
+                          className="rbd-droppable-context"
+                          data-group-id={group._id}
+                          {...provided2.droppableProps}
+                          ref={provided2.innerRef}
+                        >
+                         {
+                          props.boards
+                          .filter(board => board.group === group._id)
+                          .map((column, cardIndex) =>
+                            <Card
+                              key={column._id}
+                              onCardClick={props.onCardClick}
+                              id={column._id}
+                              onUpdateCardTitle={onUpdateCardTitle}
+                              title={column.title}
+                              column={index}
+                              index={cardIndex}
+                              onContextClick={onContextMenuCardClick}
+                            />
+                          )
+                          }
+                          {provided2.placeholder}
+                        </div>
+                        )}
+                      </Droppable>
                     </div>
-                    )}
-                  </Droppable>
                 </div>
-                }
+              }
               </Draggable>
             </div>
             )}
