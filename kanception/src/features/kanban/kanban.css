@@ -20,7 +20,7 @@
 .column {
   width: 400px;
   min-height: 50px;
-  max-height: calc(100vh - 250px);
+  max-height: calc(100vh - 200px);
   background: #242628;
   margin: 10px;
   border: solid #242628 10px;
