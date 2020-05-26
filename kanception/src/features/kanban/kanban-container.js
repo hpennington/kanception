@@ -285,7 +285,7 @@ class KanbanContainer extends React.Component {
       console.log('setting board ')
       const newOrder = boards.length - 1 - index
       console.log(newOrder)
-      this.onUpdateCard(board._id, {order: newOrder})
+      this.onUpdateCard(board._id, {order: newOrder, group: destinationId})
     })
 
   }
