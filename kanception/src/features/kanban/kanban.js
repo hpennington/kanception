@@ -66,9 +66,31 @@ export default function Kanban(props) {
     setContextMenuGroupOpen(false)
   }
 
+  const onDragEnd = e => {
+    if (e.destination !== null) {
+      if (e.destination.droppableId === 'kanbanRoot') {
+        onGroupDrop(e)
+      } else {
+        onCardDrop(e)
+      }
+    }
+  }
+
+  const onGroupDrop = e => {
+    if (e.source.index !== e.destination.index) {
+      props.onGroupOrderUpdate(
+        e.draggableId,
+        e.source.index, e.destination.index
+      )
+    }
+  }
+
+  const onCardDrop = e => {
+  }
+
   return (
     <div className="kanban" onClick={onBoardClick}>
-      <DragDropContext>
+      <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="kanbanRoot" direction="horizontal" type="COLUMN">
           {provided => (
           <div
@@ -89,7 +111,10 @@ export default function Kanban(props) {
                 ></input>
                 <button data-group-id={group._id} onClick={onAddCard}>+</button>
               </div>
-              <Draggable draggableId={'c-' + index.toString()} index={index} type="COLUMN">
+              <Draggable key={group._id}
+                draggableId={group._id}
+                index={index} type="COLUMN"
+              >
                 {dragProvided =>
                 <div
                   data-group-id={group._id}
@@ -98,7 +123,7 @@ export default function Kanban(props) {
                   {...dragProvided.draggableProps}
                   {...dragProvided.dragHandleProps}
                 >
-                  <Droppable droppableId={'d-' +index.toString()}>
+                  <Droppable droppableId={group._id}>
                     {provided2 => (
                     <div
                       {...provided2.droppableProps}
@@ -128,6 +153,7 @@ export default function Kanban(props) {
               </Draggable>
             </div>
             )}
+            {provided.placeholder}
             <diV className="group">
               <button className="hide">+</button>
               <input

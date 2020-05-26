@@ -4,6 +4,7 @@
 }
 
 #kanbanRoot {
+  width: fit-content;
   display: flex;
   color: white;
   text-align: center;

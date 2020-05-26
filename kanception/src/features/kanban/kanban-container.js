@@ -18,7 +18,7 @@ class KanbanContainer extends React.Component {
       selectedNode: null
     }
 
-    this.owner = '5ecc321a843dbc117a2a8bd9'
+    this.owner = '5ecc6be5bac28f1362f64da2'
   }
 
   constructQueryArray(url, array, name) {
@@ -232,6 +232,22 @@ class KanbanContainer extends React.Component {
     }
   }
 
+  onGroupOrderUpdate(id, source, destination) {
+    console.log(source)
+    console.log(destination)
+
+    // Splice groups
+    const newGroupsOrder = Array.from(this.props.groups)
+    console.log(newGroupsOrder)
+    newGroupsOrder.splice(source, 1)
+    newGroupsOrder.splice(destination, 0, this.props.groups
+      .filter(group => group._id === id)[0])
+
+    newGroupsOrder.forEach((group, index) => {
+      this.onUpdateGroup(group._id, {order: index})
+    })
+  }
+
   render() {
     return (
       <Kanban
@@ -244,6 +260,7 @@ class KanbanContainer extends React.Component {
         onUpdateGroup={this.onUpdateGroup.bind(this)}
         onCardDelete={this.onCardDelete.bind(this)}
         onGroupDelete={this.onGroupDelete.bind(this)}
+        onGroupOrderUpdate={this.onGroupOrderUpdate.bind(this)}
       />
     )
   }
