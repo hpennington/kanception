@@ -19,7 +19,7 @@
 }
 
 .column {
-  width: 400px;
+  width: 350px;
   min-height: 50px;
   max-height: calc(100vh - 175px);
   background: #242628;
@@ -84,7 +84,7 @@
 }
 
 .group {
-  width: 420px;
+  width: 370px;
 }
 
 .group-control {
