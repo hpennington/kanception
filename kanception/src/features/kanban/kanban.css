@@ -59,7 +59,7 @@
 }
 
 .context-menu {
- position: absolute;
+ position: fixed;
  width: 200px;
  height: 250px;
  background: white;
