@@ -11,6 +11,7 @@
 .kanception-card textarea {
   overflow: visible;
   scrollbar-width: none;  /* Firefox */
+  width: 80%;
 }
 
 textarea::-webkit-scrollbar {

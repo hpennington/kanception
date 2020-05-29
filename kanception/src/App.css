@@ -1,5 +1,6 @@
 .App {
   height: 100%;
-  width: 100%;
+  width: fit-content;
   background: #1c1c1c;
+  overflow-y: hidden;
 }

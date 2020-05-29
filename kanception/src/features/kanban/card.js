@@ -6,6 +6,7 @@ import './card.css'
 export default function Card(props) {
   const container = useRef(null)
   const [mounted, setMounted] = useState(false)
+  const [dragging, setDragging] = useState(false)
 
   useEffect(() => {
     if (mounted !== true) {
@@ -30,10 +31,11 @@ export default function Card(props) {
         ref={provided.innerRef}
         {...provided.dragHandleProps}
         {...provided.draggableProps}
-        id={props.id}
         onClick={e => props.onCardClick(e.target.id)}
+        id={props.id}
       >
         <TextAreaAutoSize
+          data-card-id={props.id}
           onClick={e => e.stopPropagation()}
           onChange={props.onUpdateCardTitle}
           placeholder="Write to-do..."

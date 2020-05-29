@@ -42,7 +42,6 @@ class KanbanContainer extends React.Component {
   }
 
   async componentDidUpdate() {
-    console.log('did update')
     if (this.state.prevSelectedNode !== this.props.selectedNode) {
       this.setState({prevSelectedNode: this.props.selectedNode})
       this.fetchBoards()
@@ -57,7 +56,6 @@ class KanbanContainer extends React.Component {
     try {
       const treeResult = await fetch(treeUrl)
       const tree = await treeResult.json()
-      console.log(tree)
       const root = tree.find(node => node.parent === null)
       let boardIds = tree.filter(node => node.parent === root._id).map(node => node.board)
       boardIds.push(root.board)
@@ -68,13 +66,10 @@ class KanbanContainer extends React.Component {
       const boards = await boardsResult.json()
 
       const groupIds = boards.find(board => board._id === root.board).groups
-      console.log(groupIds)
-      console.log(boards)
       const groupsUrl = this.constructQueryArray(api + '/groups', groupIds, 'ids')
 
       const groupsResult = await fetch(groupsUrl)
       const groups = await groupsResult.json()
-      console.log(groups)
 
       groups.sort((a, b) => a.order - b.order)
       boards.sort((a, b) => b.order - a.order)
@@ -99,7 +94,6 @@ class KanbanContainer extends React.Component {
     try {
       const treeResult = await fetch(treeUrl)
       const tree = await treeResult.json()
-      console.log(tree)
       const root = tree.find(node => node._id === this.props.selectedNode)
       let boardIds = tree.filter(node => node.parent === root._id).map(node => node.board)
       boardIds.push(root.board)
@@ -110,13 +104,10 @@ class KanbanContainer extends React.Component {
       const boards = await boardsResult.json()
 
       const groupIds = boards.find(board => board._id === root.board).groups
-      console.log(groupIds)
-      console.log(boards)
       const groupsUrl = this.constructQueryArray(api + '/groups', groupIds, 'ids')
 
       const groupsResult = await fetch(groupsUrl)
       const groups = await groupsResult.json()
-      console.log(groups)
 
       groups.sort((a, b) => a.order - b.order)
       boards.sort((a, b) => b.order - a.order)
@@ -156,21 +147,17 @@ class KanbanContainer extends React.Component {
   }
 
   async onUpdateCard(id, object) {
-    console.log(id)
-    console.log(object)
-
     this.props.dispatch(updateBoard({id: id, object: object}))
+
     const api = 'http://localhost:4000'
     const url = api + '/boards/update' + '?id=' + id
-    console.log(object)
 
-    const updateResult = await fetch(url, {
+    fetch(url, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(object)
     })
 
-    console.log(updateResult)
   }
 
   async onUpdateGroup(id, object) {
@@ -189,7 +176,6 @@ class KanbanContainer extends React.Component {
   }
 
   async onCardClick(cardId) {
-    console.log(cardId)
 
     const owner = this.props.owner
     const api = 'http://localhost:4000'
@@ -203,7 +189,6 @@ class KanbanContainer extends React.Component {
       if (boards.length > 0) {
         const board = boards[0]
 
-        console.log(board)
 
         if (board.groups.length > 0) {
           const groupsUrl = this.constructQueryArray(api + '/groups', board.groups, 'ids')
@@ -223,17 +208,14 @@ class KanbanContainer extends React.Component {
             const boardIds = tree
               .filter(node => node.parent === clickedNode._id)
               .map(node => node.board)
-            console.log(boardIds)
             const boardsUrl = this.constructQueryArray(api + '/boards', boardIds, 'ids')
 
             const boardsResult = await fetch(boardsUrl)
             const boards = await boardsResult.json()
 
-            console.log(boards)
 
             const selectedNode = tree.find(node => node.board === cardId)._id
 
-            console.log(selectedNode)
             this.props.setSelectedNode( selectedNode)
             this.props.dispatch(setGroups({groups: groups}))
             this.props.dispatch(setBoards({boards: boards}))
@@ -324,12 +306,9 @@ class KanbanContainer extends React.Component {
       this.props.boards.find(board => board._id === id)
     )
 
-    console.log(boards)
 
     boards.forEach((board, index) => {
-      console.log('setting board ')
       const newOrder = boards.length - 1 - index
-      console.log(newOrder)
       this.onUpdateCard(board._id, {order: newOrder, group: destinationId})
     })
 

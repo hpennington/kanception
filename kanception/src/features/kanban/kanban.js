@@ -15,7 +15,6 @@ export default function Kanban(props) {
     const groups = document.getElementsByClassName('group-container')
 
     if (groups.length > 1) {
-      console.log(groups.length)
       for (const group of groups) {
 
         group.oncontextmenu = e => {
@@ -34,7 +33,7 @@ export default function Kanban(props) {
   }
 
   const onUpdateCardTitle = e => {
-    props.onUpdateCard(e.target.parentNode.id, {title: e.target.value})
+    props.onUpdateCard(e.target.dataset.cardId, {title: e.target.value})
   }
 
   const onUpdateGroupTitle = e => {

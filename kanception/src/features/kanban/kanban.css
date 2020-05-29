@@ -1,6 +1,7 @@
 .kanban {
-  overflow: auto;
+  overflow: visible;
   height: calc(100% - 50px);
+  margin-top: 50px;
 }
 
 #kanbanRoot {
@@ -20,12 +21,12 @@
 .column {
   width: 400px;
   min-height: 50px;
-/*  max-height: calc(100vh - 200px); */
+  max-height: calc(100vh - 200px);
   background: #242628;
   margin: 10px;
   border: solid #242628 10px;
   border-radius: 5px;
-/* overflow-y: auto; */
+  overflow-y: auto;
   scrollbar-width: none;  /* Firefox */
 }
 
