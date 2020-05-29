@@ -10,6 +10,8 @@ export default function Kanban(props) {
   const [contextMenuGroupPosition, setContextMenuGroupPosition] = useState({x: 0, y: 0})
   const [contextMenuGroupOpen, setContextMenuGroupOpen] = useState(false)
   const [contextGroupId, setContextGroupId] = useState(null)
+  const [dragging, setDragging] = useState(null)
+  const [dragX, setDragX] = useState(0)
 
   useEffect(() => {
     const groups = document.getElementsByClassName('group-container')
@@ -24,6 +26,26 @@ export default function Kanban(props) {
         }
       }
 
+    }
+
+    document.querySelector('.kanban').onmousedown = e => {
+      setDragging(true)
+      setDragX(e.clientX)
+    }
+
+    document.onmouseup = e => {
+      setDragging(false)
+    }
+
+    document.onmousecancel = e => {
+      setDragging(false)
+    }
+
+    document.onmousemove = e => {
+      if (dragging === true) {
+        console.log(e)
+        window.scrollTo(window.scrollX + dragX - e.clientX, 0)
+      }
     }
 
   })
