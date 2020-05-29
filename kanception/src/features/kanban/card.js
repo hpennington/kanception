@@ -32,6 +32,7 @@ export default function Card(props) {
         {...provided.dragHandleProps}
         {...provided.draggableProps}
         onClick={e => props.onCardClick(e.target.id)}
+        onMouseDown={e => e.stopPropagation()}
         id={props.id}
       >
         <TextAreaAutoSize
