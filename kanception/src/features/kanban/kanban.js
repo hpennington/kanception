@@ -30,7 +30,7 @@ export default function Kanban(props) {
 
     document.querySelector('.kanban').onmousedown = e => {
       setDragging(true)
-      setDragX(e.clientX)
+      setDragX(window.scrollX + e.clientX)
     }
 
     document.onmouseup = e => {
@@ -44,7 +44,7 @@ export default function Kanban(props) {
     document.onmousemove = e => {
       if (dragging === true) {
         console.log(e)
-        window.scrollTo(window.scrollX + dragX - e.clientX, 0)
+        window.scrollTo(dragX - e.clientX, 0)
       }
     }
 
