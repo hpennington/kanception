@@ -49,6 +49,11 @@ export default function Card(props) {
           }}
           value={props.title}
         />
+        <select className="share-select">
+          <option>Private</option>
+          <option>E Com</option>
+          <option>Space Brain</option>
+        </select>
       </div>
       )}
     </Draggable>
