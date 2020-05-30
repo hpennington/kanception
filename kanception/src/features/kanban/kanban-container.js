@@ -316,20 +316,22 @@ class KanbanContainer extends React.Component {
 
   render() {
     return (
-      <Kanban
-        boards={this.props.boards}
-        groups={this.props.groups}
-        onCardClick={this.onCardClick.bind(this)}
-        onAddCard={this.onAddCard.bind(this)}
-        onUpdateCard={this.onUpdateCard.bind(this)}
-        onAddGroupClick={this.onAddGroup.bind(this)}
-        onUpdateGroup={this.onUpdateGroup.bind(this)}
-        onCardDelete={this.onCardDelete.bind(this)}
-        onGroupDelete={this.onGroupDelete.bind(this)}
-        onGroupOrderUpdate={this.onGroupOrderUpdate.bind(this)}
-        onCardOrderUpdate={this.onCardOrderUpdate.bind(this)}
-        onCardGroupUpdate={this.onCardGroupUpdate.bind(this)}
-      />
+      <div style={this.props.style}>
+        <Kanban
+          boards={this.props.boards}
+          groups={this.props.groups}
+          onCardClick={this.onCardClick.bind(this)}
+          onAddCard={this.onAddCard.bind(this)}
+          onUpdateCard={this.onUpdateCard.bind(this)}
+          onAddGroupClick={this.onAddGroup.bind(this)}
+          onUpdateGroup={this.onUpdateGroup.bind(this)}
+          onCardDelete={this.onCardDelete.bind(this)}
+          onGroupDelete={this.onGroupDelete.bind(this)}
+          onGroupOrderUpdate={this.onGroupOrderUpdate.bind(this)}
+          onCardOrderUpdate={this.onCardOrderUpdate.bind(this)}
+          onCardGroupUpdate={this.onCardGroupUpdate.bind(this)}
+        />
+      </div>
     )
   }
 }

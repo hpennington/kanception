@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import Toolbar from './toolbar'
 import KanbanContainer from './features/kanban/kanban-container'
+import SideMenu from './side-menu'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 
 function App() {
   const [selectedNode, setSelectedNode] = useState(null)
+  const [menuOpen, setMenuOpen] = useState(true)
   const owner = '5ed193c30d863904a2aedf79'
 
   async function onBack(e) {
@@ -23,14 +25,24 @@ function App() {
         console.log(error)
       }
 
-
     }
+  }
+
+  const onOpenMenu = (e) => {
+    console.log(e)
+    setMenuOpen(!menuOpen)
   }
 
   return (
     <div className="App">
-      <Toolbar onBack={onBack}/>
-      <KanbanContainer owner={owner} selectedNode={selectedNode} setSelectedNode={setSelectedNode} />
+      <Toolbar onBack={onBack} onOpen={onOpenMenu} />
+      { menuOpen === true ? <SideMenu /> : '' }
+      <KanbanContainer
+        style={{marginLeft: menuOpen === true ? "375px" : 0}}
+        owner={owner}
+        selectedNode={selectedNode}
+        setSelectedNode={setSelectedNode}
+      />
     </div>
   )
 }

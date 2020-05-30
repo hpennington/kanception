@@ -1,4 +1,5 @@
 .App {
+  display: flex;
   height: 100%;
   width: fit-content;
   background: #1c1c1c;

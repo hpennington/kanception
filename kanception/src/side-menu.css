@@ -1,0 +1,8 @@
+#side-menu {
+  position: fixed;
+  width: 375px;
+  height: 100%;
+  background: #242628;
+  z-index: 1;
+  margin-top: 50px;
+}

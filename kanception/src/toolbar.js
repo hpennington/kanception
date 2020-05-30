@@ -23,8 +23,10 @@ export default function Toolbar(props) {
           <HamburgerMenu
             color={'white'}
             width={20}
-            height={20}
+            height={15}
             strokeWidth={3}
+            menuClicked={props.onOpen}
+            isOpen={false}
           />
         </div>
       </div>
