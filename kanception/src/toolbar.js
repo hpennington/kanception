@@ -3,7 +3,7 @@ import { Dropdown, Pagination } from 'react-bootstrap'
 import HamburgerMenu from 'react-hamburger-menu'
 import './toolbar.css'
 
-export default function Toolbar(props) {
+const Toolbar = (props) => {
   return (
     <div className="toolbar">
       <div style={{
@@ -40,3 +40,5 @@ export default function Toolbar(props) {
     </div>
   )
 }
+
+export default Toolbar

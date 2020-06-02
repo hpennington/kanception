@@ -28,10 +28,10 @@ export default function Kanban(props) {
 
     }
 
-    document.querySelector('.kanban').onmousedown = e => {
-      if (e.target.className === "kanban") {
-        setDragging(true)
+    document.querySelector('#kanbanRoot').onmousedown = e => {
+      if (e.target.id === "kanbanRoot") {
         setDragX(window.scrollX + e.screenX)
+        setDragging(true)
       }
     }
 
@@ -45,7 +45,6 @@ export default function Kanban(props) {
 
     document.onmousemove = e => {
       if (dragging === true) {
-        console.log(e)
         window.scrollTo(dragX - e.screenX, 0)
       }
     }
@@ -202,7 +201,7 @@ export default function Kanban(props) {
             </div>
             )}
             {provided.placeholder}
-            <diV className="group">
+            <div className="group">
               <button className="hide">+</button>
               <input
                 placeholder="Group Title"
@@ -217,7 +216,7 @@ export default function Kanban(props) {
                 'Add New Group'
               }
               </button>
-            </diV>
+            </div>
             <CardContextMenu
               cardId={contextCardId}
               isOpen={contextMenuCardOpen}

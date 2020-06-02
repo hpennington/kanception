@@ -15,6 +15,8 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "express-jwt": "^5.3.3",
+    "jwks-rsa": "^1.8.0",
     "mongoose": "^5.9.14"
   },
   "devDependencies": {}
