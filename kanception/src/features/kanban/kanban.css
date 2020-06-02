@@ -20,7 +20,7 @@
 }
 
 .column {
-  width: 350px;
+  width: 300px;
   min-height: 50px;
   max-height: calc(100vh - 175px);
   background: #242628;
@@ -29,6 +29,7 @@
   border-radius: 5px;
   overflow-y: auto;
   scrollbar-width: none;  /* Firefox */
+  box-shadow: 0 0 5px 1px #111;
 }
 
 .column::-webkit-scrollbar {
@@ -46,6 +47,7 @@
 
 .group-title-input {
   font-size: 1.5em;
+  width: 70%;
   background: inherit;
   color: white;
   border: none;
@@ -60,16 +62,16 @@
 }
 
 .context-menu {
- position: fixed;
- width: 200px;
- height: 250px;
- background: white;
- border-radius: 5px;
- color: black;
- box-shadow: 0 0 2px 2px #444;
- display: flex;
- flex-direction: column;
- justify-content: space-between;
+   position: fixed;
+   width: 200px;
+   height: 250px;
+   background: white;
+   border-radius: 5px;
+   color: black;
+   box-shadow: 0 0 2px 2px #444;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
 }
 
 .context-menu h6 {
@@ -85,7 +87,7 @@
 }
 
 .group {
-  width: 370px;
+  width: 320px;
   height: fit-content;
 }
 
