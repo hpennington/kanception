@@ -11,16 +11,73 @@ const App = () => {
   const [mounted, setMounted] = useState(false)
   const [selectedNode, setSelectedNode] = useState(null)
   const [menuOpen, setMenuOpen] = useState(true)
+  const [teams, setTeams] = useState([])
   const [blank, setBlank] = useState(false)
 
   useEffect(() => {
     if (mounted === false) {
       setMounted(true)
-      fetchUser()
+      postAndFetchUser()
     }
   })
 
+  const postAndFetchUser = async () => {
+    try {
+      const post = await postUser()
+      const res = await fetchUser()
+      fetchTeams(res)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const fetchTeams = async (teamIds) => {
+    try {
+      const token = await getTokenSilently()
+      console.log(teams)
+
+      for (const team of teamIds) {
+        const url = 'http://localhost:4000/team?team=' + team
+        fetch(url, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }).then(res => res.json())
+          .then(res => {
+            const newTeams = teams
+            console.log(res)
+            newTeams.push(res)
+            setTeams(newTeams)
+          })
+      }
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+
   const fetchUser = async () => {
+    try {
+
+      const url = 'http://localhost:4000/user'
+      const token = await getTokenSilently()
+      const userResult = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      })
+
+      const user = await userResult.json()
+      return user
+      console.log(user.teams)
+
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
+  const postUser = async () => {
     try {
 
       const url = 'http://localhost:4000/user'
@@ -68,8 +125,26 @@ const App = () => {
   }
 
   const onOpenMenu = (e) => {
-    console.log(e)
     setMenuOpen(!menuOpen)
+  }
+
+  const onAddTeam = async (e) => {
+    const api = 'http://localhost:4000'
+    const treeUrl = api + '/team?title=bob'
+
+    try {
+      const token = await getTokenSilently()
+
+      const treeResult = await fetch(treeUrl, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+    } catch(error) {
+      console.log(error)
+    }
   }
 
   if (loading === true) {
@@ -83,7 +158,7 @@ const App = () => {
   return (
     <div className="App">
       <Toolbar onBack={onBack} onOpen={onOpenMenu} />
-      { menuOpen === true ? <SideMenu /> : '' }
+      { menuOpen === true ? <SideMenu onAddTeam={onAddTeam} teams={teams} /> : '' }
       { blank === true && <KanbanContainer
         style={{marginLeft: menuOpen === true ? "375px" : 0}}
         selectedNode={selectedNode}
