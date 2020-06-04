@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useReducer } from 'react'
 import { useAuth0 } from './react-auth0-spa'
 import Toolbar from './toolbar'
 import KanbanContainer from './features/kanban/kanban-container'
 import SideMenu from './side-menu'
+import { TeamTitleMenu } from './menu'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 
@@ -11,8 +12,10 @@ const App = () => {
   const [mounted, setMounted] = useState(false)
   const [selectedNode, setSelectedNode] = useState(null)
   const [menuOpen, setMenuOpen] = useState(true)
+  const [sideMenuOpen, setSideMenuOpen] = useState(true)
   const [teams, setTeams] = useState([])
   const [blank, setBlank] = useState(false)
+  const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
   useEffect(() => {
     if (mounted === false) {
@@ -125,26 +128,41 @@ const App = () => {
   }
 
   const onOpenMenu = (e) => {
-    setMenuOpen(!menuOpen)
+    setSideMenuOpen(!sideMenuOpen)
   }
 
   const onAddTeam = async (e) => {
+    setMenuOpen(true)
+  }
+
+  const addTeam = async (title) => {
     const api = 'http://localhost:4000'
-    const treeUrl = api + '/team?title=bob'
+    const teamUrl = api + '/team?title=' + title
 
     try {
       const token = await getTokenSilently()
 
-      const treeResult = await fetch(treeUrl, {
+      const teamResult = await fetch(teamUrl, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
+      const teamMember = await teamResult.json()
+      teams.push(teamMember)
+      console.log(teams)
+      setTeams(teams)
+
+      forceUpdate()
 
     } catch(error) {
       console.log(error)
     }
+  }
+
+  const onTeamSave = (title) => {
+    setMenuOpen(false)
+    addTeam(title)
   }
 
   if (loading === true) {
@@ -157,10 +175,12 @@ const App = () => {
 
   return (
     <div className="App">
+      {menuOpen === true &&
+      <TeamTitleMenu onSave={onTeamSave} close={() => setMenuOpen(false)} />}
       <Toolbar onBack={onBack} onOpen={onOpenMenu} />
-      { menuOpen === true ? <SideMenu onAddTeam={onAddTeam} teams={teams} /> : '' }
+      { sideMenuOpen === true ? <SideMenu onAddTeam={onAddTeam} teams={teams} /> : '' }
       { blank === true && <KanbanContainer
-        style={{marginLeft: menuOpen === true ? "375px" : 0}}
+        style={{marginLeft: sideMenuOpen === true ? "375px" : 0}}
         selectedNode={selectedNode}
         setSelectedNode={setSelectedNode}
       />}
