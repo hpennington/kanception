@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import './table-view.css'
 
 const TableCell = props => {
+  console.log(props.cellId)
   return (
-    <div className="table-cell"
+    <div
+      className="table-cell"
+      data-cell-id={props.cellId}
+      onClick={props.onCellClick}
       style={{
         border: props.highlighted === true ? "solid 2px #4d27cf" : "none"
       }}
@@ -14,10 +18,27 @@ const TableCell = props => {
 }
 
 const TableView  = props => {
-  console.log(props.cells)
+  const onCellClick = e => {
+    props.onSetSelectedTeam(e.target.dataset.cellId)
+  }
+
   return (
     <div className="table-view">
-      {props.cells.map(cell => <TableCell title={cell.title} highlighted={cell.selected} />)}
+      {
+      props.cells
+      .map(cell => (
+      {_id: cell._id, title: cell.title,
+      highlighted: cell._id === props.selectedId})
+      )
+      .map(cell =>
+        <TableCell
+          cellId={cell._id}
+          onCellClick={onCellClick}
+          title={cell.title}
+          highlighted={cell.highlighted}
+        />
+       )
+      }
     </div>
   )
 }

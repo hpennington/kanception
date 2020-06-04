@@ -1,6 +1,11 @@
 .table-view {
   max-height: 250px;
   overflow: auto;
+  scrollbar-width: none;  /* Firefox */
+}
+
+.table-view::-webkit-scrollbar {
+  display: none;  /* Safari and Chrome */
 }
 
 .table-cell {
@@ -14,3 +19,5 @@
   align-items: center;
   justify-content: center;
 }
+
+

@@ -21,8 +21,11 @@
   background: inherit;
   color: white;
   margin: 20px;
+  margin-top: 40px;
+  margin-left: 40px;
 }
 
 .btn-container {
   width: 100%;
 }
+
