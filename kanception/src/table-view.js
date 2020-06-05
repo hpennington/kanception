@@ -12,7 +12,9 @@ const TableCell = props => {
         border: props.highlighted === true ? "solid 2px #4d27cf" : "none"
       }}
     >
-      <h6>{props.title}</h6>
+      <h6
+        data-cell-id={props.cellId}
+      >{props.title}</h6>
     </div>
   )
 }

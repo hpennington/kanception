@@ -11,7 +11,7 @@ const App = () => {
   const { loading, getTokenSilently } = useAuth0()
   const [mounted, setMounted] = useState(false)
   const [selectedNode, setSelectedNode] = useState(null)
-  const [menuOpen, setMenuOpen] = useState(true)
+  const [menuOpen, setMenuOpen] = useState(false)
   const [sideMenuOpen, setSideMenuOpen] = useState(true)
   const [teams, setTeams] = useState([])
   const [blank, setBlank] = useState(false)
