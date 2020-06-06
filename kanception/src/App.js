@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useReducer } from 'react'
+import React, { useState, useEffect, useReducer, useRef } from 'react'
+import { Button } from 'react-bootstrap'
 import { useAuth0 } from './react-auth0-spa'
 import Toolbar from './toolbar'
 import KanbanContainer from './features/kanban/kanban-container'
@@ -11,10 +12,10 @@ const App = () => {
   const { loading, getTokenSilently } = useAuth0()
   const [mounted, setMounted] = useState(false)
   const [selectedNode, setSelectedNode] = useState(null)
+  const [nameOpen, setNameOpen] = useState(true)
   const [menuOpen, setMenuOpen] = useState(false)
   const [sideMenuOpen, setSideMenuOpen] = useState(true)
   const [teams, setTeams] = useState([])
-  const [blank, setBlank] = useState(false)
   const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
   useEffect(() => {
@@ -93,9 +94,14 @@ const App = () => {
         }
       })
 
-      const userId = await userResult.json()
-      console.log(userId)
-      setBlank(true)
+      const user = await userResult.json()
+      console.log(user)
+
+      if (user.name === undefined) {
+        setNameOpen(true)
+      } else {
+        setNameOpen(false)
+      }
 
     } catch(error) {
       console.log(error)
@@ -165,6 +171,28 @@ const App = () => {
     addTeam(title)
   }
 
+  const onSubmit = async (first, last) => {
+    try {
+
+      const url = 'http://localhost:4000/name?first=' + first + '&last=' + last
+      const token = await getTokenSilently()
+      const userResult = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      })
+
+      setNameOpen(false)
+
+      console.log(userResult)
+
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
   if (loading === true) {
     return (
       <div>
@@ -179,11 +207,94 @@ const App = () => {
       <TeamTitleMenu onSave={onTeamSave} close={() => setMenuOpen(false)} />}
       <Toolbar onBack={onBack} onOpen={onOpenMenu} />
       { sideMenuOpen === true ? <SideMenu onAddTeam={onAddTeam} teams={teams} /> : '' }
-      { blank === true && <KanbanContainer
+      { nameOpen === false && <KanbanContainer
         style={{marginLeft: sideMenuOpen === true ? "375px" : 0}}
         selectedNode={selectedNode}
         setSelectedNode={setSelectedNode}
       />}
+      {
+        nameOpen === true && <CollectName onSubmit={onSubmit} />
+      }
+    </div>
+  )
+}
+
+const CollectName = props => {
+  const [submitEnabled, setSubmitEnabled] = useState(false)
+  const firstName = useRef(null)
+  const lastName = useRef(null)
+
+  const nameStyle = {
+    margin: "10px",
+    borderRadius: "5px",
+    border: "solid 1px gray",
+  }
+
+  const setEnabled = () => {
+    if ((firstName.current.value.length > 0) && lastName.current.value.length > 0) {
+      setSubmitEnabled(true)
+    } else {
+      setSubmitEnabled(false)
+    }
+  }
+
+  const onFirstChange = e => {
+    setEnabled()
+  }
+
+  const onLastChange = e => {
+    setEnabled()
+  }
+
+  const onSubmit = e => {
+    props.onSubmit(firstName.current.value, lastName.current.value)
+  }
+
+  return (
+    <div style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: "rgba(128, 128, 128, 0.25)",
+      zIndex: 200,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      }}>
+      <div style={{
+        width: "300px",
+        height: "200px",
+        background: "white",
+        borderRadius: "5px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        }}>
+        <p>Enter your name!</p>
+        <input
+          ref={firstName}
+          type="text"
+          onChange={onFirstChange}
+          placeholder="First"
+          style={nameStyle}
+        />
+        <input
+          ref={lastName}
+          type="text"
+          onChange={onLastChange}
+          placeholder="Last"
+          style={nameStyle}
+        />
+        <Button
+          onClick={onSubmit}
+          disabled={!submitEnabled}
+        >
+          Submit
+        </Button>
+      </div>
     </div>
   )
 }

@@ -18,7 +18,7 @@ const TeamTitleMenu = props => {
         bottom: 0,
         left: 0,
         right: 0,
-        background: "rgba(255, 255, 255, 0.25)",
+        background: "rgba(128, 128, 128, 0.25)",
         zIndex: 101,
         display: "flex",
         alignItems: "center",
