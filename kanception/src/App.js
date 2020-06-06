@@ -11,8 +11,9 @@ import './App.css'
 const App = () => {
   const { loading, getTokenSilently } = useAuth0()
   const [mounted, setMounted] = useState(false)
+  const [user, setUser] = useState(null)
   const [selectedNode, setSelectedNode] = useState(null)
-  const [nameOpen, setNameOpen] = useState(true)
+  const [nameOpen, setNameOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [sideMenuOpen, setSideMenuOpen] = useState(true)
   const [teams, setTeams] = useState([])
@@ -22,6 +23,10 @@ const App = () => {
     if (mounted === false) {
       setMounted(true)
       postAndFetchUser()
+    } else {
+      if (user !== null) {
+        fetchTeams(user)
+      }
     }
   })
 
@@ -29,7 +34,7 @@ const App = () => {
     try {
       const post = await postUser()
       const res = await fetchUser()
-      fetchTeams(res)
+      setUser(res)
     } catch (error) {
       console.log(error)
     }
@@ -48,10 +53,14 @@ const App = () => {
           }
         }).then(res => res.json())
           .then(res => {
-            const newTeams = teams
             console.log(res)
-            newTeams.push(res)
-            setTeams(newTeams)
+            console.log(teams)
+            if (teams.find(team => team._id === res._id) === undefined) {
+              const newTeams = teams
+              console.log(res)
+              newTeams.push(res)
+              setTeams(newTeams)
+            }
           })
       }
     } catch (error) {
