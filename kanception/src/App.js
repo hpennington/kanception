@@ -171,10 +171,11 @@ const App = () => {
     addTeam(title)
   }
 
-  const onSubmit = async (first, last) => {
+  const onSubmit = async (first, last, email) => {
     try {
 
-      const url = 'http://localhost:4000/name?first=' + first + '&last=' + last
+      const url = 'http://localhost:4000/name?first='
+        + first + '&last=' + last + '&email=' + email
       const token = await getTokenSilently()
       const userResult = await fetch(url, {
         method: 'POST',
@@ -213,16 +214,17 @@ const App = () => {
         setSelectedNode={setSelectedNode}
       />}
       {
-        nameOpen === true && <CollectName onSubmit={onSubmit} />
+        nameOpen === true && <CollectInfo onSubmit={onSubmit} />
       }
     </div>
   )
 }
 
-const CollectName = props => {
+const CollectInfo = props => {
   const [submitEnabled, setSubmitEnabled] = useState(false)
   const firstName = useRef(null)
   const lastName = useRef(null)
+  const email = useRef(null)
 
   const nameStyle = {
     margin: "10px",
@@ -231,7 +233,9 @@ const CollectName = props => {
   }
 
   const setEnabled = () => {
-    if ((firstName.current.value.length > 0) && lastName.current.value.length > 0) {
+    if ((firstName.current.value.length > 0)
+      && (lastName.current.value.length > 0)
+      && (email.current.value.length > 0)) {
       setSubmitEnabled(true)
     } else {
       setSubmitEnabled(false)
@@ -246,8 +250,16 @@ const CollectName = props => {
     setEnabled()
   }
 
+  const onEmailChange = e => {
+    setEnabled()
+  }
+
   const onSubmit = e => {
-    props.onSubmit(firstName.current.value, lastName.current.value)
+    props.onSubmit(
+      firstName.current.value,
+      lastName.current.value,
+      email.current.value,
+    )
   }
 
   return (
@@ -265,7 +277,7 @@ const CollectName = props => {
       }}>
       <div style={{
         width: "300px",
-        height: "200px",
+        height: "300px",
         background: "white",
         borderRadius: "5px",
         display: "flex",
@@ -286,6 +298,13 @@ const CollectName = props => {
           type="text"
           onChange={onLastChange}
           placeholder="Last"
+          style={nameStyle}
+        />
+        <input
+          ref={email}
+          type="email"
+          onChange={onEmailChange}
+          placeholder="Email"
           style={nameStyle}
         />
         <Button
