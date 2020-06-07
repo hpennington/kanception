@@ -11,13 +11,18 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.691.0",
     "babel-loader": "^8.1.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-jwt": "^5.3.3",
     "jwks-rsa": "^1.8.0",
-    "mongoose": "^5.9.14"
+    "mongoose": "^5.9.14",
+    "node-fetch": "^2.6.0",
+    "sendmail": "^1.6.1",
+    "uuid": "^8.1.0",
+    "uuidv4": "^6.1.0"
   },
   "devDependencies": {}
 }

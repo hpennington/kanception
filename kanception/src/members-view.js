@@ -1,9 +1,27 @@
 import React, { useRef, useState } from 'react'
 import { Button, Tooltip, OverlayTrigger } from 'react-bootstrap'
+import { useAuth0 } from './react-auth0-spa'
 import './members-view.css'
 
 const MembersView = props => {
   const [teamInviteOpen, setTeamInviteOpen] = useState(false)
+  const { getTokenSilently } = useAuth0()
+
+  const onInviteSubmit = async (first, last, email) => {
+    const token = await getTokenSilently()
+    fetch(
+      'http://localhost:4000/team/invite?first='
+      + first + '&last=' + last + '&email=' + email + '&team=' + props.team,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    ).then(res => setTeamInviteOpen(false))
+     .catch(console.log)
+
+  }
 
   return (
     <div style={{width: "100%"}}>
@@ -12,7 +30,7 @@ const MembersView = props => {
       </div>
       {
         teamInviteOpen === true &&
-        <InviteTeam  onSubmit={console.log} onCancel={e => setTeamInviteOpen(false)} />
+        <InviteTeam  onSubmit={onInviteSubmit} onCancel={e => setTeamInviteOpen(false)} />
       }
       {
         props.members.length > 0 &&
@@ -27,7 +45,7 @@ const MembersView = props => {
 const MemberView = props => {
   return (
     <OverlayTrigger
-      placement="right"
+      placement="top"
       delay={{ show: 250, hide: 400 }}
       overlay={<Tooltip>{displayName(props.name)}</Tooltip>}
     >

@@ -48,7 +48,7 @@ const SideMenu = props => {
       />}
       {
         props.teams.length > 0 &&
-        <MembersView members={[{_id: '', name: {first: 'hayden', last: 'pennington'}}, {_id: '', name: {first: 'Josh', last: 'pennington'}}, {_id: '', name: {first: 'Graham', last: 'Pennington'}}]} />
+        <MembersView team={selectedId} members={[{_id: '', name: {first: 'hayden', last: 'pennington'}}, {_id: '', name: {first: 'Josh', last: 'pennington'}}, {_id: '', name: {first: 'Graham', last: 'Pennington'}}]} />
       }
     </div>
   )
