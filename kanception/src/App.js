@@ -11,6 +11,7 @@ import './App.css'
 const App = () => {
   const { loading, getTokenSilently } = useAuth0()
   const [mounted, setMounted] = useState(false)
+  const [kanbanReady, setKanbanReady] = useState(false)
   const [user, setUser] = useState(null)
   const [selectedNode, setSelectedNode] = useState(null)
   const [nameOpen, setNameOpen] = useState(false)
@@ -35,6 +36,7 @@ const App = () => {
       const post = await postUser()
       const res = await fetchUser()
       setUser(res)
+      setKanbanReady(true)
     } catch (error) {
       console.log(error)
     }
@@ -83,7 +85,6 @@ const App = () => {
 
       const user = await userResult.json()
       return user
-      console.log(user.teams)
 
     } catch(error) {
       console.log(error)
@@ -217,8 +218,9 @@ const App = () => {
       <TeamTitleMenu onSave={onTeamSave} close={() => setMenuOpen(false)} />}
       <Toolbar onBack={onBack} onOpen={onOpenMenu} />
       { sideMenuOpen === true ? <SideMenu onAddTeam={onAddTeam} teams={teams} /> : '' }
-      { nameOpen === false && <KanbanContainer
+      { nameOpen === false && kanbanReady === true && <KanbanContainer
         style={{marginLeft: sideMenuOpen === true ? "375px" : 0}}
+        owner={user._id}
         selectedNode={selectedNode}
         setSelectedNode={setSelectedNode}
       />}

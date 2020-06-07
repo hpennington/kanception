@@ -11,12 +11,13 @@
   align-items: center;
 }
 
-#side-menu h1 {
+#side-menu > h1 {
   margin-top: 40px;
   text-align: center;
 }
 
-#side-menu button {
+#side-menu > div > button,
+#side-menu > div > div > button {
   border: none;
   background: inherit;
   color: white;

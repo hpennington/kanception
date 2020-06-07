@@ -1,0 +1,28 @@
+.members-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  background: #1c1c1c;
+  width: 300px;
+  margin: auto;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.member-view {
+  background: #4d27cf;
+  color: white;
+  margin: 10px;
+  width: 70px;
+  height: 70px;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.member-view * {
+  margin: 0;
+}
+
