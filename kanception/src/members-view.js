@@ -26,15 +26,15 @@ const MembersView = props => {
 
 const MemberView = props => {
   return (
-    <div className="member-view">
-      <OverlayTrigger
-        placement="right"
-        delay={{ show: 250, hide: 400 }}
-        overlay={<Tooltip>{displayName(props.name)}</Tooltip>}
-      >
-        <h3>{props.name.first[0].toUpperCase() + props.name.last[0].toUpperCase()}</h3>
-      </OverlayTrigger>
-    </div>
+    <OverlayTrigger
+      placement="right"
+      delay={{ show: 250, hide: 400 }}
+      overlay={<Tooltip>{displayName(props.name)}</Tooltip>}
+    >
+      <div className="member-view">
+          <h3>{props.name.first[0].toUpperCase() + props.name.last[0].toUpperCase()}</h3>
+      </div>
+    </OverlayTrigger>
   )
 }
 
