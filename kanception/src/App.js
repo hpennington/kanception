@@ -27,6 +27,7 @@ const App = () => {
     } else {
       if (user !== null) {
         fetchTeams(user)
+        fetchTeamInvites()
       }
     }
   })
@@ -69,6 +70,27 @@ const App = () => {
       console.log(error)
     }
 
+  }
+
+  const fetchTeamInvites = async () => {
+    try {
+
+      const token = await getTokenSilently()
+
+      const url = 'http://localhost:4000/teaminvites'
+
+      fetch(url, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }).then(res => res.json())
+        .then(res => {
+          console.log(res)
+        })
+
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const fetchUser = async () => {
