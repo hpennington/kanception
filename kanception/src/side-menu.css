@@ -30,3 +30,7 @@
   width: 100%;
 }
 
+#side-menu > div > div > p {
+  margin-top: 40px;
+  margin-left: 25px;
+}

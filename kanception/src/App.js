@@ -18,6 +18,7 @@ const App = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [sideMenuOpen, setSideMenuOpen] = useState(true)
   const [teams, setTeams] = useState([])
+  const [teamInvites, setTeamInvites] = useState([])
   const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
   useEffect(() => {
@@ -86,6 +87,7 @@ const App = () => {
       }).then(res => res.json())
         .then(res => {
           console.log(res)
+          setTeamInvites(res)
         })
 
     } catch (error) {
@@ -239,7 +241,7 @@ const App = () => {
       {menuOpen === true &&
       <TeamTitleMenu onSave={onTeamSave} close={() => setMenuOpen(false)} />}
       <Toolbar onBack={onBack} onOpen={onOpenMenu} />
-      { sideMenuOpen === true ? <SideMenu onAddTeam={onAddTeam} teams={teams} /> : '' }
+      { sideMenuOpen === true ? <SideMenu onAddTeam={onAddTeam} invites={teamInvites} teams={teams} /> : '' }
       { nameOpen === false && kanbanReady === true && <KanbanContainer
         style={{marginLeft: sideMenuOpen === true ? "375px" : 0}}
         owner={user._id}

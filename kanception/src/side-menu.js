@@ -37,8 +37,20 @@ const SideMenu = props => {
   return (
     <div id="side-menu">
       <h1>Teams</h1>
+      {props.invites.length > 0 &&
+      <div>
+        <div className="btn-container">
+          <p>Team Invites</p>
+        </div>
+        <TableView
+          onSetSelectedTeam={id => setSelectedId(id)}
+          selectedId={selectedId}
+          cells={props.teams}
+        />
+      </div>
+      }
       <div className="btn-container">
-        <button onClick={props.onAddTeam}>New Team</button>
+        <button onClick={props.onAddTeam}>New Team +</button>
       </div>
       {props.teams.length > 0 &&
       <TableView
