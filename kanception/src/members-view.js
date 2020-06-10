@@ -24,7 +24,7 @@ const MembersView = props => {
   }
 
   return (
-    <div style={{width: "100%", height: "fit-content"}}>
+    <div style={{width: "100%", height: "fit-content", marginBottom: "60px"}}>
       <div className="btn-container">
         <button onClick={e => setTeamInviteOpen(true)}>Invite Team +</button>
       </div>
