@@ -13,6 +13,7 @@ const App = () => {
   const [mounted, setMounted] = useState(false)
   const [kanbanReady, setKanbanReady] = useState(false)
   const [user, setUser] = useState(null)
+  const [prevUser, setPrevUser] = useState(null)
   const [selectedNode, setSelectedNode] = useState(null)
   const [nameOpen, setNameOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -26,9 +27,10 @@ const App = () => {
       setMounted(true)
       postAndFetchUser()
     } else {
-      if (user !== null) {
+      if (user !== null && user !== prevUser) {
         fetchTeams(user)
         fetchTeamInvites()
+        setPrevUser(user)
       }
     }
   })

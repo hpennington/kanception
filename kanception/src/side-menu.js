@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import TableView from './table-view'
+import TeamTableView from './team-table-view'
+import InviteTableView from './invite-table-view'
 import MembersView from './members-view'
 import './side-menu.css'
 
@@ -42,10 +43,9 @@ const SideMenu = props => {
         <div className="btn-container">
           <p>Team Invites</p>
         </div>
-        <TableView
-          onSetSelectedTeam={id => setSelectedId(id)}
-          selectedId={selectedId}
-          cells={props.teams}
+        <InviteTableView
+          onSetSelectedTeam={() => {}}
+          cells={props.invites}
         />
       </div>
       }
@@ -53,14 +53,14 @@ const SideMenu = props => {
         <button onClick={props.onAddTeam}>New Team +</button>
       </div>
       {props.teams.length > 0 &&
-      <TableView
+      <TeamTableView
         onSetSelectedTeam={id => setSelectedId(id)}
         selectedId={selectedId}
         cells={props.teams}
       />}
       {
         props.teams.length > 0 &&
-        <MembersView team={selectedId} members={[{_id: '', name: {first: 'hayden', last: 'pennington'}}, {_id: '', name: {first: 'Josh', last: 'pennington'}}, {_id: '', name: {first: 'Graham', last: 'Pennington'}}]} />
+        <MembersView team={selectedId} members={[{_id: '', name: {first: 'John', last: 'Doe'}}, {_id: '', name: {first: 'hayden', last: 'pennington'}}, {_id: '', name: {first: 'Josh', last: 'pennington'}}, {_id: '', name: {first: 'Graham', last: 'Pennington'}}]} />
       }
     </div>
   )
