@@ -23,7 +23,9 @@
 
 .table-cell-invite {
   margin: auto;
-  height: 80px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  justify-content: space-between;
 }
 
 .btn-container {

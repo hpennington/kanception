@@ -35,8 +35,8 @@ const TeamTitleMenu = props => {
         }}>
         <input
           style={{
-            border: "solid 1px purple",
-            borderRadius: "10px",
+            border: "solid 1px gray",
+            borderRadius: "5px",
             margin: "20px",
             width: "80%",
             textAlign: "center",

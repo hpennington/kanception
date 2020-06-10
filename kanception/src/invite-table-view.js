@@ -9,11 +9,11 @@ const TableCell = props => {
       data-cell-id={props.cellId}
       onClick={props.onCellClick}
       style={{
-        border: props.highlighted === true ? "solid 2px #4d27cf" : "none"
+        border: props.highlighted === true ? "solid 2px #4d27cf" : "none",
       }}
     >
       <button style={{
-        marginRight: "20px",
+        margin: "10px",
         width: "50px",
         height: "30px",
         borderRadius: "10px",
@@ -21,7 +21,9 @@ const TableCell = props => {
         background: "#A00",
         color: "white",
         border: "none",
-        }}>
+        }}
+        onClick={e => props.onTeamInviteDelete(props.cellId)}
+      >
         Decline
       </button>
       <h6
@@ -29,7 +31,6 @@ const TableCell = props => {
       >{props.title}</h6>
       <button style={{
         margin: "10px",
-        marginLeft: "20px",
         borderRadius: "10px",
         width: "50px",
         height: "30px",
@@ -59,6 +60,7 @@ const TableView  = props => {
       )
       .map(cell =>
         <TableCell
+          onTeamInviteDelete={props.onTeamInviteDelete}
           cellId={cell._id}
           onCellClick={onCellClick}
           title={cell.title}

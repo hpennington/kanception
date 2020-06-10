@@ -19,8 +19,11 @@ const App = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [sideMenuOpen, setSideMenuOpen] = useState(true)
   const [teams, setTeams] = useState([])
+  const [members, setMembers] = useState([])
   const [teamInvites, setTeamInvites] = useState([])
   const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
+  const [selectedTeam, setSelectedTeam] = useState(null)
+  const [prevSelectedTeam, setPrevSelectedTeam] = useState(null)
 
   useEffect(() => {
     if (mounted === false) {
@@ -32,8 +35,54 @@ const App = () => {
         fetchTeamInvites()
         setPrevUser(user)
       }
+
+      if (selectedTeam !== prevSelectedTeam) {
+        fetchMemberProfiles(selectedTeam)
+        setPrevSelectedTeam(selectedTeam)
+      }
     }
   })
+
+  const fetchMemberProfiles = async (team) => {
+    try {
+
+      const token = await getTokenSilently()
+      const url = 'http://localhost:4000/profiles?team=' + team
+
+      fetch(url, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }).then(res => res.json())
+        .then(res => {
+          console.log(res)
+        })
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const teamInviteDelete = async (team) => {
+    try {
+      const token = await getTokenSilently()
+      const url = 'http://localhost:4000/teaminvites?team=' + team
+
+      fetch(url, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }).then(res => {
+          console.log(res)
+          const filteredTeams = teamInvites.filter(invite => invite._id !== team)
+          console.log(filteredTeams)
+          setTeamInvites(filteredTeams)
+        })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const postAndFetchUser = async () => {
     try {
@@ -66,6 +115,9 @@ const App = () => {
               console.log(res)
               newTeams.push(res)
               setTeams(newTeams)
+              if (newTeams.length > 0) {
+                setSelectedTeam(newTeams[0]._id)
+              }
             }
           })
       }
@@ -243,7 +295,7 @@ const App = () => {
       {menuOpen === true &&
       <TeamTitleMenu onSave={onTeamSave} close={() => setMenuOpen(false)} />}
       <Toolbar onBack={onBack} onOpen={onOpenMenu} />
-      { sideMenuOpen === true ? <SideMenu onAddTeam={onAddTeam} invites={teamInvites} teams={teams} /> : '' }
+      { sideMenuOpen === true ? <SideMenu setSelectedTeam={setSelectedTeam} selectedTeam={selectedTeam} onTeamInviteDelete={teamInviteDelete} onAddTeam={onAddTeam} invites={teamInvites} teams={teams} members={members}/> : '' }
       { nameOpen === false && kanbanReady === true && <KanbanContainer
         style={{marginLeft: sideMenuOpen === true ? "375px" : 0}}
         owner={user._id}
