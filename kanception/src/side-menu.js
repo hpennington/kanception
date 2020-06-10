@@ -51,7 +51,7 @@ const SideMenu = props => {
         </div>
         }
         <div className="btn-container">
-          <button onClick={props.onAddTeam}>New Team +</button>
+          <button onClick={props.onAddTeam}>New Team</button>
         </div>
         {props.teams.length > 0 &&
         <TeamTableView
