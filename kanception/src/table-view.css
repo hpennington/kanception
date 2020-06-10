@@ -14,7 +14,7 @@
   text-align: center;
   background: #1c1c1c;
   border-radius: 5px;
-  margin: 20px;
+  margin: auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -22,7 +22,10 @@
 
 
 .table-cell-invite {
+  margin: auto;
   height: 80px;
 }
 
-
+.btn-container {
+  margin: auto;
+}
