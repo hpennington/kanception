@@ -37,31 +37,33 @@ const SideMenu = props => {
 
   return (
     <div id="side-menu">
-      <h1>Teams</h1>
-      {props.invites.length > 0 &&
-      <div>
-        <div className="btn-container">
-          <p>Team Invites</p>
+      <div id="side-menu-scroll">
+        <h1>Teams</h1>
+        {props.invites.length > 0 &&
+        <div>
+          <div className="btn-container">
+            <p>Team Invites</p>
+          </div>
+          <InviteTableView
+            onSetSelectedTeam={() => {}}
+            cells={props.invites}
+          />
         </div>
-        <InviteTableView
-          onSetSelectedTeam={() => {}}
-          cells={props.invites}
-        />
+        }
+        <div className="btn-container">
+          <button onClick={props.onAddTeam}>New Team +</button>
+        </div>
+        {props.teams.length > 0 &&
+        <TeamTableView
+          onSetSelectedTeam={id => setSelectedId(id)}
+          selectedId={selectedId}
+          cells={props.teams}
+        />}
+        {
+          props.teams.length > 0 &&
+          <MembersView team={selectedId} members={[{_id: '', name: {first: 'John', last: 'Doe'}}, {_id: '', name: {first: 'hayden', last: 'pennington'}}, {_id: '', name: {first: 'Josh', last: 'pennington'}}, {_id: '', name: {first: 'Graham', last: 'Pennington'}}]} />
+        }
       </div>
-      }
-      <div className="btn-container">
-        <button onClick={props.onAddTeam}>New Team +</button>
-      </div>
-      {props.teams.length > 0 &&
-      <TeamTableView
-        onSetSelectedTeam={id => setSelectedId(id)}
-        selectedId={selectedId}
-        cells={props.teams}
-      />}
-      {
-        props.teams.length > 0 &&
-        <MembersView team={selectedId} members={[{_id: '', name: {first: 'John', last: 'Doe'}}, {_id: '', name: {first: 'hayden', last: 'pennington'}}, {_id: '', name: {first: 'Josh', last: 'pennington'}}, {_id: '', name: {first: 'Graham', last: 'Pennington'}}]} />
-      }
     </div>
   )
 }

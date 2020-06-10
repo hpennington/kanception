@@ -12,13 +12,13 @@
   align-items: center;
 }
 
-#side-menu > h1 {
+#side-menu > div > h1 {
   margin-top: 10px;
   text-align: center;
 }
 
-#side-menu > div > button,
-#side-menu > div > div > button {
+#side-menu > div > div > button,
+#side-menu > div > div > div > button {
   border: none;
   background: inherit;
   color: white;
@@ -31,7 +31,12 @@
   width: 100%;
 }
 
-#side-menu > div > div > p {
+#side-menu > div > div > div > p {
   margin-top: 40px;
   margin-left: 25px;
+}
+
+#side-menu-scroll {
+  height: 100%;
+  overflow: auto;
 }
