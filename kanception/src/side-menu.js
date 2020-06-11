@@ -15,6 +15,7 @@ const SideMenu = props => {
             <p>Team Invites</p>
           </div>
           <InviteTableView
+            onTeamInviteAccept={props.onTeamInviteAccept}
             onTeamInviteDelete={props.onTeamInviteDelete}
             onSetSelectedTeam={() => {}}
             cells={props.invites}

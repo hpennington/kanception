@@ -38,7 +38,9 @@ const TableCell = props => {
         background: "#4d27cf",
         color: "white",
         border: "none",
-        }}>
+        }}
+        onClick={e => props.onTeamInviteAccept(props.cellId)}
+      >
         Accept
       </button>
     </div>
@@ -60,6 +62,7 @@ const TableView  = props => {
       )
       .map(cell =>
         <TableCell
+          onTeamInviteAccept={props.onTeamInviteAccept}
           onTeamInviteDelete={props.onTeamInviteDelete}
           cellId={cell._id}
           onCellClick={onCellClick}

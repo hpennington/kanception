@@ -56,6 +56,32 @@ const App = () => {
       }).then(res => res.json())
         .then(res => {
           console.log(res)
+          setMembers(res)
+        })
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const teamInviteAccept = async (team) => {
+    try {
+      const token = await getTokenSilently()
+      const url = 'http://localhost:4001/team/invite/accept?team=' + team
+
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }).then(res => {
+          console.log(res)
+          const filteredTeams = teamInvites.filter(invite => invite._id !== team)
+          console.log(filteredTeams)
+          setTeamInvites(filteredTeams)
+
+          setUser(user.push(team))
+          fetchTeams(user)
         })
 
     } catch (error) {
@@ -295,7 +321,7 @@ const App = () => {
       {menuOpen === true &&
       <TeamTitleMenu onSave={onTeamSave} close={() => setMenuOpen(false)} />}
       <Toolbar onBack={onBack} onOpen={onOpenMenu} />
-      { sideMenuOpen === true ? <SideMenu setSelectedTeam={setSelectedTeam} selectedTeam={selectedTeam} onTeamInviteDelete={teamInviteDelete} onAddTeam={onAddTeam} invites={teamInvites} teams={teams} members={members}/> : '' }
+      { sideMenuOpen === true ? <SideMenu onTeamInviteAccept={teamInviteAccept} setSelectedTeam={setSelectedTeam} selectedTeam={selectedTeam} onTeamInviteDelete={teamInviteDelete} onAddTeam={onAddTeam} invites={teamInvites} teams={teams} members={members}/> : '' }
       { nameOpen === false && kanbanReady === true && <KanbanContainer
         style={{marginLeft: sideMenuOpen === true ? "375px" : 0}}
         owner={user._id}
