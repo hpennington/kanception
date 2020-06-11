@@ -67,7 +67,7 @@ const App = () => {
   const teamInviteAccept = async (team) => {
     try {
       const token = await getTokenSilently()
-      const url = 'http://localhost:4001/team/invite/accept?team=' + team
+      const url = 'http://localhost:4000/team/invite/accept?team=' + team
 
       fetch(url, {
         method: 'POST',

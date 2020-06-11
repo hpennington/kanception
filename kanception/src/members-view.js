@@ -35,19 +35,35 @@ const MembersView = props => {
       {
         props.members.length > 0 &&
         <div className="members-container">
-          {props.members.map(member => <MemberView name={member.name} />)}
+          {props.members.map(member =>
+            <MemberView email={member.email} name={member.name} />)}
         </div>
       }
     </div>
   )
 }
 
+const TooltipInfo = props => {
+  console.log(props.email)
+  return (
+    <div>
+      <div>
+        {props.name}
+      </div>
+      <div>
+        {props.email}
+      </div>
+    </div>
+  )
+}
+
 const MemberView = props => {
+  console.log(props.name)
   return (
     <OverlayTrigger
       placement="top"
       delay={{ show: 250, hide: 400 }}
-      overlay={<Tooltip>{displayName(props.name)}</Tooltip>}
+      overlay={<Tooltip><TooltipInfo email={props.email} name={displayName(props.name)} /></Tooltip>}
     >
       <div className="member-view">
           <h3>{props.name.first[0].toUpperCase() + props.name.last[0].toUpperCase()}</h3>
@@ -57,9 +73,9 @@ const MemberView = props => {
 }
 
 const displayName = ({first, last}) => {
-  return  first[0].toUpperCase() + first.slice(1).toLowerCase()
+  return  first[0].toUpperCase() + first.slice(1)
     + ' '
-    + last[0].toUpperCase() + last.slice(1).toLowerCase()
+    + last[0].toUpperCase() + last.slice(1)
 }
 
 const InviteTeam = props => {

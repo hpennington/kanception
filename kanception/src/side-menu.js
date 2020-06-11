@@ -32,7 +32,7 @@ const SideMenu = props => {
           cells={props.teams}
         />}
         {
-          props.teams.length > 0 &&
+          props.members.length > 0 &&
           <MembersView team={props.selectedTeam} members={props.members} />
         }
       </div>
