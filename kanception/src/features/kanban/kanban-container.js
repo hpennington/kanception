@@ -294,7 +294,7 @@ const KanbanContainer = (props) => {
 
             const selectedNode = tree.find(node => node.board === cardId)._id
 
-            props.setSelectedNode( selectedNode)
+            props.setSelectedNode(selectedNode)
             props.dispatch(setGroups({groups: groups}))
             props.dispatch(setBoards({boards: boards}))
           }
