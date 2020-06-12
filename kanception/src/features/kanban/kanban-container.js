@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, {
+  useEffect, useState, useRef, forwardRef, useImperativeHandle
+} from 'react'
 import { connect } from 'react-redux'
 import Kanban from './kanban'
 import {
@@ -12,7 +14,7 @@ import {
 
 import { useAuth0 } from '../../react-auth0-spa'
 
-const KanbanContainer = (props) => {
+const KanbanContainer = props => {
   const [mounted, setMounted] = useState(false)
   const [prevSelectedNode, setPrevSelectedNode] = useState(null)
 
@@ -50,9 +52,8 @@ const KanbanContainer = (props) => {
   })
 
   const fetchBoardsInit = async () => {
-    const owner = props.owner
     const api = 'http://localhost:4000'
-    const treeUrl = api + '/tree?owner=' + owner
+    const treeUrl = api + '/tree'
 
     try {
       const token = await getTokenSilently()
@@ -63,7 +64,8 @@ const KanbanContainer = (props) => {
         }
       })
       const tree = await treeResult.json()
-      const root = tree.find(node => node.parent === null)
+      console.log(tree)
+      const root = tree.find(node => node.isRoot === true)
       let boardIds = tree.filter(node => node.parent === root._id).map(node => node.board)
       boardIds.push(root.board)
 
@@ -77,6 +79,9 @@ const KanbanContainer = (props) => {
 
       const boards = await boardsResult.json()
 
+
+      console.log(boards)
+      console.log(root.board)
       const groupIds = boards.find(board => board._id === root.board).groups
       const groupsUrl = constructQueryArray(api + '/groups', groupIds, 'ids')
 
@@ -191,50 +196,6 @@ const KanbanContainer = (props) => {
 
   }
 
-  const onUpdateCard = async (id, object) => {
-    props.dispatch(updateBoard({id: id, object: object}))
-
-    const api = 'http://localhost:4000'
-    const url = api + '/boards/update' + '?id=' + id
-
-    try {
-      const token = await getTokenSilently()
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(object)
-      })
-    } catch(error) {
-      console.log(error)
-    }
-  }
-
-  const onUpdateGroup = async (id, object) => {
-    console.log(id)
-    console.log(object)
-    props.dispatch(updateGroup({id: id, object: object}))
-    const api = 'http://localhost:4000'
-    const url = api + '/groups/update' + '?id=' + id
-    console.log(object)
-
-    try {
-      const token = await getTokenSilently()
-      const updateResult = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(object)
-      })
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   const onCardClick = async (cardId) => {
 
     const owner = props.owner
@@ -306,39 +267,6 @@ const KanbanContainer = (props) => {
     }
   }
 
-  const onAddGroup = async () => {
-    const owner = props.owner
-    const api = 'http://localhost:4000'
-    const url = api + '/groups/add?owner=' + owner + '&board=' + props.selectedNode
-    const token = await getTokenSilently()
-    const addResult = await fetch(url, {method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    const group = await addResult.json()
-
-    console.log(group)
-
-    props.dispatch(addGroup({group: group}))
-  }
-
-  const onCardDelete = (id) => {
-    const deleteCard = window.confirm('Hit OK to delete the card')
-
-    if (deleteCard === true) {
-      console.log('delete ' + id)
-    }
-  }
-
-  const onGroupDelete = (id, title) => {
-    const deleteGroup = window.prompt('Confirm group name to delete:')
-
-    if (deleteGroup === title) {
-      console.log('detete group: ' + id)
-    }
-  }
-
   const onGroupOrderUpdate = (id, source, destination) => {
     console.log(source)
     console.log(destination)
@@ -396,21 +324,121 @@ const KanbanContainer = (props) => {
 
   }
 
+  const onUpdateGroup = async (id, object) => {
+    console.log(id)
+    console.log(object)
+    props.dispatch(updateGroup({id: id, object: object}))
+    const api = 'http://localhost:4000'
+    const url = api + '/groups/update' + '?id=' + id
+    console.log(object)
+
+    try {
+      const token = await getTokenSilently()
+      const updateResult = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(object)
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const onUpdateCard = async (id, object) => {
+    props.dispatch(updateBoard({id: id, object: object}))
+
+    const api = 'http://localhost:4000'
+    const url = api + '/boards/update' + '?id=' + id
+
+    try {
+      const token = await getTokenSilently()
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(object)
+      })
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
+  const onAddGroup = async () => {
+    const owner = props.owner
+    const api = 'http://localhost:4000'
+    const url = api + '/groups/add?owner=' + owner + '&board=' + props.selectedNode
+    const token = await getTokenSilently()
+    const addResult = await fetch(url, {method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    const group = await addResult.json()
+
+    console.log(group)
+
+    props.dispatch(addGroup({group: group}))
+  }
+
+  const onCardDelete = (id) => {
+    const deleteCard = window.confirm('Hit OK to delete the card')
+
+    if (deleteCard === true) {
+      console.log('delete ' + id)
+    }
+  }
+
+  const onGroupDelete = (id, title) => {
+    const deleteGroup = window.prompt('Confirm group name to delete:')
+
+    if (deleteGroup === title) {
+      console.log('detete group: ' + id)
+    }
+  }
+
+  const onTeamChange = async (team, board) => {
+    console.log('onteamchange')
+    const url = 'http://localhost:4000/boards/update/team'
+    try {
+      const token = await getTokenSilently()
+      const result = await fetch(
+        url + '?team=' + team + '&board=' + board,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        }
+      )
+
+      console.log(result)
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div style={props.style}>
       <Kanban
         boards={props.boards}
         groups={props.groups}
+        teams={props.teams}
         onCardClick={onCardClick}
         onAddCard={onAddCard}
         onUpdateCard={onUpdateCard}
         onAddGroupClick={onAddGroup}
-        onUpdateGroup={onUpdateGroup}
+        onUpdateGroup={props.onUpdateGroup}
         onCardDelete={onCardDelete}
         onGroupDelete={onGroupDelete}
         onGroupOrderUpdate={onGroupOrderUpdate}
         onCardOrderUpdate={onCardOrderUpdate}
         onCardGroupUpdate={onCardGroupUpdate}
+        onTeamChange={onTeamChange}
       />
     </div>
   )
@@ -419,10 +447,12 @@ const KanbanContainer = (props) => {
 const mapStateToProps = state => {
   const groups = state.kanban.groups
   const boards = state.kanban.boards
+  const teams = state.teams.teams
 
   return {
     groups,
     boards,
+    teams,
   }
 }
 

@@ -1,8 +1,17 @@
 import React, { useState, useEffect, useReducer, useRef } from 'react'
 import { connect } from 'react-redux'
-import { setTeams, setMembers, setSelectedTeam } from './features/teams/teamsSlice'
+import { DragDropContext } from 'react-beautiful-dnd'
+import { setTeams, setMembers, setSelectedTeam, setNewCards } from './features/teams/teamsSlice'
 import { Button } from 'react-bootstrap'
 import { useAuth0 } from './react-auth0-spa'
+import {
+  setGroups,
+  setBoards,
+  addGroup,
+  addBoard,
+  updateBoard,
+  updateGroup,
+} from './features/kanban/kanbanSlice'
 import Toolbar from './toolbar'
 import KanbanContainer from './features/kanban/kanban-container'
 import SideMenu from './side-menu'
@@ -37,10 +46,33 @@ const App = props => {
 
       if (props.selectedTeam !== prevSelectedTeam) {
         fetchMemberProfiles(props.selectedTeam)
+        fetchNewTeamCards(props.selectedTeam)
         setPrevSelectedTeam(props.selectedTeam)
       }
     }
   })
+
+  const fetchNewTeamCards = async (team) => {
+    try {
+
+      const token = await getTokenSilently()
+      const url = 'http://localhost:4000/team/root/children?team=' + team
+
+      fetch(url, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }).then(res => res.json())
+        .then(res => {
+          console.log(res)
+          props.dispatch(setNewCards({cards: res}))
+        })
+        .catch(error => console.log(error))
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const fetchMemberProfiles = async (team) => {
     console.log('fetchMemberProfiles')
@@ -79,8 +111,8 @@ const App = props => {
           const filteredTeams = teamInvites.filter(invite => invite._id !== team)
           console.log(filteredTeams)
           setTeamInvites(filteredTeams)
-
-          setUser(user.push(team))
+          user.push(team)
+          setUser(user)
           fetchTeams(user)
         })
 
@@ -130,18 +162,17 @@ const App = props => {
       for (const team of teamIds) {
         const url = 'http://localhost:4000/team?team=' + team
         const promise = new Promise(async (resolve, reject) => {
-          const res = await fetch(url, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          })
-          const json = await res.json()
-
-          if (props.teams.find(team => team._id === json._id) === undefined) {
+          try {
+            const res = await fetch(url, {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            })
+            const json = await res.json()
             resolve(json)
+          } catch(error) {
+            reject(error)
           }
-
-          reject()
         })
 
         promises.push(promise)
@@ -154,6 +185,7 @@ const App = props => {
       if (results.length > 0) {
         props.dispatch(setSelectedTeam({team: results[0]._id}))
         fetchMemberProfiles(props.selectedTeam)
+        fetchNewTeamCards(props.selectedTeam)
       }
 
     } catch (error) {
@@ -322,6 +354,31 @@ const App = props => {
     }
   }
 
+  const onAcceptCard = async (id, group) => {
+    try {
+
+      const parent = selectedNode
+      const team = props.selectedTeam
+      const url = 'http://localhost:4000/team/board/accept'
+        + '?board=' + id
+        + '&group=' + group
+        + '&parent=' + parent
+        + '&team=' + team
+
+      const token = await getTokenSilently()
+      const result = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+    } catch(error) {
+      console.log(error)
+    }
+
+  }
+
   if (loading === true) {
     return (
       <div>
@@ -331,32 +388,38 @@ const App = props => {
   }
 
   return (
-    <div className="App">
-      {menuOpen === true &&
-      <TeamTitleMenu onSave={onTeamSave} close={() => setMenuOpen(false)} />}
-      <Toolbar onBack={onBack} onOpen={onOpenMenu} />
-      { sideMenuOpen === true &&
-        <SideMenu
-          onTeamInviteAccept={teamInviteAccept}
-          setSelectedTeam={team => props.dispatch(setSelectedTeam({team: team}))}
-          selectedTeam={props.selectedTeam}
-          onTeamInviteDelete={teamInviteDelete}
-          onAddTeam={onAddTeam}
-          invites={teamInvites}
-          teams={props.teams}
-          members={props.members}
-        />
-      }
-      { nameOpen === false && kanbanReady === true && <KanbanContainer
-        style={{marginLeft: sideMenuOpen === true ? "375px" : 0}}
-        owner={user._id}
-        selectedNode={selectedNode}
-        setSelectedNode={setSelectedNode}
-      />}
-      {
-        nameOpen === true && <CollectInfo onSubmit={onSubmit} />
-      }
-    </div>
+      <div className="App">
+        {menuOpen === true &&
+        <TeamTitleMenu onSave={onTeamSave} close={() => setMenuOpen(false)} />}
+        <Toolbar onBack={onBack} onOpen={onOpenMenu} />
+        { sideMenuOpen === true &&
+          <SideMenu
+            onTeamInviteAccept={teamInviteAccept}
+            setSelectedTeam={team => props.dispatch(setSelectedTeam({team: team}))}
+            selectedTeam={props.selectedTeam}
+            onTeamInviteDelete={teamInviteDelete}
+            onAddTeam={onAddTeam}
+            invites={teamInvites}
+            groups={props.groups}
+            onAcceptCard={onAcceptCard}
+            newCards={props.newCards.filter(card => card.team === props.selectedTeam)
+            .filter(card => !props.boards.map(board => board._id).includes(card._id))}
+            teams={props.teams}
+            members={props.members}
+          />
+        }
+        { nameOpen === false && kanbanReady === true &&
+          <KanbanContainer
+            style={{marginLeft: sideMenuOpen === true ? "375px" : 0}}
+            owner={user._id}
+            selectedNode={selectedNode}
+            setSelectedNode={setSelectedNode}
+          />
+        }
+        {
+          nameOpen === true && <CollectInfo onSubmit={onSubmit} />
+        }
+      </div>
   )
 }
 
@@ -463,6 +526,9 @@ const mapStateToProps = state => {
     teams: state.teams.teams,
     selectedTeam: state.teams.selectedTeam,
     members: state.teams.members,
+    newCards: state.teams.newCards,
+    boards: state.kanban.boards,
+    groups: state.kanban.groups,
   }
 }
 

@@ -3,7 +3,7 @@ import { Draggable } from 'react-beautiful-dnd'
 import TextAreaAutoSize from 'react-textarea-autosize'
 import './card.css'
 
-export default function Card(props) {
+const Card = props => {
   const container = useRef(null)
   const [mounted, setMounted] = useState(false)
   const [dragging, setDragging] = useState(false)
@@ -48,13 +48,26 @@ export default function Card(props) {
           }}
           value={props.title}
         />
-        <select className="share-select">
-          <option>Private</option>
-          <option>E Com</option>
-          <option>Space Brain</option>
+        <select
+          className="share-select"
+          data-card-id={props.id}
+          onChange={e =>
+            props.onTeamChange(
+              e.target.children[e.target.selectedIndex].dataset.teamId,
+              e.target.dataset.cardId
+            )
+          }>
+          <option data-team-id="private">Private</option>
+          {
+          props.teams.map(team =>
+            <option data-team-id={team._id}>{team.title}</option>
+          )
+          }
         </select>
       </div>
       )}
     </Draggable>
   )
 }
+
+export default Card

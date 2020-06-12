@@ -6,6 +6,7 @@ export const teamsSlice = createSlice({
     teams: [],
     selectedTeam: null,
     members: [],
+    newCards: [],
   },
   reducers: {
     setTeams: (state, action) => {
@@ -20,6 +21,9 @@ export const teamsSlice = createSlice({
     setMembers: (state, action) => {
       state.members = action.payload.members
     },
+    setNewCards: (state, action) => {
+      state.newCards = action.payload.cards
+    },
   },
 });
 
@@ -27,7 +31,8 @@ export const {
   setTeams,
   setMembers,
   addTeam,
-  setSelectedTeam
+  setSelectedTeam,
+  setNewCards
 } = teamsSlice.actions
 
 export default teamsSlice.reducer

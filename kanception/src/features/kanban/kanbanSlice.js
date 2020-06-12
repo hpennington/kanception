@@ -17,8 +17,6 @@ export const kanbanSlice = createSlice({
       state.boards = action.payload.boards
     },
     addBoard: (state, action) => {
-      console.log(action.payload.board)
-      console.log(state.boards)
       state.boards.unshift(action.payload.board)
       state.boards.sort((a, b) => b.order - a.order)
     },

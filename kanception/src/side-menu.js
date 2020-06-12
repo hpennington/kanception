@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import TeamTableView from './team-table-view'
+import NewCardsTableView from './new-cards-table-view'
 import InviteTableView from './invite-table-view'
 import MembersView from './members-view'
 import './side-menu.css'
@@ -23,14 +24,28 @@ const SideMenu = props => {
         </div>
         }
         <div className="btn-container">
-          <button onClick={props.onAddTeam}>New Team</button>
+          <button onClick={props.onAddTeam}>New Team +</button>
         </div>
         {props.teams.length > 0 &&
         <TeamTableView
           onSetSelectedTeam={id => props.setSelectedTeam(id)}
           selectedId={props.selectedTeam}
           cells={props.teams}
-        />}
+        />
+        }
+        {
+          props.newCards.length > 0 &&
+          <span>
+            <div className="btn-container">
+              <p>New shared team cards</p>
+            </div>
+            <NewCardsTableView
+              onAcceptCard={props.onAcceptCard}
+              groups={props.groups}
+              cells={props.newCards}
+            />
+          </span>
+        }
         {
           props.members.length > 0 &&
           <MembersView team={props.selectedTeam} members={props.members} />
