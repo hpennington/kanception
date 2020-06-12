@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useReducer, useRef } from 'react'
+import { connect } from 'react-redux'
+import { setTeams, setMembers, setSelectedTeam } from './features/teams/teamsSlice'
 import { Button } from 'react-bootstrap'
 import { useAuth0 } from './react-auth0-spa'
 import Toolbar from './toolbar'
@@ -8,7 +10,7 @@ import { TeamTitleMenu } from './menu'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 
-const App = () => {
+const App = props => {
   const { loading, getTokenSilently } = useAuth0()
   const [mounted, setMounted] = useState(false)
   const [kanbanReady, setKanbanReady] = useState(false)
@@ -18,11 +20,8 @@ const App = () => {
   const [nameOpen, setNameOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [sideMenuOpen, setSideMenuOpen] = useState(true)
-  const [teams, setTeams] = useState([])
-  const [members, setMembers] = useState([])
   const [teamInvites, setTeamInvites] = useState([])
   const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
-  const [selectedTeam, setSelectedTeam] = useState(null)
   const [prevSelectedTeam, setPrevSelectedTeam] = useState(null)
 
   useEffect(() => {
@@ -36,9 +35,9 @@ const App = () => {
         setPrevUser(user)
       }
 
-      if (selectedTeam !== prevSelectedTeam) {
-        fetchMemberProfiles(selectedTeam)
-        setPrevSelectedTeam(selectedTeam)
+      if (props.selectedTeam !== prevSelectedTeam) {
+        fetchMemberProfiles(props.selectedTeam)
+        setPrevSelectedTeam(props.selectedTeam)
       }
     }
   })
@@ -57,7 +56,7 @@ const App = () => {
       }).then(res => res.json())
         .then(res => {
           console.log(res)
-          setMembers(res)
+          props.dispatch(setMembers({members: res}))
         })
 
     } catch (error) {
@@ -125,28 +124,36 @@ const App = () => {
   const fetchTeams = async (teamIds) => {
     try {
       const token = await getTokenSilently()
-      console.log(teams)
+      console.log(props.teams)
+      const promises = []
+
       for (const team of teamIds) {
         const url = 'http://localhost:4000/team?team=' + team
-        fetch(url, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }).then(res => res.json())
-          .then(res => {
-            console.log(res)
-            console.log(teams)
-            if (teams.find(team => team._id === res._id) === undefined) {
-              const newTeams = teams
-              console.log(res)
-              newTeams.push(res)
-              setTeams(newTeams)
-              if (newTeams.length > 0) {
-                setSelectedTeam(newTeams[0]._id)
-                console.log('set selecte team')
-              }
+        const promise = new Promise(async (resolve, reject) => {
+          const res = await fetch(url, {
+            headers: {
+              Authorization: `Bearer ${token}`
             }
           })
+          const json = await res.json()
+
+          if (props.teams.find(team => team._id === json._id) === undefined) {
+            resolve(json)
+          }
+
+          reject()
+        })
+
+        promises.push(promise)
+      }
+
+      const results = await Promise.all(promises)
+
+      props.dispatch(setTeams({teams: results}))
+
+      if (results.length > 0) {
+        props.dispatch(setSelectedTeam({team: results[0]._id}))
+        fetchMemberProfiles(props.selectedTeam)
       }
 
     } catch (error) {
@@ -271,11 +278,13 @@ const App = () => {
         }
       })
       const teamMember = await teamResult.json()
-      teams.unshift(teamMember)
-      console.log(teams)
-      setTeams(teams)
-      if (teams.length > 0) {
-        setSelectedTeam(teams[0]._id)
+      const newTeams = props.teams.slice()
+      newTeams.unshift(teamMember)
+      console.log(newTeams)
+      props.dispatch(setTeams({teams: newTeams}))
+
+      if (newTeams.length > 0) {
+        props.dispatch(setSelectedTeam({team: newTeams[0]._id}))
       }
 
       forceUpdate()
@@ -326,7 +335,18 @@ const App = () => {
       {menuOpen === true &&
       <TeamTitleMenu onSave={onTeamSave} close={() => setMenuOpen(false)} />}
       <Toolbar onBack={onBack} onOpen={onOpenMenu} />
-      { sideMenuOpen === true ? <SideMenu onTeamInviteAccept={teamInviteAccept} setSelectedTeam={setSelectedTeam} selectedTeam={selectedTeam} onTeamInviteDelete={teamInviteDelete} onAddTeam={onAddTeam} invites={teamInvites} teams={teams} members={members}/> : '' }
+      { sideMenuOpen === true &&
+        <SideMenu
+          onTeamInviteAccept={teamInviteAccept}
+          setSelectedTeam={team => props.dispatch(setSelectedTeam({team: team}))}
+          selectedTeam={props.selectedTeam}
+          onTeamInviteDelete={teamInviteDelete}
+          onAddTeam={onAddTeam}
+          invites={teamInvites}
+          teams={props.teams}
+          members={props.members}
+        />
+      }
       { nameOpen === false && kanbanReady === true && <KanbanContainer
         style={{marginLeft: sideMenuOpen === true ? "375px" : 0}}
         owner={user._id}
@@ -438,4 +458,13 @@ const CollectInfo = props => {
   )
 }
 
-export default App
+const mapStateToProps = state => {
+  return {
+    teams: state.teams.teams,
+    selectedTeam: state.teams.selectedTeam,
+    members: state.teams.members,
+  }
+}
+
+
+export default connect(mapStateToProps)(App)
