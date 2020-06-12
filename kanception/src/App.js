@@ -44,6 +44,7 @@ const App = () => {
   })
 
   const fetchMemberProfiles = async (team) => {
+    console.log('fetchMemberProfiles')
     try {
 
       const token = await getTokenSilently()
@@ -125,7 +126,6 @@ const App = () => {
     try {
       const token = await getTokenSilently()
       console.log(teams)
-
       for (const team of teamIds) {
         const url = 'http://localhost:4000/team?team=' + team
         fetch(url, {
@@ -143,10 +143,12 @@ const App = () => {
               setTeams(newTeams)
               if (newTeams.length > 0) {
                 setSelectedTeam(newTeams[0]._id)
+                console.log('set selecte team')
               }
             }
           })
       }
+
     } catch (error) {
       console.log(error)
     }
@@ -269,9 +271,12 @@ const App = () => {
         }
       })
       const teamMember = await teamResult.json()
-      teams.push(teamMember)
+      teams.unshift(teamMember)
       console.log(teams)
       setTeams(teams)
+      if (teams.length > 0) {
+        setSelectedTeam(teams[0]._id)
+      }
 
       forceUpdate()
 
