@@ -319,7 +319,7 @@ const KanbanContainer = props => {
 
     boards.forEach((board, index) => {
       const newOrder = boards.length - 1 - index
-      onUpdateCard(board._id, {order: newOrder, group: destinationId})
+      onUpdateCardGroup(board._id, {order: newOrder, group: destinationId})
     })
 
   }
@@ -352,6 +352,27 @@ const KanbanContainer = props => {
 
     const api = 'http://localhost:4000'
     const url = api + '/boards/update' + '?id=' + id
+
+    try {
+      const token = await getTokenSilently()
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(object)
+      })
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
+  const onUpdateCardGroup = async (id, object) => {
+    //props.dispatch(updateBoard({id: id, object: object}))
+
+    const api = 'http://localhost:4000'
+    const url = api + '/boardrefs/update' + '?id=' + id
 
     try {
       const token = await getTokenSilently()

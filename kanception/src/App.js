@@ -402,8 +402,9 @@ const App = props => {
             invites={teamInvites}
             groups={props.groups}
             onAcceptCard={onAcceptCard}
-            newCards={props.newCards.filter(card => card.team === props.selectedTeam)
-            .filter(card => !props.boards.map(board => board._id).includes(card._id))}
+            boards={props.boards}
+            newCards={props.boards.length > 0 ? props.newCards.filter(card => card.team === props.selectedTeam)
+            .filter(card => !props.boards.map(board => board._id).includes(card._id)) : []}
             teams={props.teams}
             members={props.members}
           />
@@ -526,8 +527,8 @@ const mapStateToProps = state => {
     teams: state.teams.teams,
     selectedTeam: state.teams.selectedTeam,
     members: state.teams.members,
-    newCards: state.teams.newCards,
     boards: state.kanban.boards,
+    newCards: state.teams.newCards,
     groups: state.kanban.groups,
   }
 }
