@@ -29,6 +29,7 @@ const App = props => {
   const [nameOpen, setNameOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [sideMenuOpen, setSideMenuOpen] = useState(true)
+  const [tree, setTree] = useState([])
   const [teamInvites, setTeamInvites] = useState([])
   const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
   const [prevSelectedTeam, setPrevSelectedTeam] = useState(null)
@@ -279,6 +280,7 @@ const App = props => {
 
         const tree = await treeResult.json()
         console.log(tree)
+        setTree(tree)
         const root = tree.find(node => node._id === selectedNode)
         setSelectedNode(root.parent)
       } catch(error) {
@@ -404,7 +406,7 @@ const App = props => {
             onAcceptCard={onAcceptCard}
             boards={props.boards}
             newCards={props.boards.length > 0 ? props.newCards.filter(card => card.team === props.selectedTeam)
-            .filter(card => !props.boards.map(board => board._id).includes(card._id)) : []}
+            .filter(card => !props.tree.map(boardRef => boardRef.board).includes(card._id)) : []}
             teams={props.teams}
             members={props.members}
           />
@@ -530,6 +532,7 @@ const mapStateToProps = state => {
     boards: state.kanban.boards,
     newCards: state.teams.newCards,
     groups: state.kanban.groups,
+    tree: state.kanban.tree,
   }
 }
 

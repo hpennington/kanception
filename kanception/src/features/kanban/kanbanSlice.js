@@ -5,6 +5,7 @@ export const kanbanSlice = createSlice({
   initialState: {
     groups: [],
     boards: [],
+    tree: [],
   },
   reducers: {
     addGroup: (state, action) => {
@@ -33,6 +34,9 @@ export const kanbanSlice = createSlice({
       state.groups = [group, ...state.groups.filter(group => group._id !== action.payload.id)]
       state.groups.sort((a, b) => a.order - b.order)
     },
+    setTree: (state, action) => {
+      state.tree = action.payload.tree
+    },
   },
 });
 
@@ -42,7 +46,8 @@ export const {
   addGroup,
   addBoard,
   updateBoard,
-  updateGroup
+  updateGroup,
+  setTree,
 } = kanbanSlice.actions;
 
 export default kanbanSlice.reducer

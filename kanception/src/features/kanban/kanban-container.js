@@ -10,6 +10,7 @@ import {
   addBoard,
   updateBoard,
   updateGroup,
+  setTree,
 } from './kanbanSlice'
 
 import { useAuth0 } from '../../react-auth0-spa'
@@ -64,6 +65,7 @@ const KanbanContainer = props => {
         }
       })
       const tree = await treeResult.json()
+      props.dispatch(setTree({tree: tree}))
       console.log(tree)
       const root = tree.find(node => node.isRoot === true)
       let boardIds = tree.filter(node => node.parent === root._id).map(node => node.board)
@@ -121,6 +123,7 @@ const KanbanContainer = props => {
         }
       })
       const tree = await treeResult.json()
+      props.dispatch(setTree({tree: tree}))
       const root = tree.find(node => node._id === props.selectedNode)
       let boardIds = tree.filter(node => node.parent === root._id).map(node => node.board)
       boardIds.push(root.board)
@@ -234,6 +237,7 @@ const KanbanContainer = props => {
             }
           })
           const tree = await treeResult.json()
+          props.dispatch(setTree({tree: tree}))
 
           const clickedNode = tree.find(node => node.board === cardId)
 
