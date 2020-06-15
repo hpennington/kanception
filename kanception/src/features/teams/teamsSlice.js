@@ -24,6 +24,9 @@ export const teamsSlice = createSlice({
     setNewCards: (state, action) => {
       state.newCards = action.payload.cards
     },
+    removeNewCard: (state, action) => {
+      state.newCards = state.newCards.filter(card => card._id !== action.payload.id)
+    },
   },
 });
 
@@ -32,7 +35,8 @@ export const {
   setMembers,
   addTeam,
   setSelectedTeam,
-  setNewCards
+  setNewCards,
+  removeNewCard,
 } = teamsSlice.actions
 
 export default teamsSlice.reducer

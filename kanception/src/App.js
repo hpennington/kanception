@@ -12,6 +12,7 @@ import {
   updateBoard,
   updateGroup,
 } from './features/kanban/kanbanSlice'
+import { removeNewCard } from './features/teams/teamsSlice'
 import Toolbar from './toolbar'
 import KanbanContainer from './features/kanban/kanban-container'
 import SideMenu from './side-menu'
@@ -358,7 +359,6 @@ const App = props => {
 
   const onAcceptCard = async (id, group) => {
     try {
-
       const parent = selectedNode
       const team = props.selectedTeam
       const url = 'http://localhost:4000/team/board/accept'
@@ -374,6 +374,20 @@ const App = props => {
           Authorization: `Bearer ${token}`,
         },
       })
+
+      const boardRef = await result.json()
+
+      const boardResult = await fetch(
+        'http://localhost:4000/boards?ids[]=' + id, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+
+      const boards = await boardResult.json()
+      props.dispatch(addBoard({board: boards[0]}))
+      props.dispatch(removeNewCard({id: id}))
 
     } catch(error) {
       console.log(error)

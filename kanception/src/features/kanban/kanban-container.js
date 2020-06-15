@@ -453,6 +453,7 @@ const KanbanContainer = props => {
         boards={props.boards}
         groups={props.groups}
         teams={props.teams}
+        tree={props.tree}
         onCardClick={onCardClick}
         onAddCard={onAddCard}
         onUpdateCard={onUpdateCard}
@@ -474,6 +475,7 @@ const mapStateToProps = state => {
     groups: state.kanban.groups,
     boards: state.kanban.boards,
     teams: state.teams.teams,
+    tree: state.kanban.tree,
   }
 }
 
