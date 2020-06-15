@@ -470,14 +470,10 @@ const KanbanContainer = props => {
 }
 
 const mapStateToProps = state => {
-  const groups = state.kanban.groups
-  const boards = state.kanban.boards
-  const teams = state.teams.teams
-
   return {
-    groups,
-    boards,
-    teams,
+    groups: state.kanban.groups,
+    boards: state.kanban.boards,
+    teams: state.teams.teams,
   }
 }
 
