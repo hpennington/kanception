@@ -187,6 +187,7 @@ const Kanban = forwardRef((props, ref) => {
                         .map((column, cardIndex) =>
                           <Card
                             key={column._id}
+                            team={props.tree.find(node => node.board === column._id).team}
                             teams={props.teams}
                             onCardClick={props.onCardClick}
                             id={column._id}

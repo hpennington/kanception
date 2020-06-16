@@ -192,7 +192,7 @@ const KanbanContainer = props => {
       })
       const result = await addResult.json()
 
-      props.dispatch(addBoard({board: result.board}))
+      props.dispatch(addBoard({board: result.board, boardRef: result.boardRef}))
     } catch (error) {
       console.log(error)
     }

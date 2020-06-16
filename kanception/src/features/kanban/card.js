@@ -55,8 +55,10 @@ const Card = props => {
             props.onTeamChange(
               e.target.children[e.target.selectedIndex].dataset.teamId,
               e.target.dataset.cardId
-            )
-          }>
+            )}
+            value={props.team === undefined
+            ? 'Private' : props.teams.find(team => team._id === props.team).title}
+          >
           <option data-team-id="private">Private</option>
           {
           props.teams.map(team =>
