@@ -11,6 +11,7 @@ import {
   updateBoard,
   updateGroup,
   setTree,
+  setBoardTeam,
 } from './kanbanSlice'
 
 import { useAuth0 } from '../../react-auth0-spa'
@@ -428,6 +429,7 @@ const KanbanContainer = props => {
 
   const onTeamChange = async (team, board) => {
     console.log('onteamchange')
+    props.dispatch(setBoardTeam({team: team, board: board}))
     const url = 'http://localhost:4000/boards/update/team'
     try {
       const token = await getTokenSilently()
@@ -440,7 +442,6 @@ const KanbanContainer = props => {
           }
         }
       )
-
       console.log(result)
     } catch(error) {
       console.log(error)

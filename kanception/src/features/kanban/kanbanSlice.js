@@ -22,6 +22,14 @@ export const kanbanSlice = createSlice({
       state.boards.sort((a, b) => b.order - a.order)
       state.tree.push(action.payload.boardRef)
     },
+    setBoardTeam: (state, action) => {
+      const boardRef = state.tree.find(node => node.board === action.payload.board)
+      if (action.payload.team === 'Private') {
+        boardRef.team = 'Private'
+      } else {
+        boardRef.team = action.payload.team
+      }
+    },
     updateBoard: (state, action) => {
       console.log(action.payload)
       let board = state.boards.find(board => board._id === action.payload.id)
@@ -49,6 +57,7 @@ export const {
   updateBoard,
   updateGroup,
   setTree,
-} = kanbanSlice.actions;
+  setBoardTeam,
+} = kanbanSlice.actions
 
 export default kanbanSlice.reducer

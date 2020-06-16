@@ -56,7 +56,7 @@ const Card = props => {
               e.target.children[e.target.selectedIndex].dataset.teamId,
               e.target.dataset.cardId
             )}
-            value={props.team === undefined
+            value={props.team === 'Private' || props.teams.find(t => t._id === props.team) == null
             ? 'Private' : props.teams.find(team => team._id === props.team).title}
           >
           <option data-team-id="private">Private</option>
