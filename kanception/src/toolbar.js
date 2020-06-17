@@ -36,6 +36,7 @@ const Toolbar = (props) => {
             variant="secondary"
             name="radio"
             style={{
+              boxShadow: "none",
               borderRight: "1px solid #4d27cf",
               background: "white",
               color: props.kanbanOpen === true ? "gray" : "#4d27cf",
@@ -50,6 +51,7 @@ const Toolbar = (props) => {
             variant="secondary"
             name="radio"
             style={{
+              boxShadow: "none",
               borderLeft: "1px solid #4d27cf",
               background: "white",
               color: props.kanbanOpen === true ? "#4d27cf" : "gray",
