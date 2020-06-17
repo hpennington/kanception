@@ -1,0 +1,8 @@
+.gantt {
+  height: 65vh;
+  margin: 5px;
+  margin-top: 40px;
+  background: rgb(22, 22, 46);
+  color: white;
+  border-radius: 5px;
+}
