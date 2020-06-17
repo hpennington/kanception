@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useReducer, useRef } from 'react'
 import { connect } from 'react-redux'
 import { DragDropContext } from 'react-beautiful-dnd'
+import GanttChart from './features/gantt/gantt.js'
+import BoardsListView from './features/list-view/list-view.js'
 import { setTeams, setMembers, setSelectedTeam, setNewCards } from './features/teams/teamsSlice'
 import { Button } from 'react-bootstrap'
 import { useAuth0 } from './react-auth0-spa'
@@ -24,6 +26,8 @@ const App = props => {
   const { loading, getTokenSilently } = useAuth0()
   const [mounted, setMounted] = useState(false)
   const [kanbanReady, setKanbanReady] = useState(false)
+  const [kanbanOpen, setKanbanOpen] = useState(true)
+  const [ganttOpen, setGanttOpen] = useState(false)
   const [user, setUser] = useState(null)
   const [prevUser, setPrevUser] = useState(null)
   const [selectedNode, setSelectedNode] = useState(null)
@@ -395,6 +399,16 @@ const App = props => {
 
   }
 
+  const onOpenKanban = e => {
+    setKanbanOpen(true)
+    setGanttOpen(false)
+  }
+
+  const onOpenGantt = e => {
+    setGanttOpen(true)
+    setKanbanOpen(false)
+  }
+
   if (loading === true) {
     return (
       <div>
@@ -407,7 +421,13 @@ const App = props => {
       <div className="App">
         {menuOpen === true &&
         <TeamTitleMenu onSave={onTeamSave} close={() => setMenuOpen(false)} />}
-        <Toolbar onBack={onBack} onOpen={onOpenMenu} />
+        <Toolbar
+          onBack={onBack}
+          onOpenKanban={onOpenKanban}
+          onOpenGantt={onOpenGantt}
+          onOpen={onOpenMenu}
+          kanbanOpen={kanbanOpen === true && ganttOpen === false}
+        />
         { sideMenuOpen === true &&
           <SideMenu
             onTeamInviteAccept={teamInviteAccept}
@@ -425,7 +445,20 @@ const App = props => {
             members={props.members}
           />
         }
-        { nameOpen === false && kanbanReady === true &&
+        {
+          ganttOpen === true &&
+          <div
+            style={{
+              marginLeft: sideMenuOpen === true ? "375px" : 0,
+              marginTop: "50px",
+              width: sideMenuOpen === true ? "calc(100vw - 375px)" : "100vw",
+            }}
+          >
+            <GanttChart />
+            <BoardsListView />
+          </div>
+        }
+        { nameOpen === false && kanbanReady === true && kanbanOpen === true &&
           <KanbanContainer
             style={{marginLeft: sideMenuOpen === true ? "375px" : 0}}
             owner={user._id}
