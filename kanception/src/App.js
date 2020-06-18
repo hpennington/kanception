@@ -25,6 +25,8 @@ import './App.css'
 const App = props => {
   const { loading, getTokenSilently } = useAuth0()
   const [mounted, setMounted] = useState(false)
+  const [dragging, setDragging] = useState(false)
+  const [position, setPosition] = useState({x: 0, y: 0})
   const [kanbanReady, setKanbanReady] = useState(false)
   const [kanbanOpen, setKanbanOpen] = useState(true)
   const [ganttOpen, setGanttOpen] = useState(false)
@@ -417,6 +419,19 @@ const App = props => {
     )
   }
 
+  const onMouseMove = e => {
+    if (dragging === true) {
+      e.target.style.top = `${e.clientY}px`
+      e.target.style.left = `${e.clientX}px`
+      e.target.style.position = 'absolute'
+    }
+  }
+
+  const onMouseUp = e => {
+    setDragging(false)
+    e.target.style.position = 'block'
+  }
+
   return (
       <div className="App">
         {menuOpen === true &&
@@ -452,10 +467,16 @@ const App = props => {
               marginLeft: sideMenuOpen === true ? "375px" : 0,
               marginTop: "50px",
               width: sideMenuOpen === true ? "calc(100vw - 375px)" : "100vw",
+              overflow: "auto",
             }}
+            onMouseMove={onMouseMove}
+            onMouseUp={onMouseUp}
           >
             <GanttChart />
-            <BoardsListView />
+            <BoardsListView
+              setDragging={e => setDragging(e)}
+              setPosition={position => setPosition(position)}
+            />
           </div>
         }
         { nameOpen === false && kanbanReady === true && kanbanOpen === true &&
