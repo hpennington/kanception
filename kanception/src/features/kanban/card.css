@@ -14,6 +14,7 @@
 .share-select {
   visibility: hidden;
   margin: 10px;
+  opacity: 0.75;
 }
 
 .kanception-card:hover .share-select {
