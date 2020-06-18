@@ -1,0 +1,18 @@
+:root {
+  --cell-margin: 10px;
+}
+
+.list-cell {
+  max-width: 800px;
+  width: 100%;
+  padding: 30px;
+  background: #242628;
+  color: white;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--cell-margin);
+  margin-bottom: var(--cell-margin);
+}
+

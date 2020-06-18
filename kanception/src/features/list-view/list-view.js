@@ -5,51 +5,56 @@ import './list-view.css'
 
 const BoardsListView = props => {
   return (
-    <div
-      style={{
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        overflow: "auto",
-      }}
-    >
-      <ListCell setDragging={props.setDragging} setPosition={props.setPosition}/>
-      <ListCell setDragging={props.setDragging} setPosition={props.setPosition}/>
-      <ListCell setDragging={props.setDragging} setPosition={props.setPosition}/>
-      <ListCell setDragging={props.setDragging} setPosition={props.setPosition}/>
-      <ListCell setDragging={props.setDragging} setPosition={props.setPosition}/>
-      <ListCell setDragging={props.setDragging} setPosition={props.setPosition}/>
-      <ListCell setDragging={props.setDragging} setPosition={props.setPosition}/>
-      <ListCell setDragging={props.setDragging} setPosition={props.setPosition}/>
-      <ListCell setDragging={props.setDragging} setPosition={props.setPosition}/>
-      <ListCell setDragging={props.setDragging} setPosition={props.setPosition}/>
-      <ListCell setDragging={props.setDragging} setPosition={props.setPosition}/>
-      <ListCell setDragging={props.setDragging} setPosition={props.setPosition}/>
-    </div>
+    <DragDropContext>
+      <Droppable
+        droppableId="list-view-droppable"
+      >
+        {provided =>
+        <div
+          {...provided.droppableProps}
+          ref={provided.innerRef}
+          style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            overflow: "auto",
+          }}
+        >
+          {props.boards.map((board, index) =>
+          <ListCell id={board._id} title={board.title} />
+          )}
+        </div>
+        }
+      </Droppable>
+    </DragDropContext>
   )
 }
 
 const ListCell = props => {
-
-  const onMouseDown = e => {
-    props.setPosition({x: e.clientX, y: e.clientY})
-    props.setDragging(true)
-  }
-
   return (
-    <div
-      className="list-cell"
-      onMouseDown={onMouseDown}
+    <Draggable
+      draggableId={props.id}
+      index={props.index}
     >
-      Work on task 1 for bug #43
-    </div>
+      {provided =>
+      <div
+        {...provided.dragHandleProps}
+        {...provided.draggableProps}
+        ref={provided.innerRef}
+        className="list-cell"
+      >
+        {props.title}
+      </div>
+      }
+    </Draggable>
   )
 }
 
 const mapStateToProps = state => {
   return {
+    boards: state.kanban.boards
   }
 }
 
