@@ -5,7 +5,6 @@ import './list-view.css'
 
 const BoardsListView = props => {
   return (
-    <DragDropContext>
       <Droppable
         droppableId="list-view-droppable"
       >
@@ -23,12 +22,12 @@ const BoardsListView = props => {
           }}
         >
           {props.boards.map((board, index) =>
-          <ListCell id={board._id} title={board.title} />
+          <ListCell id={board._id} title={board.title} index={index} />
           )}
+          {provided.placeholder}
         </div>
         }
       </Droppable>
-    </DragDropContext>
   )
 }
 

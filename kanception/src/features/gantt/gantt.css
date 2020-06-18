@@ -6,3 +6,7 @@
   color: white;
   border-radius: 5px;
 }
+
+.gantt-channel {
+  height: calc(65vh / 8);
+}
