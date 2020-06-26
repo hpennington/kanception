@@ -112,9 +112,8 @@ const KanbanContainer = props => {
   }
 
   const fetchBoards = async () => {
-    const owner = props.owner
     const api = 'http://localhost:4000'
-    const treeUrl = api + '/tree?owner=' + owner
+    const treeUrl = api + '/tree'
 
     try {
       const token = await getTokenSilently()
