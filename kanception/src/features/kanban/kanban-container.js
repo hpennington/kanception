@@ -169,8 +169,7 @@ const KanbanContainer = props => {
       const token = await getTokenSilently()
       const api = 'http://localhost:4000'
       const title = ''
-      const owner = props.owner
-      const treeUrl = api + '/tree?owner=' + owner
+      const treeUrl = api + '/tree'
       const treeResult = await fetch(treeUrl, {
         headers: {
           Authorization: `Bearer ${token}`
@@ -182,7 +181,7 @@ const KanbanContainer = props => {
       const parent = props.selectedNode
       console.log(parent)
       const url = api + '/boards/add?group=' + groupId
-        + '&title=' + title + '&owner=' + owner + '&parent=' + parent
+        + '&title=' + title + '&parent=' + parent
 
       const addResult = await fetch(url, {
         method: 'POST',
