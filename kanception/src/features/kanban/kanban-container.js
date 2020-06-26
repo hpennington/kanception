@@ -202,7 +202,6 @@ const KanbanContainer = props => {
   const onCardClick = async (cardId) => {
     console.log('ONCARDCLICK')
 
-    const owner = props.owner
     const api = 'http://localhost:4000'
     const clickedBoardUrl = constructQueryArray(api + '/boards', [cardId], 'ids')
 
@@ -231,7 +230,7 @@ const KanbanContainer = props => {
           })
           const groups = await groupsResult.json()
 
-          const treeUrl = api + '/tree?owner=' + owner
+          const treeUrl = api + '/tree'
           const treeResult = await fetch(treeUrl, {
             headers: {
               Authorization: `Bearer ${token}`
