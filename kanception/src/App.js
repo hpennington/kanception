@@ -361,8 +361,9 @@ const App = props => {
     }
   }
 
-  const onAcceptCard = async (id, group) => {
+  const onAcceptCard = async (refId, group) => {
     try {
+      const id = props.newCards.find(node => node._id === refId).board
       const parent = selectedNode
       const team = props.selectedTeam
       const url = 'http://localhost:4000/team/board/accept'
@@ -439,8 +440,10 @@ const App = props => {
             groups={props.groups}
             onAcceptCard={onAcceptCard}
             boards={props.boards}
-            newCards={props.boards.length > 0 ? props.newCards.filter(card => card.team === props.selectedTeam)
-            .filter(card => !props.tree.map(boardRef => boardRef.board).includes(card._id)) : []}
+            newCards={props.boards.length > 0 ? props.newCards
+              .filter(card => card.team === props.selectedTeam)
+              .filter(card => !props.tree
+              .map(boardRef => boardRef.board).includes(card.board)) : []}
             teams={props.teams}
             members={props.members}
           />

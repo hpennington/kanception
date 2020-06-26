@@ -201,6 +201,7 @@ const KanbanContainer = props => {
   }
 
   const onCardClick = async (cardId) => {
+    console.log('ONCARDCLICK')
 
     const owner = props.owner
     const api = 'http://localhost:4000'
