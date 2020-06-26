@@ -51,6 +51,7 @@ const Card = props => {
         <select
           className="share-select"
           data-card-id={props.id}
+          onClick={e => e.stopPropagation()}
           onChange={e =>
             props.onTeamChange(
               e.target.children[e.target.selectedIndex].dataset.teamId,
