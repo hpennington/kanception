@@ -131,6 +131,34 @@ const Kanban = forwardRef((props, ref) => {
     }
   }
 
+  const filterTeams = (id, teams) => {
+    const boardRef = props.tree.find(node => node.board === id)
+    const parentRef = props.tree.find(node => node._id === boardRef.parent)
+
+    if (parentRef.isRoot === true) {
+      if (boardRef.team === null || boardRef.team === undefined) {
+        // Private only
+        return [{_id: "Private", title: "Private"}]
+      } else {
+        // Team only
+        return props.teams.filter(team => team._id === boardRef.team)
+      }
+
+    } else {
+
+      if (parentRef.team === null || parentRef.team === undefined) {
+        // Private only
+        return [{_id: "Private", title: "Private"}]
+      } else {
+        // Team or private
+        return [
+          {_id: "Private", title: "Private"},
+          props.teams.find(team => team._id === parentRef.team)
+        ]
+      }
+    }
+  }
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
     <div className="kanban" onClick={onBoardClick}>
@@ -188,7 +216,7 @@ const Kanban = forwardRef((props, ref) => {
                           <Card
                             key={column._id}
                             team={props.tree.find(node => node.board === column._id).team}
-                            teams={props.teams}
+                            teams={filterTeams(column._id, props.teams)}
                             onCardClick={props.onCardClick}
                             id={column._id}
                             onTeamChange={props.onTeamChange}
