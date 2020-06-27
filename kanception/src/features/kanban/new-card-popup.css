@@ -1,0 +1,26 @@
+.new-card-popup {
+  width: 175px;
+  height: 90px;
+  position: absolute;
+  background: white;
+  color: black;
+  border-radius: 5px;
+}
+
+.new-card-popup ul {
+  list-style: none;
+  text-align: center;
+  padding: 0;
+}
+
+.new-card-popup li {
+  padding: 10px;
+}
+
+.new-card-popup li:nth-child(1) {
+  border-bottom: 1px solid #aaa;
+}
+
+.new-card-popup li:active {
+  background: #eee;
+}

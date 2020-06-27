@@ -7,6 +7,7 @@ import React, {
 } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import Card from './card'
+import NewCardPopup from './new-card-popup'
 import './kanban.css'
 
 const Kanban = forwardRef((props, ref) => {
@@ -16,6 +17,7 @@ const Kanban = forwardRef((props, ref) => {
   const [contextMenuGroupPosition, setContextMenuGroupPosition] = useState({x: 0, y: 0})
   const [contextMenuGroupOpen, setContextMenuGroupOpen] = useState(false)
   const [contextGroupId, setContextGroupId] = useState(null)
+  const [popupOpen, setPopupOpen] = useState(false)
   const [dragging, setDragging] = useState(null)
   const [dragX, setDragX] = useState(0)
 
@@ -58,7 +60,8 @@ const Kanban = forwardRef((props, ref) => {
   })
 
   const onAddCard = e => {
-    props.onAddCard(e.target.dataset.groupId)
+    //props.onAddCard(e.target.dataset.groupId)
+    setPopupOpen(true)
   }
 
   const onUpdateCardTitle = e => {
@@ -196,6 +199,9 @@ const Kanban = forwardRef((props, ref) => {
                     data-group-id={group._id}
                   ></input>
                   <button data-group-id={group._id} onClick={onAddCard}>+</button>
+                  {
+                    <NewCardPopup showAddTeamCard={true} />
+                  }
                 </div>
                   <div
                     data-group-id={group._id}
