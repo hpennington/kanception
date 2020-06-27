@@ -124,10 +124,6 @@ const Kanban = forwardRef((props, ref) => {
             {...provided.droppableProps}
           >
             {props.groups.map((group, index) =>
-            <div
-              {...provided.draggableProps}
-              {...provided.dragHandleProps}
-            >
               <Group
                 group={group}
                 index={index}
@@ -136,9 +132,9 @@ const Kanban = forwardRef((props, ref) => {
                 teams={props.teams}
                 setContextCardId={setContextCardId}
                 contextMenuCardOpen={contextMenuCardOpen}
-                provided={provided}
+                onAddCard={props.onAddCard}
+                onUpdateCard={props.onUpdateCard}
               />
-            </div>
             )}
             {provided.placeholder}
           <div className="group">

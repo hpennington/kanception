@@ -48,28 +48,6 @@ const Card = props => {
           }}
           value={props.title}
         />
-        <select
-          className="share-select"
-          data-card-id={props.id}
-          onClick={e => e.stopPropagation()}
-          onChange={e =>
-            props.onTeamChange(
-              e.target.children[e.target.selectedIndex].dataset.teamId,
-              e.target.dataset.cardId
-            )}
-            value={
-              props.team === 'Private'
-              || props.teams.find(team => team._id === props.team) == null
-              ? 'Private'
-              : props.teams.find(team => team._id === props.team).title
-            }
-          >
-          {
-          props.teams.map(team =>
-            <option data-team-id={team._id}>{team.title}</option>
-          )
-          }
-        </select>
       </div>
       )}
     </Draggable>

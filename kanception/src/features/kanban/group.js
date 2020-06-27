@@ -41,9 +41,21 @@ const Group = props => {
     }
   }
 
+  const onAddTeamCard = () => {
+    setPopupOpen(false)
+  }
+
+  const onAddPrivateCard = e => {
+    setPopupOpen(false)
+    props.onAddCard(e.target.dataset.groupId)
+  }
+
   const onAddCard = e => {
-    //props.onAddCard(e.target.dataset.groupId)
-    setPopupOpen(true)
+    if (popupOpen === true) {
+      setPopupOpen(false)
+    } else {
+      setPopupOpen(true)
+    }
   }
 
   const onUpdateCardTitle = e => {
@@ -72,7 +84,9 @@ const Group = props => {
         <div className="group-control"
           data-group-id={props.group._id}
         >
-          <button className="hide">+</button>
+          <button className="hide">
+            { popupOpen === true ? 'x' : '+' }
+          </button>
           <input placeholder="Group Title"
             className="group-title-input"
             type="text"
@@ -80,9 +94,18 @@ const Group = props => {
             value={props.group.title}
             data-group-id={props.group._id}
           ></input>
-          <button data-group-id={props.group._id} onClick={onAddCard}>+</button>
+          <button data-group-id={props.group._id} onClick={onAddCard}
+          >
+            { popupOpen === true ? 'x' : '+' }
+          </button>
           {
-            <NewCardPopup showAddTeamCard={true} />
+          popupOpen === true &&
+          <NewCardPopup
+            id={props.group._id}
+            onAddPrivateCard={onAddPrivateCard}
+            onAddTeamCard={onAddTeamCard}
+            showAddTeamCard={true}
+          />
           }
         </div>
           <div
