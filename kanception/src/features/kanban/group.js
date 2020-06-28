@@ -17,7 +17,7 @@ const Group = props => {
     const boardRef = props.tree.find(node => node.board === id)
     const parentRef = props.tree.find(node => node._id === boardRef.parent)
 
-    if (parentRef.isRoot === true) {
+    if (parentRef.isUserRoot === true) {
       if (boardRef.team === null || boardRef.team === undefined) {
         // Private only
         return [{_id: "Private", title: "Private"}]
@@ -41,13 +41,14 @@ const Group = props => {
     }
   }
 
-  const onAddTeamCard = () => {
+  const onAddTeamCard = e => {
     setPopupOpen(false)
+    props.onAddCard(e.target.dataset.groupId, true)
   }
 
   const onAddPrivateCard = e => {
     setPopupOpen(false)
-    props.onAddCard(e.target.dataset.groupId)
+    props.onAddCard(e.target.dataset.groupId, false)
   }
 
   const onAddCard = e => {

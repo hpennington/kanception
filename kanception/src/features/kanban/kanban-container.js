@@ -68,8 +68,10 @@ const KanbanContainer = props => {
       const tree = await treeResult.json()
       props.dispatch(setTree({tree: tree}))
       console.log(tree)
-      const root = tree.find(node => node.isRoot === true)
+      const root = tree.find(node => node.isUserRoot === true)
+      const teamRoots = tree.filter(node => node.isTeamRoot === true).map(node => node.board)
       let boardIds = tree.filter(node => node.parent === root._id).map(node => node.board)
+      boardIds.push(...teamRoots)
       boardIds.push(root.board)
 
       const boardsUrl = constructQueryArray(api + '/boards', boardIds, 'ids')
@@ -162,7 +164,7 @@ const KanbanContainer = props => {
     return null
   }
 
-  const onAddCard = async (groupId) => {
+  const onAddCard = async (groupId, isTeam) => {
     console.log(groupId)
     console.log(props.selectedNode)
     try {
@@ -180,8 +182,10 @@ const KanbanContainer = props => {
 
       const parent = props.selectedNode
       console.log(parent)
+      const team = props.tree.find(node => node._id === parent).team
       const url = api + '/boards/add?group=' + groupId
         + '&title=' + title + '&parent=' + parent
+        + '&isteam=' + isTeam + '&team=' + team
 
       const addResult = await fetch(url, {
         method: 'POST',
