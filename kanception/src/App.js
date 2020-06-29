@@ -440,9 +440,13 @@ const App = props => {
             groups={props.groups}
             onAcceptCard={onAcceptCard}
             boards={props.boards}
-            newCards={props.boards.length > 0 ? props.newCards
+            newCards={props.boards.length > 0
+              ? props.newCards
               .filter(card => card.team === props.selectedTeam)
-              .filter(card => !props.tree.map(boardRef => boardRef.board).includes(card.board)) : []}
+              .filter(card => !props.tree
+                .map(boardRef => boardRef.board).includes(card.board)
+              )
+              : []}
             teams={props.teams}
             members={props.members}
           />

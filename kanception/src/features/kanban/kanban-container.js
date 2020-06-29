@@ -69,9 +69,7 @@ const KanbanContainer = props => {
       props.dispatch(setTree({tree: tree}))
       console.log(tree)
       const root = tree.find(node => node.isUserRoot === true)
-      const teamRoots = tree.filter(node => node.isTeamRoot === true).map(node => node.board)
       let boardIds = tree.filter(node => node.parent === root._id).map(node => node.board)
-      boardIds.push(...teamRoots)
       boardIds.push(root.board)
 
       const boardsUrl = constructQueryArray(api + '/boards', boardIds, 'ids')
