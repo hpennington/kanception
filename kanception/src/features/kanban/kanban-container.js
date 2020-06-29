@@ -180,8 +180,7 @@ const KanbanContainer = props => {
 
       const parent = props.selectedNode
       console.log(parent)
-      //const team = props.tree.find(node => node._id === parent).team
-      const team = '5ef96053a84da347a3fbe2d2'
+      const team = props.tree.find(node => node._id === parent).team
       const url = api + '/boards/add?group=' + groupId
         + '&title=' + title + '&parent=' + parent
         + '&isteam=' + isTeam + '&team=' + team
