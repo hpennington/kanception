@@ -204,7 +204,7 @@ const KanbanContainer = props => {
     console.log('ONCARDCLICK')
 
     const api = 'http://localhost:4000'
-    const clickedBoardUrl = constructQueryArray(api + '/boards', [cardId], 'ids')
+    const clickedBoardUrl = constructQueryArray(api + '/team/boards', [cardId], 'ids')
 
     try {
 
@@ -248,7 +248,7 @@ const KanbanContainer = props => {
             const boardIds = tree
               .filter(node => node.parent === clickedNode._id)
               .map(node => node.board)
-            const boardsUrl = constructQueryArray(api + '/boards', boardIds, 'ids')
+            const boardsUrl = constructQueryArray(api + '/team/boards', boardIds, 'ids')
 
             const boardsResult = await fetch(boardsUrl, {
               headers: {
