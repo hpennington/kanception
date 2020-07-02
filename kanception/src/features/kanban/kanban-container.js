@@ -27,7 +27,7 @@ const KanbanContainer = props => {
 
   const fetchTree = async () => {
     const api = 'http://localhost:4000'
-    const treeUrl = api + '/tree'
+    const treeUrl = api + '/tree?project=' + props.selectedProject
 
     try {
       const token = await getTokenSilently()
@@ -41,7 +41,7 @@ const KanbanContainer = props => {
       const tree = await treeResult.json()
       props.dispatch(setTree({tree: tree}))
 
-      const root = tree.find(node => node._id === props.selectedNode)
+      const root = tree.find(node => node.parent === null)
       console.log(root)
       const groupIds = root.groups
       console.log(groupIds)

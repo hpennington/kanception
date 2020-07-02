@@ -39,6 +39,7 @@ const App = props => {
   const [user, setUser] = useState(null)
   const [prevUser, setPrevUser] = useState(null)
   const [selectedNode, setSelectedNode] = useState(null)
+  const [selectedProject, setSelectedProject] = useState(null)
   const [nameOpen, setNameOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [sideMenuOpen, setSideMenuOpen] = useState(true)
@@ -555,6 +556,7 @@ const App = props => {
             spaces={props.spaces}
             projects={props.projects}
             onAddProject={onAddProject}
+            setSelectedProject={id => setSelectedProject(id)}
             onTeamInviteAccept={teamInviteAccept}
             setSelectedTeam={team => props.dispatch(setSelectedTeam({team: team}))}
             selectedTeam={props.selectedTeam}
@@ -592,11 +594,12 @@ const App = props => {
           </div>
         }
         { nameOpen === false && kanbanReady === true && kanbanOpen === true &&
-          selectedNode != null &&
+          selectedProject != null &&
           <KanbanContainer
             style={{marginLeft: sideMenuOpen === true ? "375px" : 0}}
             owner={user._id}
             selectedNode={selectedNode}
+            selectedProject={selectedProject}
             setSelectedNode={setSelectedNode}
           />
         }

@@ -84,6 +84,7 @@ export default function CustomizedTreeView(props) {
   const onNodeSelect = (event, value) => {
     // If project selected
     if (props.projects.find(project => project._id === value) != null) {
+      props.setSelectedProject(value)
 
     } else if (props.spaces.find(space => space._id === value) != null) {
 
