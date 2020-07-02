@@ -43,7 +43,7 @@ const TeamTitleMenu = props => {
             }}
           id="team-title-input"
           onChange={onTitleChange}
-          type="text" placeholder="Add team title"></input>
+          type="text" placeholder="Add space title"></input>
           <div>
             <Button
               variant="secondary"

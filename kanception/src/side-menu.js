@@ -9,7 +9,7 @@ const SideMenu = props => {
   return (
     <div id="side-menu">
       <div id="side-menu-scroll">
-        <h1>Teams</h1>
+        <h1>Spaces</h1>
         {props.invites.length > 0 &&
         <div>
           <div className="btn-container">
@@ -24,7 +24,7 @@ const SideMenu = props => {
         </div>
         }
         <div className="btn-container">
-          <button onClick={props.onAddTeam}>New Team +</button>
+          <button onClick={props.onAddTeam}>New Space +</button>
         </div>
         {props.teams.length > 0 &&
         <TeamTableView
