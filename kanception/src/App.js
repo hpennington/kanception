@@ -42,7 +42,7 @@ const App = props => {
   useEffect(() => {
     if (mounted === false) {
       setMounted(true)
-      postAndFetchUser()
+      startAsyncFetching()
     } else {
       if (user !== null && user !== prevUser) {
         fetchTeams(user)
@@ -57,6 +57,33 @@ const App = props => {
       }
     }
   })
+
+  const fetchTreeInit = async () => {
+    const api = 'http://localhost:4000'
+    const treeUrl = api + '/tree'
+
+    try {
+      const token = await getTokenSilently()
+
+      const treeResult = await fetch(treeUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      const tree = await treeResult.json()
+      console.log(tree)
+      //props.dispatch(setTree({tree: tree}))
+
+      const root = tree.find(node => node.isUserRoot === true)
+      console.log(root)
+      setSelectedNode(root._id)
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
 
   const fetchNewTeamCards = async (team) => {
     try {
@@ -148,10 +175,11 @@ const App = props => {
     }
   }
 
-  const postAndFetchUser = async () => {
+  const startAsyncFetching = async () => {
     try {
       const post = await postUser()
       const res = await fetchUser()
+      await fetchTreeInit()
       setUser(res)
       setKanbanReady(true)
     } catch (error) {
@@ -468,6 +496,7 @@ const App = props => {
           </div>
         }
         { nameOpen === false && kanbanReady === true && kanbanOpen === true &&
+          selectedNode != null &&
           <KanbanContainer
             style={{marginLeft: sideMenuOpen === true ? "375px" : 0}}
             owner={user._id}

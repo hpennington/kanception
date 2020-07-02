@@ -19,41 +19,13 @@ import { useAuth0 } from '../../react-auth0-spa'
 const KanbanContainer = props => {
   const [mounted, setMounted] = useState(false)
   const [prevSelectedNode, setPrevSelectedNode] = useState(null)
-
   const { getTokenSilently } = useAuth0()
 
-  const constructQueryArray = (url, array, name) => {
-    var i = 0
-
-    for (const el of array) {
-      if (i === 0) {
-        url += '?' + name + '[]=' + el
-      } else {
-        url += '&' + name + '[]=' + el
-      }
-
-      i += 1
-    }
-
-    return url
-  }
-
   useEffect(() => {
-    if (mounted === false) {
-      fetchBoardsInit()
-        .then(nodeId => {
-          props.setSelectedNode(nodeId)
-          setMounted(true)
-        })
-    } else {
-      if (prevSelectedNode !== props.selectedNode) {
-        setPrevSelectedNode(props.selectedNode)
-        fetchBoards()
-      }
-    }
-  })
+    fetchTree()
+  }, [props.selectedNode])
 
-  const fetchBoardsInit = async () => {
+  const fetchTree = async () => {
     const api = 'http://localhost:4000'
     const treeUrl = api + '/tree'
 
@@ -65,79 +37,28 @@ const KanbanContainer = props => {
           Authorization: `Bearer ${token}`
         }
       })
+
       const tree = await treeResult.json()
       props.dispatch(setTree({tree: tree}))
-      console.log(tree)
-      const root = tree.find(node => node.isUserRoot === true)
-      let boardIds = tree.filter(node => node.parent === root._id).map(node => node.board)
-      boardIds.push(root.board)
 
-      const boardsUrl = constructQueryArray(api + '/boards', boardIds, 'ids')
+      const root = tree.find(node => node._id === props.selectedNode)
+      console.log(root)
+      const groupIds = root.groups
+      console.log(groupIds)
 
-      const boardsResult = await fetch(boardsUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+      fetchGroups(groupIds)
 
-      const boards = await boardsResult.json()
-
-
-      console.log(boards)
-      console.log(root.board)
-      const groupIds = boards.find(board => board._id === root.board).groups
-      const groupsUrl = constructQueryArray(api + '/groups', groupIds, 'ids')
-
-      const groupsResult = await fetch(groupsUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-
-      const groups = await groupsResult.json()
-
-      groups.sort((a, b) => a.order - b.order)
-      boards.sort((a, b) => b.order - a.order)
-
-      props.dispatch(setGroups({groups: groups}))
-      props.dispatch(setBoards({boards: boards}))
-
-      return root._id
-
-    } catch(error) {
+    } catch (error) {
       console.log(error)
     }
-
-    return null
   }
 
-  const fetchBoards = async () => {
+  const fetchGroups = async (groupIds) => {
     const api = 'http://localhost:4000'
     const treeUrl = api + '/tree'
 
     try {
       const token = await getTokenSilently()
-      const treeResult = await fetch(treeUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      const tree = await treeResult.json()
-      props.dispatch(setTree({tree: tree}))
-      const root = tree.find(node => node._id === props.selectedNode)
-      let boardIds = tree.filter(node => node.parent === root._id).map(node => node.board)
-      boardIds.push(root.board)
-
-      const boardsUrl = constructQueryArray(api + '/boards', boardIds, 'ids')
-
-      const boardsResult = await fetch(boardsUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      const boards = await boardsResult.json()
-
-      const groupIds = boards.find(board => board._id === root.board).groups
       const groupsUrl = constructQueryArray(api + '/groups', groupIds, 'ids')
 
       const groupsResult = await fetch(groupsUrl, {
@@ -145,21 +66,18 @@ const KanbanContainer = props => {
           Authorization: `Bearer ${token}`
         }
       })
+
       const groups = await groupsResult.json()
 
       groups.sort((a, b) => a.order - b.order)
-      boards.sort((a, b) => b.order - a.order)
+      console.log(groups)
 
       props.dispatch(setGroups({groups: groups}))
-      props.dispatch(setBoards({boards: boards}))
 
-      return root._id
-
-    } catch(error) {
+    } catch (error) {
       console.log(error)
     }
 
-    return null
   }
 
   const onAddCard = async (groupId, isTeam) => {
@@ -446,6 +364,22 @@ const KanbanContainer = props => {
     } catch(error) {
       console.log(error)
     }
+  }
+
+  const constructQueryArray = (url, array, name) => {
+    var i = 0
+
+    for (const el of array) {
+      if (i === 0) {
+        url += '?' + name + '[]=' + el
+      } else {
+        url += '&' + name + '[]=' + el
+      }
+
+      i += 1
+    }
+
+    return url
   }
 
   return (
