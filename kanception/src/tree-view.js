@@ -128,6 +128,7 @@ export default function CustomizedTreeView(props) {
         defaultSelected={"2"}
         defaultCollapseIcon={<MinusSquare />}
         defaultExpandIcon={<PlusSquare />}
+        defaultEndIcon={<CloseSquare />}
         onNodeSelect={onNodeSelect}
       >
         {
