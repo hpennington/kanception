@@ -27,8 +27,12 @@ const SideMenu = props => {
         <div className="btn-container">
           <button onClick={props.onAddTeam}>New Space +</button>
         </div>
-        {props.teams.length > 0 &&
-          <TreeView />
+        {props.spaces.length > 0 &&
+        <TreeView
+          spaces={props.spaces}
+          projects={props.projects}
+          onAddProject={props.onAddProject}
+        />
         }
         {
           props.newCards.length > 0 &&

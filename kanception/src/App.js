@@ -14,6 +14,14 @@ import {
   updateBoard,
   updateGroup,
 } from './features/kanban/kanbanSlice'
+import {
+  setSpaces,
+  addSpace,
+} from './features/spaces/spacesSlice'
+import {
+  setProjects,
+  addProject,
+} from './features/projects/projectsSlice'
 import { removeNewCard } from './features/teams/teamsSlice'
 import Toolbar from './toolbar'
 import KanbanContainer from './features/kanban/kanban-container'
@@ -47,6 +55,8 @@ const App = props => {
       if (user !== null && user !== prevUser) {
         fetchTeams(user)
         fetchTeamInvites()
+        fetchSpaces()
+        fetchProjects()
         setPrevUser(user)
       }
 
@@ -179,7 +189,8 @@ const App = props => {
     try {
       const post = await postUser()
       const res = await fetchUser()
-      await fetchTreeInit()
+      await fetchSpaces()
+      await fetchProjects()
       setUser(res)
       setKanbanReady(true)
     } catch (error) {
@@ -187,10 +198,51 @@ const App = props => {
     }
   }
 
+  const fetchSpaces = async () => {
+    try {
+
+      const token = await getTokenSilently()
+      const url = 'http://localhost:4000/spaces'
+
+      const result = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      const spaces = await result.json()
+      props.dispatch(setSpaces({spaces: spaces}))
+
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
+  const fetchProjects = async () => {
+    try {
+
+      const token = await getTokenSilently()
+      const url = 'http://localhost:4000/projects'
+
+      const result = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      const projects = await result.json()
+      props.dispatch(setProjects({projects: projects}))
+
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
   const fetchTeams = async (teamIds) => {
     try {
       const token = await getTokenSilently()
-      console.log(props.teams)
       const promises = []
 
       for (const team of teamIds) {
@@ -331,6 +383,47 @@ const App = props => {
     setMenuOpen(true)
   }
 
+  const onAddSpace = async (title) => {
+    try {
+      const api = 'http://localhost:4000/spaces/add?title=' + title
+      const token = await getTokenSilently()
+
+      const spaceResult = await fetch(api, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      const space = await spaceResult.json()
+      props.dispatch(addSpace({space: space}))
+
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
+  const onAddProject = async (title, space) => {
+    try {
+      const api = 'http://localhost:4000/projects/add?title=' + title
+        + '&space=' + space
+      const token = await getTokenSilently()
+
+      const projectResult = await fetch(api, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      const project = await projectResult.json()
+      props.dispatch(addProject({project: project}))
+
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
   const addTeam = async (title) => {
     const api = 'http://localhost:4000'
     const teamUrl = api + '/team?title=' + title
@@ -363,7 +456,7 @@ const App = props => {
 
   const onTeamSave = (title) => {
     setMenuOpen(false)
-    addTeam(title)
+    onAddSpace(title)
   }
 
   const onSubmit = async (first, last, email) => {
@@ -459,6 +552,9 @@ const App = props => {
         />
         { sideMenuOpen === true &&
           <SideMenu
+            spaces={props.spaces}
+            projects={props.projects}
+            onAddProject={onAddProject}
             onTeamInviteAccept={teamInviteAccept}
             setSelectedTeam={team => props.dispatch(setSelectedTeam({team: team}))}
             selectedTeam={props.selectedTeam}
@@ -611,6 +707,8 @@ const CollectInfo = props => {
 
 const mapStateToProps = state => {
   return {
+    spaces: state.spaces.spaces,
+    projects: state.projects.projects,
     teams: state.teams.teams,
     selectedTeam: state.teams.selectedTeam,
     members: state.teams.members,

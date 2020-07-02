@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import { fade, makeStyles, withStyles } from '@material-ui/core/styles';
 import TreeView from '@material-ui/lab/TreeView';
 import TreeItem from '@material-ui/lab/TreeItem';
 import Collapse from '@material-ui/core/Collapse';
-import { useSpring, animated } from 'react-spring/web.cjs'; // web.cjs is required for IE 11 support
+import { useSpring, animated } from 'react-spring/web.cjs';
+import { ProjectTitleMenu } from './menu'
 
 function MinusSquare(props) {
   return (
@@ -27,7 +28,7 @@ function PlusSquare(props) {
 
 function CloseSquare(props) {
   return (
-    <SvgIcon className="close" fontSize="inherit" style={{ width: 14, height: 14 }} {...props}>
+    <SvgIcon onClick={e => e.preventDefault()} className="close" fontSize="inherit" style={{ width: 14, height: 14 }} {...props}>
       {/* tslint:disable-next-line: max-line-length */}
       <path d="M17.485 17.512q-.281.281-.682.281t-.696-.268l-4.12-4.147-4.12 4.147q-.294.268-.696.268t-.682-.281-.281-.682.294-.669l4.12-4.147-4.12-4.147q-.294-.268-.294-.669t.281-.682.682-.281.696 .268l4.12 4.147 4.12-4.147q.294-.268.696-.268t.682.281 .281.669-.294.682l-4.12 4.147 4.12 4.147q.294.268 .294.669t-.281.682zM22.047 22.074v0 0-20.147 0h-20.12v0 20.147 0h20.12zM22.047 24h-20.12q-.803 0-1.365-.562t-.562-1.365v-20.147q0-.776.562-1.351t1.365-.575h20.147q.776 0 1.351.575t.575 1.351v20.147q0 .803-.575 1.365t-1.378.562v0z" />
     </SvgIcon>
@@ -75,8 +76,37 @@ const useStyles = makeStyles({
   },
 });
 
-export default function CustomizedTreeView() {
+export default function CustomizedTreeView(props) {
   const classes = useStyles();
+  const [projectTitleMenuOpen, setProjectTitleMenuOpen] = useState(false)
+  const [selectedSpace, setSelectedSpace] = useState(null)
+
+  const onNodeSelect = (event, value) => {
+    // If project selected
+    if (props.projects.find(project => project._id === value) != null) {
+
+    } else if (props.spaces.find(space => space._id === value) != null) {
+
+    } else if (value.includes('add') === true) {
+      onAddProject(value.replace('-add', ''))
+    }
+  }
+
+  const onAddProject = value => {
+    console.log(value)
+    setSelectedSpace(value)
+    setProjectTitleMenuOpen(true)
+  }
+
+  const onProjectSave = title => {
+    console.log(title)
+    setProjectTitleMenuOpen(false)
+    props.onAddProject(title, selectedSpace)
+  }
+
+  const onClose = e => {
+    setProjectTitleMenuOpen(false)
+  }
 
   return (
     <div
@@ -85,27 +115,39 @@ export default function CustomizedTreeView() {
         marginLeft: "45px",
       }}
     >
+      {
+      projectTitleMenuOpen === true &&
+      <ProjectTitleMenu
+        onSave={onProjectSave}
+        close={onClose}
+      />
+      }
       <TreeView
         className={classes.root}
         defaultExpanded={['1']}
         defaultSelected={"2"}
         defaultCollapseIcon={<MinusSquare />}
         defaultExpandIcon={<PlusSquare />}
-        defaultEndIcon={<CloseSquare />}
+        onNodeSelect={onNodeSelect}
       >
-        <StyledTreeItem nodeId="1" label="Main">
-          <StyledTreeItem nodeId="2" label="Hello" />
-          <StyledTreeItem nodeId="4" label="World" />
-          <StyledTreeItem nodeId="5" label="Something something" />
-          <StyledTreeItem nodeId="6" label="Hello" />
-          <StyledTreeItem nodeId="7" label="World" />
-          <StyledTreeItem nodeId="8" label="Something something" />
-        </StyledTreeItem>
-        <StyledTreeItem nodeId="12" label="Main">
-          <StyledTreeItem nodeId="22" label="Hello" />
-          <StyledTreeItem nodeId="42" label="World" />
-          <StyledTreeItem nodeId="52" label="Something something" />
-        </StyledTreeItem>
+        {
+        props.spaces.map(
+          space =>
+          <StyledTreeItem nodeId={space._id} label={space.title}>
+            <StyledTreeItem
+              data-node-id={space._id}
+              nodeId={space._id + '-add'}
+              label={<strong data-node-id={space._id}>New</strong>}
+            />
+            {
+            props.projects.filter(project => project.space === space._id)
+              .map(project =>
+              <StyledTreeItem nodeId={project._id} label={project.title} />
+              )
+            }
+          </StyledTreeItem>
+        )
+        }
       </TreeView>
     </div>
   );
