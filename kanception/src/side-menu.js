@@ -3,6 +3,7 @@ import TeamTableView from './team-table-view'
 import NewCardsTableView from './new-cards-table-view'
 import InviteTableView from './invite-table-view'
 import MembersView from './members-view'
+import TreeView from './tree-view'
 import './side-menu.css'
 
 const SideMenu = props => {
@@ -27,11 +28,7 @@ const SideMenu = props => {
           <button onClick={props.onAddTeam}>New Space +</button>
         </div>
         {props.teams.length > 0 &&
-        <TeamTableView
-          onSetSelectedTeam={id => props.setSelectedTeam(id)}
-          selectedId={props.selectedTeam}
-          cells={props.teams}
-        />
+          <TreeView />
         }
         {
           props.newCards.length > 0 &&
