@@ -33,6 +33,7 @@ const SideMenu = props => {
           projects={props.projects}
           onAddProject={props.onAddProject}
           setSelectedProject={props.setSelectedProject}
+          setSelectedTeam={props.setSelectedTeam}
         />
         }
         {

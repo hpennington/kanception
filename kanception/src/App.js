@@ -550,8 +550,9 @@ const App = props => {
     )
   }
 
-  const onSetSelectedProject = id => {
-    props.dispatch(setSelectedProject({project: id}))
+  const onSetSelectedProject = (project, team) => {
+    props.dispatch(setSelectedProject({project: project}))
+    props.dispatch(setSelectedTeam({team: team}))
   }
 
   return (

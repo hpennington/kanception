@@ -84,10 +84,11 @@ export default function CustomizedTreeView(props) {
   const onNodeSelect = (event, value) => {
     // If project selected
     if (props.projects.find(project => project._id === value) != null) {
-      props.setSelectedProject(value)
+      props.setSelectedProject(value, event.target.dataset.nodeId)
+      props.setSelectedTeam(event.target.dataset.nodeId)
 
     } else if (props.spaces.find(space => space._id === value) != null) {
-
+      props.setSelectedTeam(value)
     } else if (value.includes('add') === true) {
       onAddProject(value.replace('-add', ''))
     }
@@ -140,7 +141,7 @@ export default function CustomizedTreeView(props) {
             <StyledTreeItem
               data-node-id={space._id}
               nodeId={space._id + '-add'}
-              label={<strong data-node-id={space._id}>New</strong>}
+              label={<strong>New</strong>}
             />
             {
             props.projects.filter(project => project.space === space._id)
