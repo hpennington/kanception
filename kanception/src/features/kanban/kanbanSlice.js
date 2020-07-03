@@ -18,9 +18,7 @@ export const kanbanSlice = createSlice({
       state.boards = action.payload.boards
     },
     addBoard: (state, action) => {
-      state.boards.unshift(action.payload.board)
-      state.boards.sort((a, b) => b.order - a.order)
-      state.tree.push(action.payload.boardRef)
+      state.tree.push(action.payload.board)
     },
     setBoardTeam: (state, action) => {
       const boardRef = state.tree.find(node => node.board === action.payload.board)

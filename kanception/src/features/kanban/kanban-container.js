@@ -100,9 +100,9 @@ const KanbanContainer = props => {
         },
       })
 
-      const boardObject = await boardResult.json()
+      const board = await boardResult.json()
 
-      //props.dispatch(addBoard({board: boardObject.board}))
+      props.dispatch(addBoard({board: board}))
 
     } catch(error) {
       console.log(error)
