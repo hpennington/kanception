@@ -246,7 +246,7 @@ const KanbanContainer = props => {
     props.dispatch(updateBoard({id: id, object: object}))
 
     const api = 'http://localhost:4000'
-    const url = api + '/boards/update' + '?id=' + id
+    const url = api + '/board/update' + '?id=' + id
 
     try {
       const token = await getTokenSilently()
