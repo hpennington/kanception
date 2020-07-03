@@ -42,6 +42,7 @@ const KanbanContainer = props => {
       props.dispatch(setTree({tree: tree}))
 
       const root = tree.find(node => node.parent === null)
+      props.setSelectedNode(root._id)
       console.log(root)
       const groupIds = root.groups
       console.log(groupIds)
@@ -80,7 +81,35 @@ const KanbanContainer = props => {
 
   }
 
-  const onAddCard = async (groupId, isTeam) => {
+  const onAddCard = async (groupId) => {
+    try {
+
+      const token = await getTokenSilently()
+      const api = 'http://localhost:4000'
+      const project = props.selectedProject
+      const parent = props.selectedNode
+      const url = api + '/boards/add'
+        + '?group=' + groupId
+        + '&project=' + project
+        + '&parent=' + parent
+
+      const boardResult = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      })
+
+      const boardObject = await boardResult.json()
+
+      //props.dispatch(addBoard({board: boardObject.board}))
+
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
+  const onAddCardDeprecated = async (groupId, isTeam) => {
     console.log(groupId)
     console.log(props.selectedNode)
     try {
@@ -385,7 +414,7 @@ const KanbanContainer = props => {
   return (
     <div style={props.style}>
       <Kanban
-        boards={props.boards}
+        boards={props.tree.filter(board => board.parent === props.selectedNode)}
         groups={props.groups}
         teams={props.teams}
         tree={props.tree}

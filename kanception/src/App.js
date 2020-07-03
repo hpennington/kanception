@@ -70,8 +70,9 @@ const App = props => {
   })
 
   const fetchTreeInit = async () => {
+    const project = selectedProject
     const api = 'http://localhost:4000'
-    const treeUrl = api + '/tree'
+    const treeUrl = api + '/tree' + '?project=' + project
 
     try {
       const token = await getTokenSilently()
@@ -84,9 +85,9 @@ const App = props => {
 
       const tree = await treeResult.json()
       console.log(tree)
-      //props.dispatch(setTree({tree: tree}))
+      props.dispatch(setTree({tree: tree}))
 
-      const root = tree.find(node => node.isUserRoot === true)
+      const root = tree.find(node => node.parent == null)
       console.log(root)
       setSelectedNode(root._id)
 
@@ -192,6 +193,7 @@ const App = props => {
       const res = await fetchUser()
       await fetchSpaces()
       await fetchProjects()
+      await fetchTreeInit()
       setUser(res)
       setKanbanReady(true)
     } catch (error) {

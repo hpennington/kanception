@@ -41,22 +41,8 @@ const Group = props => {
     }
   }
 
-  const onAddTeamCard = e => {
-    setPopupOpen(false)
-    props.onAddCard(e.target.dataset.groupId, true)
-  }
-
-  const onAddPrivateCard = e => {
-    setPopupOpen(false)
-    props.onAddCard(e.target.dataset.groupId, false)
-  }
-
   const onAddCard = e => {
-    if (popupOpen === true) {
-      setPopupOpen(false)
-    } else {
-      setPopupOpen(true)
-    }
+    props.onAddCard(e.target.dataset.groupId)
   }
 
   const onUpdateCardTitle = e => {
@@ -86,7 +72,7 @@ const Group = props => {
           data-group-id={props.group._id}
         >
           <button className="hide">
-            { popupOpen === true ? 'x' : '+' }
+            +
           </button>
           <input placeholder="Group Title"
             className="group-title-input"
@@ -97,17 +83,8 @@ const Group = props => {
           ></input>
           <button data-group-id={props.group._id} onClick={onAddCard}
           >
-            { popupOpen === true ? 'x' : '+' }
+            +
           </button>
-          {
-          popupOpen === true &&
-          <NewCardPopup
-            id={props.group._id}
-            onAddPrivateCard={onAddPrivateCard}
-            onAddTeamCard={onAddTeamCard}
-            showAddTeamCard={true}
-          />
-          }
         </div>
           <div
             data-group-id={props.group._id}
@@ -127,8 +104,7 @@ const Group = props => {
                 .map((column, cardIndex) =>
                   <Card
                     key={column._id}
-                    team={props.tree.find(node => node.board === column._id).team}
-                    teams={filterTeams(column._id, props.teams)}
+                    team={props.tree.find(node => node._id === column._id).project}
                     onCardClick={props.onCardClick}
                     id={column._id}
                     onTeamChange={props.onTeamChange}
