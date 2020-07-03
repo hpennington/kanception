@@ -131,6 +131,7 @@ export default function CustomizedTreeView(props) {
         defaultExpandIcon={<PlusSquare />}
         defaultEndIcon={<CloseSquare />}
         onNodeSelect={onNodeSelect}
+        expanded={props.spaces.map(space => space._id)}
       >
         {
         props.spaces.map(
