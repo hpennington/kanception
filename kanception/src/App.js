@@ -360,9 +360,10 @@ const App = props => {
   }
 
   const onBack = async (e) => {
-    if (selectedNode !== null) {
+    if (props.tree.find(node => node._id === selectedNode).parent !== null) {
+      const project = props.selectedProject
       const api = 'http://localhost:4000'
-      const treeUrl = api + '/tree'
+      const treeUrl = api + '/tree?project=' + project
 
       try {
         const token = await getTokenSilently()
