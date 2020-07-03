@@ -41,7 +41,7 @@ const KanbanContainer = props => {
       const tree = await treeResult.json()
       props.dispatch(setTree({tree: tree}))
 
-      const root = tree.find(node => node.parent === null)
+      const root = tree.find(node => node._id == props.selectedNode)
       props.setSelectedNode(root._id)
       console.log(root)
       const groupIds = root.groups
@@ -148,6 +148,16 @@ const KanbanContainer = props => {
   }
 
   const onCardClick = async (cardId) => {
+    try {
+
+      props.setSelectedNode(cardId)
+
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
+  const onCardClickDeprectated = async (cardId) => {
     console.log('ONCARDCLICK')
 
     const api = 'http://localhost:4000'
@@ -437,7 +447,6 @@ const KanbanContainer = props => {
 const mapStateToProps = state => {
   return {
     groups: state.kanban.groups,
-    boards: state.kanban.boards,
     teams: state.teams.teams,
     tree: state.kanban.tree,
   }

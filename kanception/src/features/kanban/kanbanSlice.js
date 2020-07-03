@@ -32,10 +32,9 @@ export const kanbanSlice = createSlice({
     },
     updateBoard: (state, action) => {
       console.log(action.payload)
-      let board = state.boards.find(board => board._id === action.payload.id)
+      let board = state.tree.find(board => board._id === action.payload.id)
       board = Object.assign(board, action.payload.object)
-      state.boards = [board, ...state.boards.filter(board => board._id !== action.payload.id)]
-      state.boards.sort((a, b) => b.order - a.order)
+      state.tree = [board, ...state.tree.filter(board => board._id !== action.payload.id)]
     },
     updateGroup: (state, action) => {
       let group = state.groups.find(group => group._id === action.payload.id)

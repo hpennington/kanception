@@ -9,6 +9,7 @@ import { useAuth0 } from './react-auth0-spa'
 import {
   setGroups,
   setBoards,
+  setTree,
   addGroup,
   addBoard,
   updateBoard,
@@ -21,6 +22,7 @@ import {
 import {
   setProjects,
   addProject,
+  setSelectedProject,
 } from './features/projects/projectsSlice'
 import { removeNewCard } from './features/teams/teamsSlice'
 import Toolbar from './toolbar'
@@ -39,7 +41,6 @@ const App = props => {
   const [user, setUser] = useState(null)
   const [prevUser, setPrevUser] = useState(null)
   const [selectedNode, setSelectedNode] = useState(null)
-  const [selectedProject, setSelectedProject] = useState(null)
   const [nameOpen, setNameOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [sideMenuOpen, setSideMenuOpen] = useState(true)
@@ -47,6 +48,7 @@ const App = props => {
   const [teamInvites, setTeamInvites] = useState([])
   const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
   const [prevSelectedTeam, setPrevSelectedTeam] = useState(null)
+  const [prevSelectedProject, setPrevSelectedProject] = useState(null)
 
   useEffect(() => {
     if (mounted === false) {
@@ -66,11 +68,16 @@ const App = props => {
         fetchNewTeamCards(props.selectedTeam)
         setPrevSelectedTeam(props.selectedTeam)
       }
+
+      if (props.selectedProject !== prevSelectedProject) {
+        fetchTreeInit()
+        setPrevSelectedProject(props.selectedProject)
+      }
     }
   })
 
   const fetchTreeInit = async () => {
-    const project = selectedProject
+    const project = props.selectedProject
     const api = 'http://localhost:4000'
     const treeUrl = api + '/tree' + '?project=' + project
 
@@ -85,7 +92,7 @@ const App = props => {
 
       const tree = await treeResult.json()
       console.log(tree)
-      props.dispatch(setTree({tree: tree}))
+      //props.dispatch(setTree({tree: tree}))
 
       const root = tree.find(node => node.parent == null)
       console.log(root)
@@ -542,6 +549,10 @@ const App = props => {
     )
   }
 
+  const onSetSelectedProject = id => {
+    props.dispatch(setSelectedProject({project: id}))
+  }
+
   return (
       <div className="App">
         {menuOpen === true &&
@@ -558,7 +569,7 @@ const App = props => {
             spaces={props.spaces}
             projects={props.projects}
             onAddProject={onAddProject}
-            setSelectedProject={id => setSelectedProject(id)}
+            setSelectedProject={onSetSelectedProject}
             onTeamInviteAccept={teamInviteAccept}
             setSelectedTeam={team => props.dispatch(setSelectedTeam({team: team}))}
             selectedTeam={props.selectedTeam}
@@ -596,12 +607,12 @@ const App = props => {
           </div>
         }
         { nameOpen === false && kanbanReady === true && kanbanOpen === true &&
-          selectedProject != null &&
+          props.selectedProject != null &&
           <KanbanContainer
             style={{marginLeft: sideMenuOpen === true ? "375px" : 0}}
             owner={user._id}
             selectedNode={selectedNode}
-            selectedProject={selectedProject}
+            selectedProject={props.selectedProject}
             setSelectedNode={setSelectedNode}
           />
         }
@@ -716,6 +727,7 @@ const mapStateToProps = state => {
     projects: state.projects.projects,
     teams: state.teams.teams,
     selectedTeam: state.teams.selectedTeam,
+    selectedProject: state.projects.selectedProject,
     members: state.teams.members,
     boards: state.kanban.boards,
     newCards: state.teams.newCards,
