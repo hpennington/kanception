@@ -157,78 +157,6 @@ const KanbanContainer = props => {
     }
   }
 
-  const onCardClickDeprectated = async (cardId) => {
-    console.log('ONCARDCLICK')
-
-    const api = 'http://localhost:4000'
-    const clickedBoardUrl = constructQueryArray(api + '/team/boards', [cardId], 'ids')
-
-    try {
-
-      const token = await getTokenSilently()
-
-      const result = await fetch(clickedBoardUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      const boards = await result.json()
-
-      if (boards.length > 0) {
-        const board = boards[0]
-
-
-        if (board.groups.length > 0) {
-          const groupsUrl = constructQueryArray(api + '/groups', board.groups, 'ids')
-
-          const groupsResult = await fetch(groupsUrl, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          })
-          const groups = await groupsResult.json()
-
-          const treeUrl = api + '/tree'
-          const treeResult = await fetch(treeUrl, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          })
-          const tree = await treeResult.json()
-          props.dispatch(setTree({tree: tree}))
-
-          const clickedNode = tree.find(node => node.board === cardId)
-
-          if (clickedNode !== null) {
-            console.log(clickedNode)
-            console.log(tree)
-            const boardIds = tree
-              .filter(node => node.parent === clickedNode._id)
-              .map(node => node.board)
-            const boardsUrl = constructQueryArray(api + '/team/boards', boardIds, 'ids')
-
-            const boardsResult = await fetch(boardsUrl, {
-              headers: {
-                Authorization: `Bearer ${token}`
-              }
-            })
-            const boards = await boardsResult.json()
-
-
-            const selectedNode = tree.find(node => node.board === cardId)._id
-
-            props.setSelectedNode(selectedNode)
-            props.dispatch(setGroups({groups: groups}))
-            props.dispatch(setBoards({boards: boards}))
-          }
-        }
-      }
-
-    } catch(error) {
-      console.log(error)
-    }
-  }
-
   const onGroupOrderUpdate = (id, source, destination) => {
     console.log(source)
     console.log(destination)
@@ -262,21 +190,25 @@ const KanbanContainer = props => {
   }
 
   const onCardGroupUpdate = (id, destinationId, destination) => {
-    const order = Math.max(...props.boards
+    const order = Math.max(...props.tree
+      .filter(board => board.parent === props.selectedNode)
       .filter(board => board.group === destinationId)
       .map(board => board.order)) + 1
 
     const object = {group: destinationId, order: order}
     props.dispatch(updateBoard({id: id, object: object}))
 
-    const boards = props.boards
+    const boards = props.tree
+      .filter(board => board.parent === props.selectedNode)
       .filter(board => board.group === destinationId)
       .sort((a, b) => b.order - a.order)
     console.log(boards)
 
     boards.splice(order, 1)
     boards.splice(destination, 0,
-      props.boards.find(board => board._id === id)
+      props.tree
+        .filter(board => board.parent === props.selectedNode)
+        .find(board => board._id === id)
     )
 
 
@@ -332,10 +264,10 @@ const KanbanContainer = props => {
   }
 
   const onUpdateCardGroup = async (id, object) => {
-    //props.dispatch(updateBoard({id: id, object: object}))
+    props.dispatch(updateBoard({id: id, object: object}))
 
     const api = 'http://localhost:4000'
-    const url = api + '/boardrefs/update' + '?id=' + id
+    const url = api + '/board/update' + '?id=' + id
 
     try {
       const token = await getTokenSilently()
