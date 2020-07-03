@@ -22,6 +22,7 @@
 }
 
 .kanception-card textarea {
+  outline: none;
   overflow: visible;
   scrollbar-width: none;  /* Firefox */
   width: 80%;
