@@ -246,13 +246,14 @@ const KanbanContainer = props => {
   }
 
   const onCardOrderUpdate = (id, groupId, source, destination) => {
-    const newCardsOrder = Array.from(props.boards
+    const newCardsOrder = Array.from(props.tree
+      .filter(board => board.parent === props.selectedNode)
       .filter(board => board.group === groupId)
       .sort((a, b) => b.order - a.order))
 
     newCardsOrder.splice(source, 1)
     newCardsOrder.splice(destination, 0,
-      props.boards.find(board => board._id === id)
+      props.tree.find(board => board._id === id)
     )
 
     newCardsOrder.forEach((board, index) => {
@@ -424,7 +425,10 @@ const KanbanContainer = props => {
   return (
     <div style={props.style}>
       <Kanban
-        boards={props.tree.filter(board => board.parent === props.selectedNode)}
+        boards={props.tree
+        .filter(board => board.parent === props.selectedNode)
+        .sort((a, b) => b.order - a.order)
+        }
         groups={props.groups}
         teams={props.teams}
         tree={props.tree}
