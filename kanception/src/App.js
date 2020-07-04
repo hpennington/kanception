@@ -65,7 +65,7 @@ const App = props => {
 
       if (props.selectedTeam !== prevSelectedTeam) {
         fetchMemberProfiles(props.selectedTeam)
-        fetchNewTeamCards(props.selectedTeam)
+        //fetchNewTeamCards(props.selectedTeam)
         setPrevSelectedTeam(props.selectedTeam)
       }
 
