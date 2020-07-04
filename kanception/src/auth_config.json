@@ -1,5 +1,5 @@
 {
   "domain": "kanception.auth0.com",
   "clientId": "0Fq4bCIH2I5q0j4jrNNOIKrIeYbKwn8s",
-  "audience": "https://api.kanception.io"
+  "audience": "https://kanception.auth0.com/api/v2/"
 }
