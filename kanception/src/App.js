@@ -281,7 +281,7 @@ const App = props => {
       if (results.length > 0) {
         props.dispatch(setSelectedTeam({team: results[0]._id}))
         fetchMemberProfiles(props.selectedTeam)
-        fetchNewTeamCards(props.selectedTeam)
+        //fetchNewTeamCards(props.selectedTeam)
       }
 
     } catch (error) {
