@@ -24,7 +24,7 @@ ReactDOM.render(
         domain={config.domain}
         client_id={config.clientId}
         audience={config.audience}
-        redirect_uri={'https://kanception.io'}
+        redirect_uri={window.location.origin}
         onRedirectCallback={onRedirectCallback}
       >
         <Router />
