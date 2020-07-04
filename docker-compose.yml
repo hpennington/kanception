@@ -1,0 +1,30 @@
+version: "3.3"
+services:
+  mongo:
+    container_name: 'mongo'
+    image: mongo
+  kanception-api:
+    container_name: 'kanception-api'
+    build: ./api
+    ports:
+      - "4000:4000"
+    volumes:
+      - type: "bind"
+        source: ./api
+        target: /home/ubuntu/api
+      - /home/ubuntu/api/node_modules/
+    depends_on:
+      - mongo
+  kanception:
+    container_name: 'kanception'
+    build: ./kanception
+    stdin_open: true
+    ports:
+      - "3000:3000"
+    depends_on:
+      - kanception-api
+    volumes:
+      - type: "bind"
+        source: ./kanception
+        target: /home/ubuntu/kanception
+      - /home/ubuntu/kanception/node_modules/

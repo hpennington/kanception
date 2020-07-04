@@ -78,7 +78,7 @@ const App = props => {
 
   const fetchTreeInit = async () => {
     const project = props.selectedProject
-    const api = 'http://localhost:4000'
+    const api = process.env.REACT_APP_API
     const treeUrl = api + '/tree' + '?project=' + project
 
     try {
@@ -108,7 +108,7 @@ const App = props => {
     try {
 
       const token = await getTokenSilently()
-      const url = 'http://localhost:4000/team/root/children?team=' + team
+      const url = process.env.REACT_APP_API + '/team/root/children?team=' + team
 
       fetch(url, {
         headers: {
@@ -131,7 +131,7 @@ const App = props => {
     try {
 
       const token = await getTokenSilently()
-      const url = 'http://localhost:4000/profiles?team=' + team
+      const url = process.env.REACT_APP_API + '/profiles?team=' + team
 
       fetch(url, {
         headers: {
@@ -151,7 +151,7 @@ const App = props => {
   const teamInviteAccept = async (team) => {
     try {
       const token = await getTokenSilently()
-      const url = 'http://localhost:4000/team/invite/accept?team=' + team
+      const url = process.env.REACT_APP_API + '/team/invite/accept?team=' + team
 
       fetch(url, {
         method: 'POST',
@@ -176,7 +176,7 @@ const App = props => {
   const teamInviteDelete = async (team) => {
     try {
       const token = await getTokenSilently()
-      const url = 'http://localhost:4000/teaminvites?team=' + team
+      const url = process.env.REACT_APP_API + '/teaminvites?team=' + team
 
       fetch(url, {
         method: 'DELETE',
@@ -212,7 +212,7 @@ const App = props => {
     try {
 
       const token = await getTokenSilently()
-      const url = 'http://localhost:4000/spaces'
+      const url = process.env.REACT_APP_API + '/spaces'
 
       const result = await fetch(url, {
         method: 'GET',
@@ -233,7 +233,7 @@ const App = props => {
     try {
 
       const token = await getTokenSilently()
-      const url = 'http://localhost:4000/projects'
+      const url = process.env.REACT_APP_API + '/projects'
 
       const result = await fetch(url, {
         method: 'GET',
@@ -256,7 +256,7 @@ const App = props => {
       const promises = []
 
       for (const team of teamIds) {
-        const url = 'http://localhost:4000/team?team=' + team
+        const url = process.env.REACT_APP_API + '/team?team=' + team
         const promise = new Promise(async (resolve, reject) => {
           try {
             const res = await fetch(url, {
@@ -295,7 +295,7 @@ const App = props => {
 
       const token = await getTokenSilently()
 
-      const url = 'http://localhost:4000/teaminvites'
+      const url = process.env.REACT_APP_API + '/teaminvites'
 
       fetch(url, {
         headers: {
@@ -315,7 +315,7 @@ const App = props => {
   const fetchUser = async () => {
     try {
 
-      const url = 'http://localhost:4000/user'
+      const url = process.env.REACT_APP_API + '/user'
       const token = await getTokenSilently()
       const userResult = await fetch(url, {
         headers: {
@@ -335,7 +335,7 @@ const App = props => {
   const postUser = async () => {
     try {
 
-      const url = 'http://localhost:4000/user'
+      const url = process.env.REACT_APP_API + '/user'
       const token = await getTokenSilently()
       const userResult = await fetch(url, {
         method: 'POST',
@@ -362,7 +362,7 @@ const App = props => {
   const onBack = async (e) => {
     if (props.tree.find(node => node._id === selectedNode).parent !== null) {
       const project = props.selectedProject
-      const api = 'http://localhost:4000'
+      const api = process.env.REACT_APP_API
       const treeUrl = api + '/tree?project=' + project
 
       try {
@@ -396,7 +396,7 @@ const App = props => {
 
   const onAddSpace = async (title) => {
     try {
-      const api = 'http://localhost:4000/spaces/add?title=' + title
+      const api = process.env.REACT_APP_API + '/spaces/add?title=' + title
       const token = await getTokenSilently()
 
       const spaceResult = await fetch(api, {
@@ -416,7 +416,7 @@ const App = props => {
 
   const onAddProject = async (title, space) => {
     try {
-      const api = 'http://localhost:4000/projects/add?title=' + title
+      const api = process.env.REACT_APP_API + '/projects/add?title=' + title
         + '&space=' + space
       const token = await getTokenSilently()
 
@@ -436,7 +436,7 @@ const App = props => {
   }
 
   const addTeam = async (title) => {
-    const api = 'http://localhost:4000'
+    const api = process.env.REACT_APP_API
     const teamUrl = api + '/team?title=' + title
 
     try {
@@ -473,7 +473,7 @@ const App = props => {
   const onSubmit = async (first, last, email) => {
     try {
 
-      const url = 'http://localhost:4000/name?first='
+      const url = process.env.REACT_APP_API + '/name?first='
         + first + '&last=' + last + '&email=' + email
       const token = await getTokenSilently()
       const userResult = await fetch(url, {
@@ -498,7 +498,7 @@ const App = props => {
       const id = props.newCards.find(node => node._id === refId).board
       const parent = selectedNode
       const team = props.selectedTeam
-      const url = 'http://localhost:4000/team/board/accept'
+      const url = process.env.REACT_APP_API + '/team/board/accept'
         + '?board=' + id
         + '&group=' + group
         + '&parent=' + parent
@@ -515,7 +515,7 @@ const App = props => {
       const boardRef = await result.json()
 
       const boardResult = await fetch(
-        'http://localhost:4000/boards?ids[]=' + id, {
+        process.env.REACT_APP_API + '/boards?ids[]=' + id, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

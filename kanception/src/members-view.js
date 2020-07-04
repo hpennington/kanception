@@ -10,7 +10,7 @@ const MembersView = props => {
   const onInviteSubmit = async (first, last, email) => {
     const token = await getTokenSilently()
     fetch(
-      'http://localhost:4000/team/invite?first='
+      process.env.REACT_APP_API + '/team/invite?first='
       + first + '&last=' + last + '&email=' + email + '&team=' + props.team,
       {
         method: 'POST',

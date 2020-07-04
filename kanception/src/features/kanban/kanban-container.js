@@ -26,7 +26,7 @@ const KanbanContainer = props => {
   }, [props.selectedNode])
 
   const fetchTree = async () => {
-    const api = 'http://localhost:4000'
+    const api = process.env.REACT_APP_API
     const treeUrl = api + '/tree?project=' + props.selectedProject
 
     try {
@@ -55,7 +55,7 @@ const KanbanContainer = props => {
   }
 
   const fetchGroups = async (groupIds) => {
-    const api = 'http://localhost:4000'
+    const api = process.env.REACT_APP_API
     const treeUrl = api + '/tree'
 
     try {
@@ -85,7 +85,7 @@ const KanbanContainer = props => {
     try {
 
       const token = await getTokenSilently()
-      const api = 'http://localhost:4000'
+      const api = process.env.REACT_APP_API
       const project = props.selectedProject
       const parent = props.selectedNode
       const url = api + '/boards/add'
@@ -114,7 +114,7 @@ const KanbanContainer = props => {
     console.log(props.selectedNode)
     try {
       const token = await getTokenSilently()
-      const api = 'http://localhost:4000'
+      const api = process.env.REACT_APP_API
       const title = ''
       const treeUrl = api + '/tree'
       const treeResult = await fetch(treeUrl, {
@@ -223,7 +223,7 @@ const KanbanContainer = props => {
     console.log(id)
     console.log(object)
     props.dispatch(updateGroup({id: id, object: object}))
-    const api = 'http://localhost:4000'
+    const api = process.env.REACT_APP_API
     const url = api + '/groups/update' + '?id=' + id
     console.log(object)
 
@@ -245,7 +245,7 @@ const KanbanContainer = props => {
   const onUpdateCard = async (id, object) => {
     props.dispatch(updateBoard({id: id, object: object}))
 
-    const api = 'http://localhost:4000'
+    const api = process.env.REACT_APP_API
     const url = api + '/board/update' + '?id=' + id
 
     try {
@@ -266,7 +266,7 @@ const KanbanContainer = props => {
   const onUpdateCardGroup = async (id, object) => {
     props.dispatch(updateBoard({id: id, object: object}))
 
-    const api = 'http://localhost:4000'
+    const api = process.env.REACT_APP_API
     const url = api + '/board/update' + '?id=' + id
 
     try {
@@ -286,7 +286,7 @@ const KanbanContainer = props => {
 
   const onAddGroup = async () => {
     const owner = props.owner
-    const api = 'http://localhost:4000'
+    const api = process.env.REACT_APP_API
     const url = api + '/groups/add?owner=' + owner + '&board=' + props.selectedNode
     const token = await getTokenSilently()
     const addResult = await fetch(url, {method: 'POST',
@@ -320,7 +320,7 @@ const KanbanContainer = props => {
   const onTeamChange = async (team, board) => {
     console.log('onteamchange')
     props.dispatch(setBoardTeam({team: team, board: board}))
-    const url = 'http://localhost:4000/boards/update/team'
+    const url = process.env.REACT_APP_API + '/boards/update/team'
     try {
       const token = await getTokenSilently()
       const result = await fetch(
