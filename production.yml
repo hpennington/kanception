@@ -34,7 +34,7 @@ services:
       - /home/ubuntu/kanception/node_modules/
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.kanception.rule=Host(`kanception.io`)"
+      - "traefik.http.routers.kanception.rule=Host(`app.kanception.io`)"
       - "traefik.http.routers.kanception.entrypoints=web"
 
   traefik:
