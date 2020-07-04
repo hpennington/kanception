@@ -40,7 +40,6 @@ services:
   traefik:
     image: "traefik:latest"
     ports:
-      - "80:80"
       - "8080:8080"
     command:
       #- "--log.level=DEBUG"
@@ -50,4 +49,15 @@ services:
       - "--entrypoints.web.address=:80"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./logs/nginx:/var/log/nginx
+      - ./data/letsencrypt:/etc/letsencrypt
+      - ./cache/ecom_cache:/var/www/ecom_cache
+    ports:
+     - "80:80"
+     - "443:443"
+
 
