@@ -84,8 +84,14 @@ export default function CustomizedTreeView(props) {
   const onNodeSelect = (event, value) => {
     // If project selected
     if (props.projects.find(project => project._id === value) != null) {
-      props.setSelectedProject(value, event.target.dataset.nodeId)
-      props.setSelectedTeam(event.target.dataset.nodeId)
+      props.setSelectedProject(value, event.target.nodeId)
+      if (event.target.className.includes('MuiTypography-root') === true) {
+        console.log(event.target.parentElement.parentElement)
+        props.setSelectedTeam(event.target.parentElement.parentElement.dataset.spaceId)
+      } else {
+        console.log(event.target.parentElement.parentElement.parentElement)
+        props.setSelectedTeam(event.target.parentElement.parentElement.dataset.spaceId)
+      }
 
     } else if (props.spaces.find(space => space._id === value) != null) {
       props.setSelectedTeam(value)
@@ -139,14 +145,15 @@ export default function CustomizedTreeView(props) {
           space =>
           <StyledTreeItem nodeId={space._id} label={space.title}>
             <StyledTreeItem
-              data-node-id={space._id}
+              data-space-id={space._id}
               nodeId={space._id + '-add'}
               label={<strong>New</strong>}
             />
             {
             props.projects.filter(project => project.space === space._id)
               .map(project =>
-              <StyledTreeItem nodeId={project._id} label={project.title} />
+              <StyledTreeItem data-space-id={space._id}
+                nodeId={project._id} label={project.title} />
               )
             }
           </StyledTreeItem>
