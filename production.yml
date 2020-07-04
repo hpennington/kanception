@@ -1,0 +1,51 @@
+version: "3.3"
+services:
+  mongo:
+    container_name: 'mongo'
+    image: mongo
+  kanception-api:
+    container_name: 'kanception-api'
+    build: ./api
+    ports:
+      - "4444:4000"
+    volumes:
+      - type: "bind"
+        source: ./api
+        target: /home/ubuntu/api
+      - /home/ubuntu/api/node_modules/
+    depends_on:
+      - mongo
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.kanception-api.rule=Host(`api.kanception.io`)"
+      - "traefik.http.routers.kanception-api.entrypoints=web"
+  kanception:
+    container_name: 'kanception'
+    build: ./kanception
+    stdin_open: true
+    ports:
+      - "3333:3000"
+    depends_on:
+      - kanception-api
+    volumes:
+      - type: "bind"
+        source: ./kanception
+        target: /home/ubuntu/kanception
+      - /home/ubuntu/kanception/node_modules/
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.kanception.rule=Host(`kanception.io`)"
+      - "traefik.http.routers.kanception.entrypoints=web"
+
+  traefik:
+    image: "traefik:latest"
+    ports: -"80:80"
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=false"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
