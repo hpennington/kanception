@@ -65,7 +65,7 @@ const Toolbar = (props) => {
         <Dropdown.Toggle id="dropdown-basic">
         </Dropdown.Toggle>
         <Dropdown.Menu>
-          <Dropdown.Item href="/logout">Sign Out</Dropdown.Item>
+          <Dropdown.Item href="/logout?returnTo=/">Sign Out</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     </div>
