@@ -28,6 +28,11 @@ progress,
 video {
   display: inline-block;
 }
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 audio:not([controls]) {
   display: none;
   height: 0;
