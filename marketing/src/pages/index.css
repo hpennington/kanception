@@ -1,0 +1,8 @@
+.sign-up-btn {
+  border: none;
+  background: orange;
+  border-radius: 5px;
+  padding: 5px 10px;
+  color: black;
+  text-decoration: none;
+}
