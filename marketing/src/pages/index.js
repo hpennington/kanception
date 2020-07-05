@@ -9,7 +9,7 @@ import "./index.css"
 const IndexPage = () => (
   <Layout>
     <SEO title="Kanban Home" />
-    <h1 className="center-text mid-width">A nested Kanban board for digital professionals</h1>
+    <h1 className="center-text mid-width">A nested Kanban board for creative professionals</h1>
     <a className="sign-up-btn" href="https://app.kanception.io">Sign In / Sign Up</a>
     <img style={{
         boxShadow: "0 0 5px 10px #ccc",
