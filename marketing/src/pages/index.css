@@ -10,3 +10,7 @@
 .center-text {
   text-align: center;
 }
+
+.mid-width {
+  max-width: 700px;
+}
