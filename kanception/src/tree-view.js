@@ -119,8 +119,8 @@ export default function CustomizedTreeView(props) {
   return (
     <div
       style={{
-        marginRight: "45px",
-        marginLeft: "45px",
+        marginRight: "20px",
+        marginLeft: "20px",
       }}
     >
       {

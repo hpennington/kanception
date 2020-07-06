@@ -596,9 +596,9 @@ const App = props => {
           ganttOpen === true &&
           <div
             style={{
-              marginLeft: sideMenuOpen === true ? "275px" : 0,
+              marginLeft: sideMenuOpen === true ? "300px" : 0,
               marginTop: "50px",
-              width: sideMenuOpen === true ? "calc(100vw - 275px)" : "100vw",
+              width: sideMenuOpen === true ? "calc(100vw - 300px)" : "100vw",
               overflow: "auto",
             }}
           >
@@ -611,7 +611,7 @@ const App = props => {
         { nameOpen === false && kanbanReady === true && kanbanOpen === true &&
           props.selectedProject != null &&
           <KanbanContainer
-            style={{marginLeft: sideMenuOpen === true ? "375px" : 0}}
+            style={{marginLeft: sideMenuOpen === true ? "300px" : 0}}
             owner={user._id}
             selectedNode={selectedNode}
             selectedProject={props.selectedProject}

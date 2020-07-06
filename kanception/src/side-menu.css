@@ -1,7 +1,7 @@
 #side-menu {
   overflow: auto;
   position: fixed;
-  width: 275px;
+  width: 300px;
   height: 100%;
   background: #242628;
   z-index: 1;
@@ -28,8 +28,8 @@
   padding-bottom: 5px;
   color: white;
   margin: 20px;
-  margin-top: 40px;
-  margin-left: 40px;
+  margin-top: 15px;
+  margin-left: 15px;
 }
 
 .btn-container {
