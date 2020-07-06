@@ -10,6 +10,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  scrollbar-width: none;  /* Firefox */
+}
+
+#side-menu::-webkit-scrollbar {
+  display: none;  /* Safari and Chrome */
 }
 
 #side-menu > div > h1 {
