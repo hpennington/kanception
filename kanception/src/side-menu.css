@@ -1,7 +1,7 @@
 #side-menu {
   overflow: auto;
   position: fixed;
-  width: 375px;
+  width: 275px;
   height: 100%;
   background: #242628;
   z-index: 1;

@@ -596,9 +596,9 @@ const App = props => {
           ganttOpen === true &&
           <div
             style={{
-              marginLeft: sideMenuOpen === true ? "375px" : 0,
+              marginLeft: sideMenuOpen === true ? "275px" : 0,
               marginTop: "50px",
-              width: sideMenuOpen === true ? "calc(100vw - 375px)" : "100vw",
+              width: sideMenuOpen === true ? "calc(100vw - 275px)" : "100vw",
               overflow: "auto",
             }}
           >
