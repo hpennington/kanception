@@ -8,6 +8,7 @@ import {
   setBoards,
   addGroup,
   addBoard,
+  cardDelete,
   updateBoard,
   updateGroup,
   setTree,
@@ -301,11 +302,26 @@ const KanbanContainer = props => {
     props.dispatch(addGroup({group: group}))
   }
 
-  const onCardDelete = (id) => {
+  const onCardDelete = async (id) => {
     const deleteCard = window.confirm('Hit OK to delete the card')
 
     if (deleteCard === true) {
+
+      props.dispatch(cardDelete({card: id}))
       console.log('delete ' + id)
+      try {
+        const token = await getTokenSilently()
+        const result = fetch(
+          process.env.REACT_APP_API + '/boards?id=' + id , {
+            method: 'DELETE',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        )
+      } catch(error) {
+        console.log(error)
+      }
     }
   }
 
