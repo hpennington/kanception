@@ -414,7 +414,7 @@ const App = props => {
     }
   }
 
-  const onAddProject = async (title, space) => {
+  const onAddProject = async (title, space, board) => {
     try {
       const api = process.env.REACT_APP_API + '/projects/add?title=' + title
         + '&space=' + space
@@ -470,11 +470,11 @@ const App = props => {
     onAddSpace(title)
   }
 
-  const onSubmit = async (first, last, email) => {
+  const onSubmit = async (first, last) => {
     try {
 
       const url = process.env.REACT_APP_API + '/name?first='
-        + first + '&last=' + last + '&email=' + email
+        + first + '&last=' + last
       const token = await getTokenSilently()
       const userResult = await fetch(url, {
         method: 'POST',
@@ -629,7 +629,6 @@ const CollectInfo = props => {
   const [submitEnabled, setSubmitEnabled] = useState(false)
   const firstName = useRef(null)
   const lastName = useRef(null)
-  const email = useRef(null)
 
   const nameStyle = {
     margin: "10px",
@@ -639,8 +638,7 @@ const CollectInfo = props => {
 
   const setEnabled = () => {
     if ((firstName.current.value.length > 0)
-      && (lastName.current.value.length > 0)
-      && (email.current.value.length > 0)) {
+      && (lastName.current.value.length > 0)) {
       setSubmitEnabled(true)
     } else {
       setSubmitEnabled(false)
@@ -655,15 +653,10 @@ const CollectInfo = props => {
     setEnabled()
   }
 
-  const onEmailChange = e => {
-    setEnabled()
-  }
-
   const onSubmit = e => {
     props.onSubmit(
       firstName.current.value,
       lastName.current.value,
-      email.current.value,
     )
   }
 
@@ -703,13 +696,6 @@ const CollectInfo = props => {
           type="text"
           onChange={onLastChange}
           placeholder="Last"
-          style={nameStyle}
-        />
-        <input
-          ref={email}
-          type="email"
-          onChange={onEmailChange}
-          placeholder="Email"
           style={nameStyle}
         />
         <Button
