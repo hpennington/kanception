@@ -9,6 +9,7 @@ import {
   addGroup,
   addBoard,
   cardDelete,
+  groupDelete,
   updateBoard,
   updateGroup,
   setTree,
@@ -45,23 +46,20 @@ const KanbanContainer = props => {
       const root = tree.find(node => node._id == props.selectedNode)
       props.setSelectedNode(root._id)
       console.log(root)
-      const groupIds = root.groups
-      console.log(groupIds)
-
-      fetchGroups(groupIds)
+      fetchGroups(root._id)
 
     } catch (error) {
       console.log(error)
     }
   }
 
-  const fetchGroups = async (groupIds) => {
+  const fetchGroups = async (boardId) => {
     const api = process.env.REACT_APP_API
     const treeUrl = api + '/tree'
 
     try {
       const token = await getTokenSilently()
-      const groupsUrl = constructQueryArray(api + '/groups', groupIds, 'ids')
+      const groupsUrl = api + '/groups?board_id=' + boardId
 
       const groupsResult = await fetch(groupsUrl, {
         headers: {
@@ -325,11 +323,29 @@ const KanbanContainer = props => {
     }
   }
 
-  const onGroupDelete = (id, title) => {
+  const onGroupDelete = async (id, title) => {
     const deleteGroup = window.prompt('Confirm group name to delete:')
 
     if (deleteGroup === title) {
       console.log('detete group: ' + id)
+
+      props.dispatch(groupDelete({group: id}))
+
+      try {
+        const token = await getTokenSilently()
+        const result = fetch(
+          process.env.REACT_APP_API + '/groups?id=' + id , {
+            method: 'DELETE',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        )
+
+        console.log(result)
+      } catch(error) {
+        console.log(error)
+      }
     }
   }
 

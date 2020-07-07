@@ -46,6 +46,9 @@ export const kanbanSlice = createSlice({
     cardDelete: (state, action) => {
       state.tree = state.tree.filter(node => node._id !== action.payload.card)
     },
+    groupDelete: (state, action) => {
+      state.groups = state.groups.filter(group => group._id !== action.payload.group)
+    },
   },
 });
 
@@ -59,6 +62,7 @@ export const {
   setTree,
   setBoardTeam,
   cardDelete,
+  groupDelete,
 } = kanbanSlice.actions
 
 export default kanbanSlice.reducer
