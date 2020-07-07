@@ -675,7 +675,7 @@ const CollectInfo = props => {
       }}>
       <div style={{
         width: "300px",
-        height: "300px",
+        height: "200px",
         background: "white",
         borderRadius: "5px",
         display: "flex",
