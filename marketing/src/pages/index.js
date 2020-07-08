@@ -16,6 +16,7 @@ const IndexPage = () => (
       autoPlay={true}
       loop={true}
       controls={true}
+      muted={true}
       width={900}
       style={{
         boxShadow: "0 0 5px 10px #ccc",
