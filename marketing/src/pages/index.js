@@ -15,6 +15,7 @@ const IndexPage = () => (
     <video
       autoPlay={true}
       loop={true}
+      controls={true}
       width={900}
       style={{
         boxShadow: "0 0 5px 10px #ccc",
