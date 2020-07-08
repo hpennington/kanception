@@ -11,11 +11,9 @@ const IndexPage = () => {
   const [width, setWidth] = useState(900)
 
   useEffect(() => {
-    if (layout !== null) {
-      const width = window.innerWidth
-      if (width <= 900) {
-        setWidth(width * 0.8)
-      }
+    const width = window.innerWidth
+    if (width <= 900) {
+      setWidth(width * 0.8)
     }
   })
 
