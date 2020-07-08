@@ -12,9 +12,11 @@ const IndexPage = () => {
   const [width, setWidth] = useState(900)
 
   useEffect(() => {
-    const width = layout.current.getBoundingClientRect().width
-    if (width <= 900) {
-      setWidth(width * 0.8)
+    if (layout !== null) {
+      const width = layout.current.getBoundingClientRect().width
+      if (width <= 900) {
+        setWidth(width * 0.8)
+      }
     }
   })
 
