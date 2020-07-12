@@ -28,9 +28,10 @@ const Layout = ({ children }) => {
       <Header siteTitle={data.site.siteMetadata.title} />
       <div
         style={{
+          width: '100vw',
+          background: 'linear-gradient(transparent, rgba(66, 4, 153, 0.5))',
           margin: `0 auto`,
-          maxWidth: 960,
-          padding: `0 1.0875rem 1.45rem`,
+          padding: `0`,
         }}
       >
         <main>{children}</main>

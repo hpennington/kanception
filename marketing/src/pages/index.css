@@ -14,3 +14,44 @@
 .mid-width {
   max-width: 700px;
 }
+
+.kanban-detail-block {
+  background: #0090E5;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-video {
+  max-width: 960px;
+}
+
+.card {
+  background: white;
+  border-radius: 10px;
+  width: 450px;
+  text-align: center;
+  padding: 60px;
+  box-shadow: 5px 5px 10px 10px rgba(127, 127, 127, 0.25);
+  margin: 20px;
+}
+
+@media screen and (max-width: 1024px) {
+.kanban-detail-block {
+  flex-direction: column;
+}
+
+.main-video {
+  max-width: 95%;
+}
+
+.card {
+  max-width: 95%;
+  padding: 30px;
+}
+
+.kanban-detail-block img {
+  margin-right: 0!important;
+}
+}
