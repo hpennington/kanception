@@ -7,6 +7,10 @@
   text-decoration: none;
 }
 
+.sign-up-btn-bottom {
+  margin: 60px;
+}
+
 .center-text {
   text-align: center;
 }

@@ -5,6 +5,8 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import Kanception from "../images/kanception.png"
 import GraphImage from "./graph.png"
+import GanttImage from "./gantt.png"
+import RoadmapImage from "./roadmap.png"
 import Demo from './demo.mp4'
 import "./index.css"
 
@@ -13,6 +15,9 @@ const IndexPage = () => (
     <SEO title="Kanban Home" />
     <MainVideoBlock />
     <KanbanDetailBlock />
+    <GanttBlock />
+    <RoadmapBlock />
+    <PricingBlock />
   </Layout>
 )
 
@@ -46,6 +51,46 @@ const KanbanDetailBlock = () => (
     >
       <h1 style={{fontSize: '2.5em', fontStyle: 'normal', color: '#555'}}>Break down large tasks into bite-sized, nested subtasks.</h1>
     </div>
+  </div>
+)
+
+const GanttBlock = () => (
+  <div style={{background: 'white', width: '100vw', textAlign: 'center'}}>
+    <h1 style={{fontSize: '3em', margin: '40px auto', maxWidth: '700px'}}>Schedule cards with the Gantt chart</h1>
+    <img style={{maxWidth: '95%'}} src={GanttImage} alt="Gantt Chart" />
+  </div>
+)
+
+const RoadmapBlock = () => (
+  <div
+    style={{
+      background: '#0090E5',
+      width: '100vw',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'column',
+    }}
+  >
+    <h1 style={{fontSize: '3em', margin: '40px auto'}}>Roadmap</h1>
+    <img src={RoadmapImage} alt="Roadmap" />
+  </div>
+)
+
+const PricingBlock = () => (
+  <div
+    style={{
+      background: 'black',
+      width: '100vw',
+      color: 'white',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    }}
+  >
+    <h1 style={{fontSize: '4em', margin: '40px auto', textAlign: 'center'}}>Pricing</h1>
+    <h1 style={{fontSize: '4em', margin: '60px auto', textAlign: 'center'}}>It's free!</h1>
+    <a className="sign-up-btn sign-up-btn-bottom" href="https://app.kanception.io">Sign In / Sign Up</a>
   </div>
 )
 
