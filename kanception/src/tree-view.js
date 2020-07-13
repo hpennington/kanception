@@ -139,6 +139,7 @@ export default function CustomizedTreeView(props) {
         defaultEndIcon={<CloseSquare />}
         onNodeSelect={onNodeSelect}
         expanded={props.spaces.map(space => space._id)}
+        selected={props.selectedProject != null ? props.selectedProject : props.selectedTeam}
       >
         {
         props.spaces.map(
@@ -147,7 +148,7 @@ export default function CustomizedTreeView(props) {
             <StyledTreeItem
               data-space-id={space._id}
               nodeId={space._id + '-add'}
-              label={<strong>New</strong>}
+              label={<span><strong>New</strong> Board</span>}
             />
             {
             props.projects.filter(project => project.space === space._id)

@@ -555,6 +555,12 @@ const App = props => {
     props.dispatch(setSelectedTeam({team: team}))
   }
 
+   if (props.projects.length > 0 && props.spaces.length > 0) {
+     const project = props.projects[0]
+     console.log(project)
+     onSetSelectedProject(project._id, project.space)
+   }
+
   return (
       <div className="App">
         {menuOpen === true &&
@@ -575,6 +581,7 @@ const App = props => {
             onTeamInviteAccept={teamInviteAccept}
             setSelectedTeam={team => props.dispatch(setSelectedTeam({team: team}))}
             selectedTeam={props.selectedTeam}
+            selectedProject={props.selectedProject}
             onTeamInviteDelete={teamInviteDelete}
             onAddTeam={onAddTeam}
             invites={teamInvites}
