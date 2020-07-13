@@ -555,7 +555,12 @@ const App = props => {
     props.dispatch(setSelectedTeam({team: team}))
   }
 
-   if (props.projects.length > 0 && props.spaces.length > 0) {
+  if (
+    props.selectedTeam === null
+    && props.selectedProject === null
+    && props.projects.length > 0
+    && props.spaces.length > 0
+  ) {
      const project = props.projects[0]
      console.log(project)
      onSetSelectedProject(project._id, project.space)
