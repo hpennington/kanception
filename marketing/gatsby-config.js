@@ -1,8 +1,8 @@
 module.exports = {
   siteMetadata: {
     title: `Kanception.io`,
-    description: ``,
-    author: `A better Kanban board for modern workflows.`,
+    author: `@kanception`,
+    description: `A better Kanban board for modern workflows.`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
