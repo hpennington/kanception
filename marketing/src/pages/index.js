@@ -12,7 +12,7 @@ import "./index.css"
 
 const IndexPage = () => (
   <Layout>
-    <SEO title="Kanban Home" />
+    <SEO title="Kanban Project Management Tool" />
     <MainVideoBlock />
     <KanbanDetailBlock />
     <GanttBlock />
