@@ -18,6 +18,7 @@ const IndexPage = () => (
     <GanttBlock />
     <RoadmapBlock />
     <PricingBlock />
+    <ContactBlock />
   </Layout>
 )
 
@@ -91,6 +92,22 @@ const PricingBlock = () => (
     <h1 style={{fontSize: '4em', margin: '40px auto', textAlign: 'center'}}>Pricing</h1>
     <h1 style={{fontSize: '4em', margin: '60px auto', textAlign: 'center'}}>It's free!</h1>
     <a className="sign-up-btn sign-up-btn-bottom" href="https://app.kanception.io">Sign In / Sign Up</a>
+  </div>
+)
+
+const ContactBlock = () => (
+  <div
+    style={{
+      background: 'black',
+      width: '100vw',
+      color: 'white',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'column',
+    }}
+  >
+    <p>Contact us @ kanception.io@gmail.com</p>
   </div>
 )
 
