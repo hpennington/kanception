@@ -5,10 +5,14 @@ import GanttCanvas from './gantt-canvas'
 import './gantt.css'
 
 const GanttChart = () => {
+  const container = useRef(null)
   const [isMounted, setIsMounted] = useState(false)
   const [width, setWidth] = useState(0)
   const [height, setHeight] = useState(0)
-  const container = useRef(null)
+  const [offset, setOffset] = useState({
+    x: 0,
+    y: 0,
+  })
 
   useEffect(() => {
     if (container !== null) {
@@ -22,6 +26,10 @@ const GanttChart = () => {
     }
   })
 
+  const onPan = offsetBy => {
+    setOffset({x: offset.x + offsetBy.x, y: offset.y + offsetBy.y})
+  }
+
   return (
     <div style={{
         display: "flex",
@@ -33,7 +41,7 @@ const GanttChart = () => {
         className="todo-panel"
       >
       </div>
-      <div style={{width: "100%"}}>
+      <div style={{width: "calc(100% - 200px)"}}>
         <div
           style={{
             height: "100px",
@@ -43,14 +51,20 @@ const GanttChart = () => {
         </div>
         <div
           style={{
-            height: "calc(100vh - 150px)",
+            height: "calc(100vh - 200px)",
+            marginLeft: "200px",
             width: "100%",
           }}
           ref={container}
         >
           {
           isMounted === true &&
-          <GanttCanvas width={width} height={height} />
+          <GanttCanvas
+            width={width}
+            height={height}
+            offset={offset}
+            onPan={onPan}
+          />
           }
         </div>
       </div>
