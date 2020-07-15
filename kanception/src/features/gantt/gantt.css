@@ -10,3 +10,10 @@
 .gantt-channel {
   height: calc(65vh / 8);
 }
+
+.todo-panel {
+  position: absolute;
+  background: rgb(22, 22, 22);
+  height: calc(100vh - 50px);
+  width: 200px!important;
+}

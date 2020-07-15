@@ -614,10 +614,7 @@ const App = props => {
               overflow: "auto",
             }}
           >
-            <DragDropContext>
-              <GanttChart />
-              <BoardsListView />
-            </DragDropContext>
+            <GanttChart />
           </div>
         }
         { nameOpen === false && kanbanReady === true && kanbanOpen === true &&
