@@ -26,8 +26,8 @@ const GanttChart = () => {
     }
   })
 
-  const onPan = offsetBy => {
-    setOffset({x: offset.x + offsetBy.x, y: offset.y + offsetBy.y})
+  const onPan = pan => {
+    setOffset({x: offset.x + pan.x, y: offset.y + pan.y})
   }
 
   return (

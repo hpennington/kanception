@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react'
 const GanttCanvas = props => {
   const canvasRef = useRef(null)
   const [isMounted, setIsMounted] = useState(false)
-  const [dragPosition, setDragPosition] = useState({x: 0, y: 0})
+  var dragPosition = {x: 0, y: 0}
   var dragging = false
 
   useEffect(() => {
@@ -38,22 +38,20 @@ const GanttCanvas = props => {
 
   const onMouseDown = e => {
     const rect = canvasRef.current.getBoundingClientRect()
-
-    setDragPosition({x: e.clientX - rect.left, y: e.clientY})
+    dragPosition = {x: e.clientX - rect.left, y: e.clientY - rect.top}
     dragging = true
   }
 
   const onMouseUp = e => {
     const rect = canvasRef.current.getBoundingClientRect()
-    setDragPosition({x: e.clientX - rect.left, y: e.clientY})
+    dragPosition = {x: e.clientX - rect.left, y: e.clientY - rect.top}
     dragging = false
   }
 
   const onMouseMove = e => {
     if (dragging === true) {
       const rect = canvasRef.current.getBoundingClientRect()
-      props.onPan({x: e.clientX - rect.left - dragPosition.x, y: e.clientY + dragPosition.y})
-      setDragPosition({x: e.clientX - rect.left, y: e.clientY})
+      props.onPan({x: e.clientX - rect.left - dragPosition.x, y: e.clientY - rect.top})
     }
   }
 
@@ -66,7 +64,7 @@ const GanttCanvas = props => {
       // Draw horizontal lines
       ctx.beginPath()
       ctx.setLineDash([2, 4])
-      ctx.lineWidth = 1
+      ctx.lineWidth = 2
       ctx.strokeStyle = 'black'
 
       for (const index of [1, 2, 3, 4, 5, 6, 7, 8, 9]) {
@@ -80,14 +78,13 @@ const GanttCanvas = props => {
       // Draw vertical lines
       ctx.beginPath()
       ctx.setLineDash([2, 4])
-      ctx.lineWidth = 1
+      ctx.lineWidth = 2
       ctx.strokeStyle = 'black'
 
-      //for (const index of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
-        const index = 0
+      for (const index of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
         ctx.moveTo(props.offset.x + (index * 150), 0);
         ctx.lineTo(props.offset.x + (index * 150), props.height);
-      //}
+      }
 
       ctx.closePath();
       ctx.stroke();
