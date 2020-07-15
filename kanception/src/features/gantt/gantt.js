@@ -51,7 +51,7 @@ const GanttChart = () => {
         </div>
         <div
           style={{
-            height: "calc(100vh - 200px)",
+            height: "calc(100vh - 150px)",
             marginLeft: "200px",
             width: "100%",
           }}

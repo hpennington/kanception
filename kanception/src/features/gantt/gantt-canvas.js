@@ -2,19 +2,17 @@ import React, { useState, useRef, useEffect } from 'react'
 
 const GanttCanvas = props => {
   const canvasRef = useRef(null)
-  const [isMounted, setIsMounted] = useState(false)
   var dragPosition = {x: 0, y: 0}
   var dragging = false
 
   useEffect(() => {
-    if (isMounted === false && canvasRef !== null) {
+    if (canvasRef !== null) {
       console.log('Adding event listeners')
       canvasRef.current.addEventListener('mousedown', onMouseDown)
       canvasRef.current.addEventListener('mousemove', onMouseMove)
       canvasRef.current.addEventListener('mouseup', onMouseUp)
       canvasRef.current.addEventListener('mousecancel', onMouseUp)
       window.addEventListener('mouseup', onMouseUp)
-      setIsMounted(true)
     }
 
     if (canvasRef !== null) {
@@ -63,11 +61,18 @@ const GanttCanvas = props => {
 
       // Draw horizontal lines
       ctx.beginPath()
-      ctx.setLineDash([2, 4])
       ctx.lineWidth = 2
       ctx.strokeStyle = 'black'
 
       for (const index of [1, 2, 3, 4, 5, 6, 7, 8, 9]) {
+        if (index === 2) {
+          ctx.setLineDash([])
+          ctx.closePath();
+          ctx.stroke();
+          ctx.beginPath()
+          ctx.setLineDash([2, 4])
+        }
+
         ctx.moveTo(0, index * 50);
         ctx.lineTo(props.width, index * 50);
       }
@@ -78,7 +83,7 @@ const GanttCanvas = props => {
       // Draw vertical lines
       ctx.beginPath()
       ctx.setLineDash([2, 4])
-      ctx.lineWidth = 2
+      ctx.lineWidth = 1
       ctx.strokeStyle = 'black'
 
       for (const index of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
