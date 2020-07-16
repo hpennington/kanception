@@ -41,7 +41,7 @@
   margin: 20px;
 }
 
-.gantt-chart {
+#gantt-chart {
   box-shadow: 0 0 5px 10px #ccc;
   border-radius: 5px;
 }
