@@ -26,7 +26,17 @@ class GanttChart extends React.Component {
 
   onPan = pan => {
     this.setState(state => {
-      return {offset: {x: this.state.offset.x - pan.x, y: this.state.offset.y + pan.y}}
+      const rect = this.refs.container.getBoundingClientRect()
+      const rowHeight = 50
+      const maxOffset = (rowHeight * this.props.boards
+        .filter(board => board.parent === this.props.selectedNode).length) - (rect.height - rowHeight)
+      const updatedY = this.state.offset.y - pan.y
+
+      const finalY = updatedY >= 0
+        ? (updatedY <= maxOffset ? updatedY : maxOffset)
+        : 0
+
+      return {offset: {x: this.state.offset.x - pan.x, y: finalY}}
     })
   }
 
@@ -38,7 +48,6 @@ class GanttChart extends React.Component {
   }
 
   render() {
-    console.log(this.props.selectedNode)
     return (
       <div style={{
           display: "flex",

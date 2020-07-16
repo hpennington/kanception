@@ -50,7 +50,11 @@ const GanttCanvas = props => {
   const onMouseMove = e => {
     if (dragging === true) {
       const rect = canvasRef.current.getBoundingClientRect()
-      props.onPan({x: dragPosition.x - (e.clientX - rect.left), y: e.clientY - rect.top})
+      props.onPan({
+        x: dragPosition.x - (e.clientX - rect.left),
+        y: -(dragPosition.y - (e.clientY - rect.top))
+      })
+
       dragPosition = {x: e.clientX - rect.left, y: e.clientY - rect.top}
     }
   }
@@ -67,25 +71,40 @@ const GanttCanvas = props => {
   }
 
   const drawHorizontalLines = ctx => {
+    const rect = canvasRef.current.getBoundingClientRect()
+    const rowHeight = 50
     ctx.beginPath()
+    ctx.setLineDash([])
     ctx.lineWidth = 2
     ctx.strokeStyle = 'black'
+    ctx.moveTo(0, rowHeight)
+    ctx.lineTo(props.width, rowHeight)
+    ctx.closePath()
+    ctx.stroke()
 
-    for (const index of [...Array(props.boards.length + 2).keys()].splice(1)) {
-      if (index === 2) {
-        ctx.setLineDash([])
-        ctx.closePath();
-        ctx.stroke();
+    if ((rowHeight * 2) + (props.boards.length * rowHeight) > rect.height) {
+      for (const index of [...Array(props.boards.length).keys()]) {
         ctx.beginPath()
         ctx.setLineDash([2, 4])
-      }
+        const y = rowHeight + (-props.offset.y % rowHeight) + (index * rowHeight)
 
-      ctx.moveTo(0, index * 50);
-      ctx.lineTo(props.width, index * 50);
+        ctx.moveTo(0, y > rowHeight ? y : rowHeight)
+        ctx.lineTo(props.width, y > rowHeight ? y : rowHeight )
+        ctx.closePath()
+        ctx.stroke()
+      }
+    } else {
+      for (const index of [...Array(props.boards.length).keys()]) {
+        ctx.beginPath()
+        ctx.setLineDash([2, 4])
+        const y = (rowHeight * 2) + (index * 50)
+        ctx.moveTo(0, y)
+        ctx.lineTo(props.width, y)
+        ctx.closePath()
+        ctx.stroke()
+      }
     }
 
-    ctx.closePath();
-    ctx.stroke();
   }
 
   const drawVerticalLines = ctx => {
