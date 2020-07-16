@@ -29,7 +29,7 @@ const GanttCanvas = props => {
   }, [])
 
   useEffect(() => {
-    if (canvasRef !== null && isMounted === true) {
+    if (canvasRef !== null) {
       draw()
     }
   }, [props.offset, props.width, props.height])
