@@ -100,12 +100,6 @@ const GanttCanvas = props => {
     const bound1 = bound0 + (rect.width * milliSecondsPerPixel)
     console.log('start: ' + new Date(bound0) + ' end: ' + new Date(bound1))
 
-
-    for (const index of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
-      ctx.moveTo(props.offset.x + (index * 150), 0);
-      ctx.lineTo(props.offset.x + (index * 150), props.height);
-    }
-
     const t0 = ceilHour(bound0).getTime()
     var t = t0
     const deltaT = hourMS
