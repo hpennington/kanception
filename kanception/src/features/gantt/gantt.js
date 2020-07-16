@@ -38,6 +38,7 @@ class GanttChart extends React.Component {
   }
 
   render() {
+    console.log(this.props.selectedNode)
     return (
       <div style={{
           display: "flex",
@@ -68,10 +69,13 @@ class GanttChart extends React.Component {
             {
             this.state.isMounted === true &&
             <GanttCanvas
+              selectedNode={this.props.selectedNode}
               width={this.state.width}
               height={this.state.height}
               offset={this.state.offset}
               onPan={this.onPan.bind(this)}
+              boards={this.props.boards
+                .filter(board => board.parent === this.props.selectedNode)}
             />
             }
           </div>
@@ -83,7 +87,7 @@ class GanttChart extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    boards: state.kanban.boards
+    boards: state.kanban.tree,
   }
 }
 

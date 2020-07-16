@@ -30,11 +30,10 @@ const GanttCanvas = props => {
   }, [])
 
   useEffect(() => {
-    console.log('draw')
     if (canvasRef !== null) {
       draw()
     }
-  }, [props.offset, props.width, props.height])
+  }, [props.selectedNode, props.offset, props.width, props.height])
 
   const onMouseDown = e => {
     const rect = canvasRef.current.getBoundingClientRect()
@@ -57,7 +56,6 @@ const GanttCanvas = props => {
   }
 
   const draw = () => {
-    console.log('draw')
     const canvas = canvasRef.current
     if (canvas.getContext) {
       const ctx = canvas.getContext('2d')
@@ -65,7 +63,6 @@ const GanttCanvas = props => {
 
       drawHorizontalLines(ctx)
       drawVerticalLines(ctx)
-
     }
   }
 
@@ -74,7 +71,7 @@ const GanttCanvas = props => {
     ctx.lineWidth = 2
     ctx.strokeStyle = 'black'
 
-    for (const index of [1, 2, 3, 4, 5, 6, 7, 8, 9]) {
+    for (const index of [...Array(props.boards.length + 2).keys()].splice(1)) {
       if (index === 2) {
         ctx.setLineDash([])
         ctx.closePath();
@@ -92,13 +89,12 @@ const GanttCanvas = props => {
   }
 
   const drawVerticalLines = ctx => {
-    console.log(props.offset.x)
     const rect = canvasRef.current.getBoundingClientRect()
     const hourMS = 60 * 60 * 1000
     const milliSecondsPerPixel = hourMS / 150
     const bound0 = now - (props.offset.x * milliSecondsPerPixel)
     const bound1 = bound0 + (rect.width * milliSecondsPerPixel)
-    console.log('start: ' + new Date(bound0) + ' end: ' + new Date(bound1))
+    //console.log('start: ' + new Date(bound0) + ' end: ' + new Date(bound1))
 
     const t0 = ceilHour(bound0).getTime()
     var t = t0
@@ -116,6 +112,7 @@ const GanttCanvas = props => {
       ctx.closePath()
       ctx.stroke()
 
+      ctx.font = '14px Arial'
       const xDate = new Date(t)
       const dateLabel = xDate.toLocaleString('en-US',
         { hour: 'numeric', hour12: true })

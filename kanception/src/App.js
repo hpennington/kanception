@@ -614,7 +614,9 @@ const App = props => {
               overflow: "auto",
             }}
           >
-            <GanttChart />
+            <GanttChart
+              selectedNode={selectedNode}
+            />
           </div>
         }
         { nameOpen === false && kanbanReady === true && kanbanOpen === true &&
