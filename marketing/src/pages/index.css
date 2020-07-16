@@ -41,6 +41,11 @@
   margin: 20px;
 }
 
+.gantt-chart {
+  box-shadow: 0 0 5px 10px #ccc;
+  border-radius: 5px;
+}
+
 @media screen and (max-width: 1024px) {
 .kanban-detail-block {
   flex-direction: column;
@@ -59,3 +64,4 @@
   margin-right: 0!important;
 }
 }
+
