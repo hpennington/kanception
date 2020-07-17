@@ -27,7 +27,8 @@ class GanttChart extends React.Component {
       isMounted: false,
       width: 0,
       height: 0,
-      offset: {x: 0, y: 0}
+      offset: {x: 0, y: 0},
+      nodes: [],
     }
   }
 
@@ -37,6 +38,11 @@ class GanttChart extends React.Component {
     if (this.state.isMounted === false && this.refs.container !== null) {
       this.setState({isMounted: true})
     }
+    this.setState({nodes: this.props.boards
+      .filter(board => board.parent === this.props.selectedNode)
+      .map(board => [1594949992000 - (15949000 * Math.random()), 1594950092000])
+    })
+
   }
 
   onPan = pan => {
@@ -106,6 +112,7 @@ class GanttChart extends React.Component {
             {
             this.state.isMounted === true &&
             <GanttCanvas
+              nodes={this.state.nodes}
               selectedNode={this.props.selectedNode}
               width={this.state.width}
               height={this.state.height}

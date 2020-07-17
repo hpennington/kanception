@@ -67,6 +67,10 @@ const GanttCanvas = props => {
 
       drawHorizontalLines(ctx)
       drawVerticalLines(ctx)
+      drawNodes(ctx)
+      drawTopbar(ctx)
+      drawTicks(ctx)
+      drawTickText(ctx)
     }
   }
 
@@ -81,6 +85,13 @@ const GanttCanvas = props => {
     ctx.lineTo(props.width, rowHeight)
     ctx.closePath()
     ctx.stroke()
+
+    ctx.beginPath()
+    ctx.rect(0, 0, rect.width, rowHeight)
+    ctx.fillStyle = '#1c1c1c'
+    ctx.zIndex = '100'
+    ctx.closePath()
+    ctx.fill()
 
     if ((rowHeight * 2) + (props.boards.length * rowHeight) > rect.height) {
       for (const index of [...Array(props.boards.length).keys()]) {
@@ -139,36 +150,120 @@ const GanttCanvas = props => {
       const labelSize = ctx.measureText(labelText)
       const labelX = x + 4
       ctx.fillStyle = 'white'
-      ctx.fillText(labelText,labelX, 44)
+      ctx.fillText(labelText,labelX, 40)
 
       t = t + deltaT
     }
   }
 
-  //  const drawNodes = ctx => {
-  //    const rect = canvasRef.current.getBoundingClientRect()
-  //    const hourMS = 60 * 60 * 1000
-  //    const milliSecondsPerPixel = hourMS / 150
-  //    const bound0 = now - (props.offset.x * milliSecondsPerPixel)
-  //    const bound1 = bound0 + (rect.width * milliSecondsPerPixel)
-  //
-  //    var index = 0
-  //    for (const node of props.nodes) {
-  //      const t = node[0]
-  //      console.log(new Date(t))
-  //      if (t >= bound0 && t <= bound1) {
-  //        const x = (t - bound0) / milliSecondsPerPixel
-  //        const rowHeight = 50
-  //        const y = rowHeight + index * rowHeight - (props.offset.y % rowHeight)
-  //        console.log(x)
-  //        ctx.roundedRect(x, y, 100, 100, 5)
-  //        ctx.stroke()
-  //        ctx.fill()
-  //      }
-  //      index += 1
-  //    }
-  //
-  //  }
+  const drawTickText = ctx => {
+    const rect = canvasRef.current.getBoundingClientRect()
+    const hourMS = 60 * 60 * 1000
+    const milliSecondsPerPixel = hourMS / 150
+    const bound0 = now - (props.offset.x * milliSecondsPerPixel)
+    const bound1 = bound0 + (rect.width * milliSecondsPerPixel)
+    //console.log('start: ' + new Date(bound0) + ' end: ' + new Date(bound1))
+
+    const t0 = ceilHour(bound0).getTime()
+    var t = t0
+    const deltaT = hourMS
+
+    while (t < bound1) {
+      const x = (t - bound0) / milliSecondsPerPixel
+
+      ctx.font = '14px Arial'
+      const xDate = new Date(t)
+      const dateLabel = xDate.toLocaleString('en-US',
+        { hour: 'numeric', hour12: true })
+      const labelText = dateLabel
+      const labelSize = ctx.measureText(labelText)
+      const labelX = x + 4
+      ctx.fillStyle = 'white'
+      ctx.fillText(labelText,labelX, 40)
+
+      t = t + deltaT
+    }
+  }
+
+  const drawTopbar = ctx => {
+    const rowHeight = 50
+    const rect = canvasRef.current.getBoundingClientRect()
+    ctx.beginPath()
+    ctx.rect(0, 0, rect.width, rowHeight)
+    ctx.fillStyle = '#1c1c1c'
+    ctx.closePath()
+    ctx.fill()
+  }
+
+  const drawTicks = ctx => {
+    const rect = canvasRef.current.getBoundingClientRect()
+    const hourMS = 60 * 60 * 1000
+    const milliSecondsPerPixel = hourMS / 150
+    const bound0 = now - (props.offset.x * milliSecondsPerPixel)
+    const bound1 = bound0 + (rect.width * milliSecondsPerPixel)
+    //console.log('start: ' + new Date(bound0) + ' end: ' + new Date(bound1))
+    const rowHeight = 50
+
+    const t0 = ceilHour(bound0).getTime()
+    var t = t0
+    const deltaT = hourMS
+
+    while (t < bound1) {
+      const x = (t - bound0) / milliSecondsPerPixel
+
+      ctx.beginPath()
+      ctx.setLineDash([2, 4])
+      ctx.lineWidth = 1
+      ctx.strokeStyle = 'black'
+      ctx.moveTo(x, 0)
+      ctx.lineTo(x, rowHeight)
+      ctx.closePath()
+      ctx.stroke()
+
+      ctx.font = '14px Arial'
+      const xDate = new Date(t)
+      const dateLabel = xDate.toLocaleString('en-US',
+        { hour: 'numeric', hour12: true })
+      const labelText = dateLabel
+      const labelSize = ctx.measureText(labelText)
+      const labelX = x + 4
+      ctx.fillStyle = 'white'
+      ctx.fillText(labelText,labelX, 40)
+
+      t = t + deltaT
+    }
+
+  }
+
+  const drawNodes = ctx => {
+    const rect = canvasRef.current.getBoundingClientRect()
+    const hourMS = 60 * 60 * 1000
+    const milliSecondsPerPixel = hourMS / 150
+    const bound0 = now - (props.offset.x * milliSecondsPerPixel)
+    const bound1 = bound0 + (rect.width * milliSecondsPerPixel)
+
+    var index = 0
+    for (const node of props.nodes) {
+      const t0 = node[0]
+      const t1 = node[1]
+      if (t0 >= bound0 && t0 <= bound1
+        || t1 >= bound0
+      ) {
+        const x = (t0 - bound0) / milliSecondsPerPixel
+        const rowHeight = 50
+        const padding = 10
+        const y = padding + rowHeight + (-props.offset.y) + (index * rowHeight)
+        //const y = padding + rowHeight + index * rowHeight - (props.offset.y % rowHeight)
+        ctx.fillStyle = "rgba(95, 54, 179, 0.5)"
+        ctx.roundedRect(x, y, 250, rowHeight - padding * 2, 5)
+        ctx.stroke()
+        ctx.fill()
+      }
+      index += 1
+    }
+
+
+  }
 
   return (
     <canvas
