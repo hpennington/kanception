@@ -1,105 +1,128 @@
 import React, { useState, useRef, useEffect } from 'react'
 
-const GanttCanvas = props => {
-  const canvasRef = useRef(null)
-  var dragPosition = {x: 0, y: 0}
-  var dragging = false
-  const now = new Date().getTime()
+class GanttCanvas extends React.Component {
+  constructor(props) {
+    super(props)
 
-  useEffect(() => {
-    if (canvasRef !== null) {
+    this.dragPosition = {x: 0, y: 0}
+    this.dragging = false
+    this.now = new Date().getTime()
+
+    this.onMouseDown = this.onMouseDown.bind(this)
+    this.onMouseUp = this.onMouseUp.bind(this)
+    this.onMouseMove = this.onMouseMove.bind(this)
+    this.onDoubleClick = this.onDoubleClick.bind(this)
+  }
+
+  componentDidMount = () => {
+    const canvasRef = this.refs.canvas
+    if (canvasRef != null) {
       console.log('Adding event listeners')
-      canvasRef.current.addEventListener('mousedown', onMouseDown)
-      canvasRef.current.addEventListener('mousemove', onMouseMove)
-      canvasRef.current.addEventListener('mouseup', onMouseUp)
-      canvasRef.current.addEventListener('mousecancel', onMouseUp)
-      canvasRef.current.addEventListener('dblclick', onDoubleClick)
-      window.addEventListener('mouseup', onMouseUp)
+      canvasRef.addEventListener('mousedown', this.onMouseDown)
+      canvasRef.addEventListener('mousemove', this.onMouseMove)
+      canvasRef.addEventListener('mouseup', this.onMouseUp)
+      canvasRef.addEventListener('mousecancel', this.onMouseUp)
+      canvasRef.addEventListener('dblclick', this.onDoubleClick)
+      window.addEventListener('mouseup', this.onMouseUp)
     }
 
-    if (canvasRef !== null) {
-      draw()
+    if (canvasRef != null) {
+      this.draw()
     }
-
-    return () => {
-      canvasRef.current.removeEventListener('mousedown', onMouseDown)
-      canvasRef.current.removeEventListener('mousemove', onMouseMove)
-      canvasRef.current.removeEventListener('mouseup', onMouseUp)
-      canvasRef.current.removeEventListener('mousecancel', onMouseUp)
-      canvasRef.current.removeEventListener('dblclick', onDoubleClick)
-      window.removeEventListener('mouseup', onMouseUp)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (canvasRef !== null) {
-      draw()
-    }
-  }, [props.selectedNode, props.offset, props.width, props.height])
-
-  const onMouseDown = e => {
-    const rect = canvasRef.current.getBoundingClientRect()
-    dragPosition = {x: e.clientX - rect.left, y: e.clientY - rect.top}
-    dragging = true
   }
 
-  const onMouseUp = e => {
-    const rect = canvasRef.current.getBoundingClientRect()
-    dragPosition = {x: e.clientX - rect.left, y: e.clientY - rect.top}
-    dragging = false
+  componentWillUnmount = () => {
+    const canvasRef = this.refs.canvas
+    canvasRef.removeEventListener('mousedown', this.onMouseDown)
+    canvasRef.removeEventListener('mousemove', this.onMouseMove)
+    canvasRef.removeEventListener('mouseup', this.onMouseUp)
+    canvasRef.removeEventListener('mousecancel', this.onMouseUp)
+    canvasRef.removeEventListener('dblclick', this.onDoubleClick)
+    window.removeEventListener('mouseup', this.onMouseUp)
   }
 
-  const onMouseMove = e => {
-    if (dragging === true) {
-      const rect = canvasRef.current.getBoundingClientRect()
-      props.onPan({
-        x: dragPosition.x - (e.clientX - rect.left),
-        y: -(dragPosition.y - (e.clientY - rect.top))
+  componentDidUpdate = () => {
+    const canvasRef = this.refs.canvas
+    if (canvasRef != null) {
+      this.draw()
+    }
+  }
+
+  onMouseDown = e => {
+    const canvasRef = this.refs.canvas
+    const rect = canvasRef.getBoundingClientRect()
+    this.dragPosition = {x: e.clientX - rect.left, y: e.clientY - rect.top}
+    this.dragging = true
+  }
+
+  onMouseUp = e => {
+    const canvasRef = this.refs.canvas
+    const rect = canvasRef.getBoundingClientRect()
+    this.dragPosition = {x: e.clientX - rect.left, y: e.clientY - rect.top}
+    this.dragging = false
+  }
+
+  onMouseMove = e => {
+    const canvasRef = this.refs.canvas
+    if (this.dragging === true) {
+      const rect = canvasRef.getBoundingClientRect()
+      this.props.onPan({
+        x: this.dragPosition.x - (e.clientX - rect.left),
+        y: -(this.dragPosition.y - (e.clientY - rect.top))
       })
 
-      dragPosition = {x: e.clientX - rect.left, y: e.clientY - rect.top}
+      this.dragPosition = {x: e.clientX - rect.left, y: e.clientY - rect.top}
     }
   }
 
-  const onDoubleClick = e => {
+  onDoubleClick = e => {
+    const canvasRef = this.refs.canvas
     const rowHeight = 50
-    const rect = canvasRef.current.getBoundingClientRect()
+    const rect = canvasRef.getBoundingClientRect()
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top - rowHeight
 
     if (y > 0) {
-      console.log({x, y})
       // Determine row
-      console.log(props.offset.y)
-      const row = Math.floor(props.offset.y / rowHeight)
+      const row = Math.floor((y / rowHeight) + (this.props.offset.y / rowHeight))
       console.log({row})
+
+      // Determine clicked time
+      const hourMS = 60 * 60 * 1000
+      const milliSecondsPerPixel = hourMS / 150
+      const bound0 = this.now - (this.props.offset.x * milliSecondsPerPixel)
+      const time = bound0 + (x * milliSecondsPerPixel)
+
+      this.props.onAddNode(this.props.nodes[row]._id, time)
     }
   }
 
-  const draw = () => {
-    const canvas = canvasRef.current
+  draw = () => {
+    const canvasRef = this.refs.canvas
+    const canvas = canvasRef
     if (canvas.getContext) {
       const ctx = canvas.getContext('2d')
-      ctx.clearRect(0, 0, props.width, props.height)
+      ctx.clearRect(0, 0, this.props.width, this.props.height)
 
-      drawHorizontalLines(ctx)
-      drawVerticalLines(ctx)
-      drawNodes(ctx)
-      drawTopbar(ctx)
-      drawTicks(ctx)
-      drawTickText(ctx)
+      this.drawHorizontalLines(ctx)
+      this.drawVerticalLines(ctx)
+      this.drawNodes(ctx)
+      this.drawTopbar(ctx)
+      this.drawTicks(ctx)
+      this.drawTickText(ctx)
     }
   }
 
-  const drawHorizontalLines = ctx => {
-    const rect = canvasRef.current.getBoundingClientRect()
+  drawHorizontalLines = ctx => {
+    const canvasRef = this.refs.canvas
+    const rect = canvasRef.getBoundingClientRect()
     const rowHeight = 50
     ctx.beginPath()
     ctx.setLineDash([])
     ctx.lineWidth = 2
     ctx.strokeStyle = 'black'
     ctx.moveTo(0, rowHeight)
-    ctx.lineTo(props.width, rowHeight)
+    ctx.lineTo(this.props.width, rowHeight)
     ctx.closePath()
     ctx.stroke()
 
@@ -110,24 +133,24 @@ const GanttCanvas = props => {
     ctx.closePath()
     ctx.fill()
 
-    if ((rowHeight * 2) + (props.boards.length * rowHeight) > rect.height) {
-      for (const index of [...Array(props.boards.length).keys()]) {
+    if ((rowHeight * 2) + (this.props.boards.length * rowHeight) > rect.height) {
+      for (const index of [...Array(this.props.boards.length).keys()]) {
         ctx.beginPath()
         ctx.setLineDash([2, 4])
-        const y = rowHeight + (-props.offset.y % rowHeight) + (index * rowHeight)
+        const y = rowHeight + (-this.props.offset.y % rowHeight) + (index * rowHeight)
 
         ctx.moveTo(0, y > rowHeight ? y : rowHeight)
-        ctx.lineTo(props.width, y > rowHeight ? y : rowHeight )
+        ctx.lineTo(this.props.width, y > rowHeight ? y : rowHeight )
         ctx.closePath()
         ctx.stroke()
       }
     } else {
-      for (const index of [...Array(props.boards.length).keys()]) {
+      for (const index of [...Array(this.props.boards.length).keys()]) {
         ctx.beginPath()
         ctx.setLineDash([2, 4])
         const y = (rowHeight * 2) + (index * 50)
         ctx.moveTo(0, y)
-        ctx.lineTo(props.width, y)
+        ctx.lineTo(this.props.width, y)
         ctx.closePath()
         ctx.stroke()
       }
@@ -135,11 +158,12 @@ const GanttCanvas = props => {
 
   }
 
-  const drawVerticalLines = ctx => {
-    const rect = canvasRef.current.getBoundingClientRect()
+  drawVerticalLines = ctx => {
+    const canvasRef = this.refs.canvas
+    const rect = canvasRef.getBoundingClientRect()
     const hourMS = 60 * 60 * 1000
     const milliSecondsPerPixel = hourMS / 150
-    const bound0 = now - (props.offset.x * milliSecondsPerPixel)
+    const bound0 = this.now - (this.props.offset.x * milliSecondsPerPixel)
     const bound1 = bound0 + (rect.width * milliSecondsPerPixel)
     //console.log('start: ' + new Date(bound0) + ' end: ' + new Date(bound1))
 
@@ -173,11 +197,12 @@ const GanttCanvas = props => {
     }
   }
 
-  const drawTickText = ctx => {
-    const rect = canvasRef.current.getBoundingClientRect()
+  drawTickText = ctx => {
+    const canvasRef = this.refs.canvas
+    const rect = canvasRef.getBoundingClientRect()
     const hourMS = 60 * 60 * 1000
     const milliSecondsPerPixel = hourMS / 150
-    const bound0 = now - (props.offset.x * milliSecondsPerPixel)
+    const bound0 = this.now - (this.props.offset.x * milliSecondsPerPixel)
     const bound1 = bound0 + (rect.width * milliSecondsPerPixel)
     //console.log('start: ' + new Date(bound0) + ' end: ' + new Date(bound1))
 
@@ -202,9 +227,10 @@ const GanttCanvas = props => {
     }
   }
 
-  const drawTopbar = ctx => {
+  drawTopbar = ctx => {
     const rowHeight = 50
-    const rect = canvasRef.current.getBoundingClientRect()
+    const canvasRef = this.refs.canvas
+    const rect = canvasRef.getBoundingClientRect()
     ctx.beginPath()
     ctx.rect(0, 0, rect.width, rowHeight)
     ctx.fillStyle = '#1c1c1c'
@@ -212,11 +238,12 @@ const GanttCanvas = props => {
     ctx.fill()
   }
 
-  const drawTicks = ctx => {
-    const rect = canvasRef.current.getBoundingClientRect()
+  drawTicks = ctx => {
+    const canvasRef = this.refs.canvas
+    const rect = canvasRef.getBoundingClientRect()
     const hourMS = 60 * 60 * 1000
     const milliSecondsPerPixel = hourMS / 150
-    const bound0 = now - (props.offset.x * milliSecondsPerPixel)
+    const bound0 = this.now - (this.props.offset.x * milliSecondsPerPixel)
     const bound1 = bound0 + (rect.width * milliSecondsPerPixel)
     //console.log('start: ' + new Date(bound0) + ' end: ' + new Date(bound1))
     const rowHeight = 50
@@ -252,15 +279,16 @@ const GanttCanvas = props => {
 
   }
 
-  const drawNodes = ctx => {
-    const rect = canvasRef.current.getBoundingClientRect()
+  drawNodes = ctx => {
+    const canvasRef = this.refs.canvas
+    const rect = canvasRef.getBoundingClientRect()
     const hourMS = 60 * 60 * 1000
     const milliSecondsPerPixel = hourMS / 150
-    const bound0 = now - (props.offset.x * milliSecondsPerPixel)
+    const bound0 = this.now - (this.props.offset.x * milliSecondsPerPixel)
     const bound1 = bound0 + (rect.width * milliSecondsPerPixel)
 
     var index = 0
-    for (const node of props.nodes) {
+    for (const node of this.props.nodes.map(board => [board.start, board.end])) {
       const t0 = node[0]
       const t1 = node[1]
       if (t0 >= bound0 && t0 <= bound1
@@ -269,8 +297,8 @@ const GanttCanvas = props => {
         const x = (t0 - bound0) / milliSecondsPerPixel
         const rowHeight = 50
         const padding = 10
-        const y = padding + rowHeight + (-props.offset.y) + (index * rowHeight)
-        //const y = padding + rowHeight + index * rowHeight - (props.offset.y % rowHeight)
+        const y = padding + rowHeight + (-this.props.offset.y) + (index * rowHeight)
+        //const y = padding + rowHeight + index * rowHeight - (this.props.offset.y % rowHeight)
         ctx.fillStyle = "rgba(95, 54, 179, 0.5)"
         const nodeWidth = (t1 - t0) * (1 / milliSecondsPerPixel)
         ctx.roundedRect(x, y, nodeWidth, rowHeight - padding * 2, 5)
@@ -282,14 +310,16 @@ const GanttCanvas = props => {
 
   }
 
-  return (
-    <canvas
-      ref={canvasRef}
-      height={props.height}
-      width={props.width}
-    >
-    </canvas>
-  )
+  render = () => {
+    return (
+      <canvas
+        ref="canvas"
+        height={this.props.height}
+        width={this.props.width}
+      >
+      </canvas>
+    )
+  }
 }
 
 const ceilHour = date => {

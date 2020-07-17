@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Droppable } from 'react-beautiful-dnd'
 import GanttCanvas from './gantt-canvas'
+import { updateBoard } from '../kanban/kanbanSlice'
 import './gantt.css'
 
 const todos = [
@@ -78,8 +79,14 @@ class GanttChart extends React.Component {
     }
   }
 
+  onAddNode = (id, time) => {
+    const halfHourMS = 30 * 60 * 1000
+    const start = time - halfHourMS
+    const end = time + halfHourMS
+    this.props.dispatch(updateBoard({id: id, object: {start: start, end: end}}))
+  }
+
   render() {
-    console.log(this.state.offset)
     return (
       <div style={{
           display: "flex",
@@ -121,8 +128,8 @@ class GanttChart extends React.Component {
             <GanttCanvas
               nodes={this.props.boards
                 .filter(board => board.parent === this.props.selectedNode)
-                .map(board => [board.start, board.end])
               }
+              onAddNode={this.onAddNode}
               selectedNode={this.props.selectedNode}
               width={this.state.width}
               height={this.state.height}
