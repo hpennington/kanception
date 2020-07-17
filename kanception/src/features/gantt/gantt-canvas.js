@@ -13,6 +13,7 @@ const GanttCanvas = props => {
       canvasRef.current.addEventListener('mousemove', onMouseMove)
       canvasRef.current.addEventListener('mouseup', onMouseUp)
       canvasRef.current.addEventListener('mousecancel', onMouseUp)
+      canvasRef.current.addEventListener('dblclick', onDoubleClick)
       window.addEventListener('mouseup', onMouseUp)
     }
 
@@ -25,6 +26,7 @@ const GanttCanvas = props => {
       canvasRef.current.removeEventListener('mousemove', onMouseMove)
       canvasRef.current.removeEventListener('mouseup', onMouseUp)
       canvasRef.current.removeEventListener('mousecancel', onMouseUp)
+      canvasRef.current.removeEventListener('dblclick', onDoubleClick)
       window.removeEventListener('mouseup', onMouseUp)
     }
   }, [])
@@ -56,6 +58,21 @@ const GanttCanvas = props => {
       })
 
       dragPosition = {x: e.clientX - rect.left, y: e.clientY - rect.top}
+    }
+  }
+
+  const onDoubleClick = e => {
+    const rowHeight = 50
+    const rect = canvasRef.current.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top - rowHeight
+
+    if (y > 0) {
+      console.log({x, y})
+      // Determine row
+      console.log(props.offset.y)
+      const row = Math.floor(props.offset.y / rowHeight)
+      console.log({row})
     }
   }
 
