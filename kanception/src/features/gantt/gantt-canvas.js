@@ -255,13 +255,13 @@ const GanttCanvas = props => {
         const y = padding + rowHeight + (-props.offset.y) + (index * rowHeight)
         //const y = padding + rowHeight + index * rowHeight - (props.offset.y % rowHeight)
         ctx.fillStyle = "rgba(95, 54, 179, 0.5)"
-        ctx.roundedRect(x, y, 250, rowHeight - padding * 2, 5)
+        const nodeWidth = (t1 - t0) * (1 / milliSecondsPerPixel)
+        ctx.roundedRect(x, y, nodeWidth, rowHeight - padding * 2, 5)
         ctx.stroke()
         ctx.fill()
       }
       index += 1
     }
-
 
   }
 

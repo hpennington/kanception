@@ -40,7 +40,13 @@ class GanttChart extends React.Component {
     }
     this.setState({nodes: this.props.boards
       .filter(board => board.parent === this.props.selectedNode)
-      .map(board => [1594949992000 - (15949000 * Math.random()), 1594950092000])
+      .map(board => {
+        const now = new Date().getTime()
+        const multiplier = 5000000
+        const t0 = now - (multiplier * (Math.random() + 0.5))
+        const t1 = now + (multiplier * (Math.random() + 0.5))
+        return [t0, t1]
+      })
     })
 
   }
