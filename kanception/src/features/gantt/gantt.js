@@ -52,7 +52,7 @@ class GanttChart extends React.Component {
       const rowHeight = 50
       const maxOffset = (rowHeight * this.props.boards
         .filter(board => board.parent === this.props.selectedNode).length) - (rect.height - rowHeight)
-      const updatedY = this.state.offset.y - pan.y
+      const updatedY = maxOffset > 0 ? (this.state.offset.y - pan.y) : -rect.height
 
       const finalY = updatedY >= 0
         ? (updatedY <= maxOffset ? updatedY : maxOffset)
