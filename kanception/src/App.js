@@ -611,7 +611,6 @@ const App = props => {
               marginLeft: sideMenuOpen === true ? "300px" : 0,
               marginTop: "50px",
               width: sideMenuOpen === true ? "calc(100vw - 300px)" : "100vw",
-              overflow: "auto",
             }}
           >
             <GanttChart

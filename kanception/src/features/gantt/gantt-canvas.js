@@ -145,6 +145,31 @@ const GanttCanvas = props => {
     }
   }
 
+  //  const drawNodes = ctx => {
+  //    const rect = canvasRef.current.getBoundingClientRect()
+  //    const hourMS = 60 * 60 * 1000
+  //    const milliSecondsPerPixel = hourMS / 150
+  //    const bound0 = now - (props.offset.x * milliSecondsPerPixel)
+  //    const bound1 = bound0 + (rect.width * milliSecondsPerPixel)
+  //
+  //    var index = 0
+  //    for (const node of props.nodes) {
+  //      const t = node[0]
+  //      console.log(new Date(t))
+  //      if (t >= bound0 && t <= bound1) {
+  //        const x = (t - bound0) / milliSecondsPerPixel
+  //        const rowHeight = 50
+  //        const y = rowHeight + index * rowHeight - (props.offset.y % rowHeight)
+  //        console.log(x)
+  //        ctx.roundedRect(x, y, 100, 100, 5)
+  //        ctx.stroke()
+  //        ctx.fill()
+  //      }
+  //      index += 1
+  //    }
+  //
+  //  }
+
   return (
     <canvas
       ref={canvasRef}
@@ -158,6 +183,19 @@ const GanttCanvas = props => {
 const ceilHour = date => {
   const p = 60 * 60 * 1000
   return new Date(Math.ceil(new Date(date).getTime() / p) * p)
+}
+
+CanvasRenderingContext2D.prototype.roundedRect = function(x, y, w, h, r) {
+ // if (w < 2 * r) r = w / 2;
+ // if (h < 2 * r) r = h / 2;
+  this.beginPath();
+  this.moveTo(x + r, y);
+  this.arcTo(x + w, y, x + w, y + h, r);
+  this.arcTo(x + w, y + h, x, y + h, r);
+  this.arcTo(x, y + h, x, y, r);
+  this.arcTo(x, y, x + w, y, r);
+  this.closePath();
+  return this;
 }
 
 export default GanttCanvas

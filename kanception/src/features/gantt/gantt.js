@@ -4,6 +4,21 @@ import { Droppable } from 'react-beautiful-dnd'
 import GanttCanvas from './gantt-canvas'
 import './gantt.css'
 
+const todos = [
+  'Todo X',
+  'Todo X',
+  'Todo X',
+  'Todo X',
+  'Todo X',
+  'Todo X',
+  'Todo X',
+  'Todo X',
+  'Todo X',
+  'Todo X',
+  'Todo X',
+  'Todo X',
+]
+
 class GanttChart extends React.Component {
   constructor(props) {
     super(props)
@@ -25,6 +40,7 @@ class GanttChart extends React.Component {
   }
 
   onPan = pan => {
+
     this.setState(state => {
       const rect = this.refs.container.getBoundingClientRect()
       const rowHeight = 50
@@ -35,6 +51,9 @@ class GanttChart extends React.Component {
       const finalY = updatedY >= 0
         ? (updatedY <= maxOffset ? updatedY : maxOffset)
         : 0
+
+      const sidePanel = document.querySelector('.todo-inner-panel')
+      sidePanel.scrollTo(0, finalY)
 
       return {offset: {x: this.state.offset.x - pan.x, y: finalY}}
     })
@@ -58,6 +77,15 @@ class GanttChart extends React.Component {
         <div
           className="todo-panel"
         >
+          <div style={{height: "150px", zIndex: "100"}}>
+          </div>
+          <div className="todo-inner-panel">
+            {
+            this.props.boards
+              .filter(board => board.parent === this.props.selectedNode)
+              .map(todo => <div className="todo-cell"><p>{todo.title}</p></div>)
+            }
+          </div>
         </div>
         <div style={{width: "calc(100% - 200px)"}}>
           <div
