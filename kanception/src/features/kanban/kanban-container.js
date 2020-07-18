@@ -3,6 +3,7 @@ import React, {
 } from 'react'
 import { connect } from 'react-redux'
 import Kanban from './kanban'
+import { setSelectedNode } from '../projects/projectsSlice'
 import {
   setGroups,
   setBoards,
@@ -44,7 +45,7 @@ const KanbanContainer = props => {
       props.dispatch(setTree({tree: tree}))
 
       const root = tree.find(node => node._id == props.selectedNode)
-      props.setSelectedNode(root._id)
+      props.dispatch(setSelectedNode({id: root._id}))
       console.log(root)
       fetchGroups(root._id)
 
