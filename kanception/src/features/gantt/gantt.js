@@ -29,7 +29,6 @@ class GanttChart extends React.Component {
       width: 0,
       height: 0,
       offset: {x: 0, y: 0},
-      nodes: [],
     }
   }
 
@@ -39,16 +38,6 @@ class GanttChart extends React.Component {
     if (this.state.isMounted === false && this.refs.container !== null) {
       this.setState({isMounted: true})
     }
-    this.setState({nodes: this.props.boards
-      .filter(board => board.parent === this.props.selectedNode)
-      .map(board => {
-        const now = new Date().getTime()
-        const multiplier = 5000000
-        const t0 = now - (multiplier * (Math.random() + 0.5))
-        const t1 = now + (multiplier * (Math.random() + 0.5))
-        return [t0, t1]
-      })
-    })
 
   }
 
@@ -79,11 +68,30 @@ class GanttChart extends React.Component {
     }
   }
 
+  onUpdateCard = async (id, object) => {
+    const api = process.env.REACT_APP_API
+    const url = api + '/board/update' + '?id=' + id
+
+    try {
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.props.token}`
+        },
+        body: JSON.stringify(object)
+      })
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
   onAddNode = (id, time) => {
     const halfHourMS = 30 * 60 * 1000
     const start = time - halfHourMS
     const end = time + halfHourMS
     this.props.dispatch(updateBoard({id: id, object: {start: start, end: end}}))
+    this.onUpdateCard(id, {start, end})
   }
 
   render() {

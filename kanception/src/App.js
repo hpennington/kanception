@@ -46,6 +46,7 @@ const App = props => {
   const [sideMenuOpen, setSideMenuOpen] = useState(true)
   const [tree, setTree] = useState([])
   const [teamInvites, setTeamInvites] = useState([])
+  const [token, setToken] = useState(null)
   const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
   const [prevSelectedTeam, setPrevSelectedTeam] = useState(null)
   const [prevSelectedProject, setPrevSelectedProject] = useState(null)
@@ -196,6 +197,8 @@ const App = props => {
 
   const startAsyncFetching = async () => {
     try {
+      const token = await getTokenSilently()
+      setToken(token)
       const post = await postUser()
       const res = await fetchUser()
       await fetchSpaces()
@@ -614,6 +617,7 @@ const App = props => {
             }}
           >
             <GanttChart
+              token={token}
               selectedNode={selectedNode}
             />
           </div>
