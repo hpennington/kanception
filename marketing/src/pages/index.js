@@ -50,7 +50,7 @@ const CurveBlock = () => (
   <svg
     viewBox="0 0 500 150"
     preserveAspectRatio="none"
-    style={{height: "100%", width: "100%"}}
+    style={{height: "100%", width: "100%", marginBottom: "-1px"}}
   >
     <path
       d="M0.00,49.98 C247.74,167.27 246.05,-24.17 500.00,49.98 L523.14,173.19 L0.00,150.00 Z"
