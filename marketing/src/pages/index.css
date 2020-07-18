@@ -56,6 +56,10 @@
   max-width: 95%;
 }
 
+#gantt-chart {
+  max-width: 95%;
+}
+
 .card {
   max-width: 95%;
   padding: 30px;
