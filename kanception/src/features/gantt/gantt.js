@@ -21,6 +21,11 @@ const todos = [
   'Todo X',
 ]
 
+const hourMS = 60 * 60 * 1000
+const dayMS = 24 * hourMS
+const HOUR = 'hour'
+const DAY = 'day'
+
 class GanttChart extends React.Component {
   constructor(props) {
     super(props)
@@ -30,6 +35,7 @@ class GanttChart extends React.Component {
       width: 0,
       height: 0,
       offset: {x: 0, y: 0},
+      granularity: HOUR,
     }
   }
 
@@ -121,11 +127,18 @@ class GanttChart extends React.Component {
   }
 
   onAddNode = (id, time) => {
-    const halfHourMS = 30 * 60 * 1000
-    const start = time - halfHourMS
-    const end = time + halfHourMS
+    const deltaT = this.state.granularity === HOUR ? hourMS / 2 : dayMS / 2
+    const start = time - deltaT
+    const end = time + deltaT
     this.props.dispatch(updateBoard({id: id, object: {start: start, end: end}}))
     this.onUpdateCard(id, {start, end})
+  }
+
+  onGranularityChange = e => {
+    const value = e.target.value
+    this.setState(state => (
+      {granularity: value, offset: {x: 0, y: state.offset.y}}
+    ))
   }
 
   render() {
@@ -154,8 +167,17 @@ class GanttChart extends React.Component {
             style={{
               height: "100px",
               width: "100%",
+              marginLeft: "200px",
             }}
           >
+            <select
+              style={{margin: "40px"}}
+              onChange={this.onGranularityChange.bind(this)}
+              value={this.state.granularity}
+            >
+              <option value={HOUR}>Hour</option>
+              <option value={DAY}>Day</option>
+            </select>
           </div>
           <div
             style={{
@@ -171,6 +193,7 @@ class GanttChart extends React.Component {
               nodes={this.props.boards
                 .filter(board => board.parent === this.props.selectedNode)
               }
+              granularity={this.state.granularity}
               onAddNode={this.onAddNode}
               selectedNode={this.props.selectedNode}
               width={this.state.width}

@@ -1,6 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react'
 
+const hourMS = 60 * 60 * 1000
+const dayMS = 24 * hourMS
+const HOUR = 'hour'
+const DAY = 'day'
+const MONTH = 'month'
+
+
 class GanttCanvas extends React.Component {
+
   constructor(props) {
     super(props)
 
@@ -88,8 +96,8 @@ class GanttCanvas extends React.Component {
       console.log({row})
 
       // Determine clicked time
-      const hourMS = 60 * 60 * 1000
-      const milliSecondsPerPixel = hourMS / 150
+      const deltaT = this.props.granularity === HOUR ? hourMS : dayMS
+      const milliSecondsPerPixel = deltaT / 150
       const bound0 = this.now - (this.props.offset.x * milliSecondsPerPixel)
       const time = bound0 + (x * milliSecondsPerPixel)
 
@@ -161,15 +169,16 @@ class GanttCanvas extends React.Component {
   drawVerticalLines = ctx => {
     const canvasRef = this.refs.canvas
     const rect = canvasRef.getBoundingClientRect()
-    const hourMS = 60 * 60 * 1000
-    const milliSecondsPerPixel = hourMS / 150
+    const deltaT = this.props.granularity === HOUR ? hourMS : dayMS
+    const milliSecondsPerPixel = deltaT / 150
     const bound0 = this.now - (this.props.offset.x * milliSecondsPerPixel)
     const bound1 = bound0 + (rect.width * milliSecondsPerPixel)
     //console.log('start: ' + new Date(bound0) + ' end: ' + new Date(bound1))
+    //
+    const ceilFunction = this.props.granularity === HOUR ? ceilHour : ceilDay
 
-    const t0 = ceilHour(bound0).getTime()
+    const t0 = ceilFunction(bound0).getTime()
     var t = t0
-    const deltaT = hourMS
 
     while (t < bound1) {
       const x = (t - bound0) / milliSecondsPerPixel
@@ -183,15 +192,6 @@ class GanttCanvas extends React.Component {
       ctx.closePath()
       ctx.stroke()
 
-      ctx.font = '14px Arial'
-      const xDate = new Date(t)
-      const dateLabel = xDate.toLocaleString('en-US',
-        { hour: 'numeric', hour12: true })
-      const labelText = dateLabel
-      const labelSize = ctx.measureText(labelText)
-      const labelX = x + 4
-      ctx.fillStyle = 'white'
-      ctx.fillText(labelText,labelX, 40)
 
       t = t + deltaT
     }
@@ -200,23 +200,24 @@ class GanttCanvas extends React.Component {
   drawTickText = ctx => {
     const canvasRef = this.refs.canvas
     const rect = canvasRef.getBoundingClientRect()
-    const hourMS = 60 * 60 * 1000
-    const milliSecondsPerPixel = hourMS / 150
+    const deltaT = this.props.granularity === HOUR ? hourMS : dayMS
+    const milliSecondsPerPixel = deltaT / 150
     const bound0 = this.now - (this.props.offset.x * milliSecondsPerPixel)
     const bound1 = bound0 + (rect.width * milliSecondsPerPixel)
     //console.log('start: ' + new Date(bound0) + ' end: ' + new Date(bound1))
+    const ceilFunction = this.props.granularity === HOUR ? ceilHour : ceilDay
 
-    const t0 = ceilHour(bound0).getTime()
+    const t0 = ceilFunction(bound0).getTime()
     var t = t0
-    const deltaT = hourMS
 
     while (t < bound1) {
       const x = (t - bound0) / milliSecondsPerPixel
 
       ctx.font = '14px Arial'
       const xDate = new Date(t)
-      const dateLabel = xDate.toLocaleString('en-US',
-        { hour: 'numeric', hour12: true })
+      const dateLabel = this.props.granularity === HOUR
+        ? xDate.toLocaleString('en-US', { hour: 'numeric', hour12: true })
+        : xDate.toLocaleString('en-US', { day: 'numeric'})
       const labelText = dateLabel
       const labelSize = ctx.measureText(labelText)
       const labelX = x + 4
@@ -241,16 +242,16 @@ class GanttCanvas extends React.Component {
   drawTicks = ctx => {
     const canvasRef = this.refs.canvas
     const rect = canvasRef.getBoundingClientRect()
-    const hourMS = 60 * 60 * 1000
-    const milliSecondsPerPixel = hourMS / 150
+    const deltaT = this.props.granularity === HOUR ? hourMS : dayMS
+    const milliSecondsPerPixel = deltaT / 150
     const bound0 = this.now - (this.props.offset.x * milliSecondsPerPixel)
     const bound1 = bound0 + (rect.width * milliSecondsPerPixel)
     //console.log('start: ' + new Date(bound0) + ' end: ' + new Date(bound1))
     const rowHeight = 50
 
-    const t0 = ceilHour(bound0).getTime()
+    const ceilFunction = this.props.granularity === HOUR ? ceilHour : ceilDay
+    const t0 = ceilFunction(bound0).getTime()
     var t = t0
-    const deltaT = hourMS
 
     while (t < bound1) {
       const x = (t - bound0) / milliSecondsPerPixel
@@ -264,15 +265,6 @@ class GanttCanvas extends React.Component {
       ctx.closePath()
       ctx.stroke()
 
-      ctx.font = '14px Arial'
-      const xDate = new Date(t)
-      const dateLabel = xDate.toLocaleString('en-US',
-        { hour: 'numeric', hour12: true })
-      const labelText = dateLabel
-      const labelSize = ctx.measureText(labelText)
-      const labelX = x + 4
-      ctx.fillStyle = 'white'
-      ctx.fillText(labelText,labelX, 40)
 
       t = t + deltaT
     }
@@ -282,8 +274,8 @@ class GanttCanvas extends React.Component {
   drawNodes = ctx => {
     const canvasRef = this.refs.canvas
     const rect = canvasRef.getBoundingClientRect()
-    const hourMS = 60 * 60 * 1000
-    const milliSecondsPerPixel = hourMS / 150
+    const deltaT = this.props.granularity === HOUR ? hourMS : dayMS
+    const milliSecondsPerPixel = deltaT / 150
     const bound0 = this.now - (this.props.offset.x * milliSecondsPerPixel)
     const bound1 = bound0 + (rect.width * milliSecondsPerPixel)
 
@@ -324,6 +316,11 @@ class GanttCanvas extends React.Component {
 
 const ceilHour = date => {
   const p = 60 * 60 * 1000
+  return new Date(Math.ceil(new Date(date).getTime() / p) * p)
+}
+
+const ceilDay = date => {
+  const p = 24 * 60 * 60 * 1000
   return new Date(Math.ceil(new Date(date).getTime() / p) * p)
 }
 
