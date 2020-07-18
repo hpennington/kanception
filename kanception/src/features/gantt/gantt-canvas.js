@@ -176,8 +176,10 @@ class GanttCanvas extends React.Component {
     //console.log('start: ' + new Date(bound0) + ' end: ' + new Date(bound1))
     //
     const ceilFunction = this.props.granularity === HOUR ? ceilHour : ceilDay
+    console.log(this.props.granularity)
 
     const t0 = ceilFunction(bound0).getTime()
+    console.log(new Date(t0))
     var t = t0
 
     while (t < bound1) {
@@ -204,7 +206,7 @@ class GanttCanvas extends React.Component {
     const milliSecondsPerPixel = deltaT / 150
     const bound0 = this.now - (this.props.offset.x * milliSecondsPerPixel)
     const bound1 = bound0 + (rect.width * milliSecondsPerPixel)
-    //console.log('start: ' + new Date(bound0) + ' end: ' + new Date(bound1))
+    console.log('start: ' + new Date(bound0) + ' end: ' + new Date(bound1))
     const ceilFunction = this.props.granularity === HOUR ? ceilHour : ceilDay
 
     const t0 = ceilFunction(bound0).getTime()
@@ -321,7 +323,11 @@ const ceilHour = date => {
 
 const ceilDay = date => {
   const p = 24 * 60 * 60 * 1000
-  return new Date(Math.ceil(new Date(date).getTime() / p) * p)
+  const newDate = new Date(date + p)
+  newDate.setHours(0)
+  newDate.setMinutes(0)
+  newDate.setMilliseconds(0)
+  return newDate
 }
 
 CanvasRenderingContext2D.prototype.roundedRect = function(x, y, w, h, r) {
