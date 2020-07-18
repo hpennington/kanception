@@ -150,7 +150,7 @@ const KanbanContainer = props => {
   const onCardClick = async (cardId) => {
     try {
 
-      props.setSelectedNode(cardId)
+      props.dispatch(setSelectedNode({id: cardId}))
 
     } catch(error) {
       console.log(error)

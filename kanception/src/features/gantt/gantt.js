@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Droppable } from 'react-beautiful-dnd'
 import GanttCanvas from './gantt-canvas'
-import { updateBoard } from '../kanban/kanbanSlice'
+import { updateBoard, setTree } from '../kanban/kanbanSlice'
+import { setSelectedNode } from '../projects/projectsSlice'
 import './gantt.css'
 
 const todos = [
@@ -39,6 +40,39 @@ class GanttChart extends React.Component {
       this.setState({isMounted: true})
     }
 
+  }
+
+  componentDidUpdate = prevProps => {
+    if (prevProps.selectedNode !== this.props.selectedNode) {
+      this.fetchTree()
+    }
+  }
+
+ fetchTree = async () => {
+    const api = process.env.REACT_APP_API
+    const treeUrl = api + '/tree?project=' + this.props.selectedProject
+
+    try {
+
+      const treeResult = await fetch(treeUrl, {
+        headers: {
+          Authorization: `Bearer ${this.props.token}`
+        }
+      })
+
+      const tree = await treeResult.json()
+      this.props.dispatch(setTree({tree: tree}))
+
+      console.log({tree, node: this.props.selectedNode, project: this.props.selectedProject})
+
+      const root = tree.find(node => node._id == this.props.selectedNode)
+      this.props.dispatch(setSelectedNode({id: root._id}))
+      console.log(root)
+      //      this.fetchGroups(root._id)
+
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   onPan = pan => {
@@ -157,6 +191,7 @@ class GanttChart extends React.Component {
 const mapStateToProps = state => {
   return {
     boards: state.kanban.tree,
+    selectedProject: state.projects.selectedProject,
   }
 }
 
