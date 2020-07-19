@@ -45,6 +45,7 @@ const MainVideoBlock = () => (
     >
       <source src={Demo} type="video/mp4" />
     </video>
+    <p>Single click on a card to access the inner Kanban board.</p>
   </>
 )
 
@@ -76,9 +77,9 @@ const CurveBottomBlock = () => (
 
 const KanbanDetailBlock = () => (
   <div className="kanban-detail-text-block">
-    <p>Team based project management software.</p>
-    <p>Create spaces, projects, boards, and nested cards with the Kanban board.</p>
-    <p>Plan and monitor progress with the Gantt chart. Schedule todos, and view your week at a glance, with the calendar.</p>
+    <h4>Team based project management software.</h4>
+    <h4>Create spaces, projects, boards, and nested cards with the Kanban board.</h4>
+    <h4>Time tracking & project planning with the Gantt chart. Schedule todos, and view your week at a glance, with the calendar.</h4>
   <div className="kanban-detail-block">
     <img style={{marginRight: '20px'}} src={GraphImage} alt="kanban graph" />
     <div
@@ -110,8 +111,12 @@ const GanttBlock = () => (
     >
       <source src={GanttDemo} type="video/mp4" />
     </video>
-    <p>Reorder tasks in the Gantt chart with drag and drop.</p>
-    <p>Double click to schedule todos in the Gantt chart.</p>
+    <h4>Reorder tasks in the Gantt chart with drag and drop.</h4>
+    <h4>Double click to schedule todos in the Gantt chart.</h4>
+    <p>
+      Here at Kanception we believe apps should be intuitive and simple to use.
+      We have a standard Gantt chart with the key difference being it is nested, like the Kanban board.
+    </p>
   </div>
 )
 

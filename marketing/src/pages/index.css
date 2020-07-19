@@ -1,5 +1,6 @@
 p {
-  margin: 10px;
+  max-width: 900px;
+  margin: 20px auto;
 }
 
 .title {
@@ -40,7 +41,7 @@ p {
   color: white;
   font-size: 1.2em;
 }
-.kanban-detail-text-block > p{
+.kanban-detail-text-block > h4 {
   margin: 20px 10px;
 }
 
@@ -64,7 +65,7 @@ p {
   max-width: 960px;
 }
 
-.gantt-block > p {
+.gantt-block > h4 {
   font-size: 1.3em;
   margin-bottom: 30px;
 }
