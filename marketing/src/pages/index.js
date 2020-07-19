@@ -79,7 +79,7 @@ const KanbanDetailBlock = () => (
   <div className="kanban-detail-text-block">
     <h4>Team based project management software.</h4>
     <h4>Create spaces, projects, boards, and nested cards with the Kanban board.</h4>
-    <h4>Time tracking & project planning with the Gantt chart. Schedule todos, and view your week at a glance, with the calendar.</h4>
+    <h4 style={{marginBottom: "60px"}}>Time tracking & project planning with the Gantt chart. Schedule todos, and view your week at a glance, with the calendar.</h4>
   <div className="kanban-detail-block">
     <img style={{marginRight: '20px'}} src={GraphImage} alt="kanban graph" />
     <div
