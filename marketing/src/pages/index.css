@@ -1,3 +1,11 @@
+p {
+  margin: 10px;
+}
+
+.title {
+  margin-bottom: 20px;
+}
+
 .sign-up-btn {
   border: none;
   background: orange;
@@ -26,6 +34,15 @@
   align-items: center;
   justify-content: center;
 }
+.kanban-detail-text-block {
+  background: #4d27cf;
+  text-align: center;
+  color: white;
+  font-size: 1.2em;
+}
+.kanban-detail-text-block > p{
+  margin: 20px 10px;
+}
 
 .main-video {
   max-width: 960px;
@@ -47,7 +64,20 @@
   max-width: 960px;
 }
 
+.gantt-block > p {
+  font-size: 1.3em;
+  margin-bottom: 30px;
+}
+
+.roadmap-block > h1 {
+  font-size: 3em;
+}
+
 @media screen and (max-width: 1024px) {
+.roadmap-block > h1 {
+  font-size: 2em;
+}
+
 .kanban-detail-block {
   flex-direction: column;
 }

@@ -26,7 +26,8 @@ const IndexPage = () => (
 
 const MainVideoBlock = () => (
   <>
-    <h1 className="center-text mid-width">A nested Kanban board for creative teams</h1>
+    <h1 className="title center-text mid-width">A nested Kanban board for creative teams</h1>
+    <p>Open Beta</p>
     <a className="sign-up-btn" href="https://app.kanception.io">Sign In / Sign Up</a>
     <video
       className="main-video"
@@ -73,25 +74,35 @@ const CurveBottomBlock = () => (
 )
 
 const KanbanDetailBlock = () => (
+  <div className="kanban-detail-text-block">
+    <p>Team based project management software.</p>
+    <p>Create spaces, projects, boards, and nested cards with the Kanban board.</p>
+    <p>Plan and monitor progress with the Gantt chart. Schedule todos, and view your week at a glance, with the calendar.</p>
   <div className="kanban-detail-block">
     <img style={{marginRight: '20px'}} src={GraphImage} alt="kanban graph" />
     <div
       className="card"
     >
-      <h1 style={{fontSize: '2.5em', fontStyle: 'normal', color: '#555'}}>Break down large tasks into bite-sized, nested subtasks.</h1>
+      <h1 style={{fontSize: '1.75em', fontstyle: 'normal', color: '#555'}}>Break down large tasks into bite-sized, nested subtasks.</h1>
+      <h2 style={{fontSize: '1.3em', fontstyle: 'normal', color: '#555'}}>Use the nested Kanban board to model the hierarchy that is inherent to complex tasks.</h2>
     </div>
+  </div>
   </div>
 )
 
 const GanttBlock = () => (
-  <div style={{background: 'white', width: '100vw', textAlign: 'center'}}>
+  <div className="gantt-block" style={{background: 'white', width: '100vw', textAlign: 'center'}}>
     <h1 style={{fontSize: '3em', margin: '40px auto', maxWidth: '700px'}}>Schedule cards with the Gantt chart</h1>
+    <p>Simple to use.</p>
     <img id="gantt-chart" src={GanttImage} alt="Gantt Chart" />
+    <p>Reorder tasks in the Gantt chart with drag and drop.</p>
+    <p>Double click to schedule todos in the Gantt chart.</p>
   </div>
 )
 
 const RoadmapBlock = () => (
   <div
+    className="roadmap-block"
     style={{
       background: '#0090E5',
       width: '100vw',
@@ -101,7 +112,7 @@ const RoadmapBlock = () => (
       flexDirection: 'column',
     }}
   >
-    <h1 style={{fontSize: '3em', margin: '40px auto'}}>Roadmap</h1>
+    <h1 style={{margin: '40px auto'}}>Product Roadmap</h1>
     <img src={RoadmapImage} alt="Roadmap" />
   </div>
 )
@@ -118,8 +129,9 @@ const PricingBlock = () => (
     }}
   >
     <h1 style={{fontSize: '4em', margin: '40px auto', textAlign: 'center'}}>Pricing</h1>
-    <h1 style={{fontSize: '4em', margin: '60px auto', textAlign: 'center'}}>It's free!</h1>
+    <h1 style={{fontsize: '4em', margin: '60px auto', textalign: 'center'}}>it's free!</h1>
     <a className="sign-up-btn sign-up-btn-bottom" href="https://app.kanception.io">Sign In / Sign Up</a>
+    <p>We will offer paid features in the future.</p>
   </div>
 )
 
