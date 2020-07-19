@@ -8,6 +8,7 @@ import GraphImage from "./graph.png"
 import GanttImage from "./gantt.png"
 import RoadmapImage from "./roadmap.png"
 import Demo from './demo.mp4'
+import GanttDemo from './gantt.mp4'
 import "./index.css"
 
 const IndexPage = () => (
@@ -94,7 +95,21 @@ const GanttBlock = () => (
   <div className="gantt-block" style={{background: 'white', width: '100vw', textAlign: 'center'}}>
     <h1 style={{fontSize: '3em', margin: '40px auto', maxWidth: '700px'}}>Schedule cards with the Gantt chart</h1>
     <p>Simple to use.</p>
-    <img id="gantt-chart" src={GanttImage} alt="Gantt Chart" />
+    <video
+      className="main-video"
+      autoPlay={true}
+      loop={true}
+      controls={true}
+      muted={true}
+      width={900}
+      style={{
+        boxShadow: "0 0 5px 10px #ccc",
+        margin: "40px auto",
+        borderRadius: "5px",
+      }}
+    >
+      <source src={GanttDemo} type="video/mp4" />
+    </video>
     <p>Reorder tasks in the Gantt chart with drag and drop.</p>
     <p>Double click to schedule todos in the Gantt chart.</p>
   </div>
