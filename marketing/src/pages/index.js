@@ -86,11 +86,15 @@ const KanbanDetailBlock = () => (
       <div
         className="card"
       >
+        <div className="color-strip blue">
+        </div>
         <h2 style={{fontSize: '1.3em', fontstyle: 'normal', color: '#555'}}>Break down large tasks into bite-sized, nested subtasks.</h2>
       </div>
       <div
         className="card"
       >
+        <div className="color-strip red">
+        </div>
         <h2 style={{fontSize: '1.3em', fontstyle: 'normal', color: '#555'}}>Use the nested Kanban board to model the hierarchy that is inherent to complex tasks.</h2>
       </div>
     </div>
