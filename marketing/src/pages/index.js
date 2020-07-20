@@ -93,7 +93,7 @@ const KanbanDetailBlock = () => (
 )
 
 const GanttBlock = () => (
-  <div className="gantt-block" style={{background: 'white', width: '100vw', textAlign: 'center'}}>
+  <div className="gantt-block" style={{paddingBottom: "40px", background: 'white', width: '100vw', textAlign: 'center'}}>
     <h1 style={{fontSize: '3em', margin: '40px auto', maxWidth: '700px'}}>Schedule cards with the Gantt chart</h1>
     <p>Simple to use.</p>
     <video
