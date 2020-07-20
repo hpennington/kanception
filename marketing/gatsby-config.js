@@ -2,7 +2,7 @@ module.exports = {
   siteMetadata: {
     title: `Kanception.io`,
     author: `@kanception`,
-    description: `A better Kanban board for modern workflows.`,
+    description: `A team Kanban board. Schudule cards with the Gantt chart. Track time with the calendar.`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
