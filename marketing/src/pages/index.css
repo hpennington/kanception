@@ -1,11 +1,24 @@
 p {
   max-width: 900px;
-  margin: 20px auto;
+  margin: 20px 10px;
   font-size: 1.25em;
+  text-align: center;
+}
+
+h2 {
+  margin: 10px;
+}
+
+h4 {
+  margin: 20px 10px;
 }
 
 .title {
   margin-bottom: 20px;
+}
+
+.gantt-block > p {
+  margin: 20px auto;
 }
 
 .sign-up-btn {
@@ -55,7 +68,7 @@ p {
   border-radius: 10px;
   width: 450px;
   text-align: center;
-  padding: 60px;
+  padding: 40px;
   box-shadow: 5px 5px 10px 10px rgba(127, 127, 127, 0.25);
   margin: 20px;
 }
@@ -76,6 +89,11 @@ p {
 }
 
 @media screen and (max-width: 1024px) {
+.card-container {
+  width: 95%;
+  max-width: 600px;
+}
+
 .roadmap-block > h1 {
   font-size: 2em;
 }
@@ -94,11 +112,16 @@ p {
 
 .card {
   max-width: 95%;
-  padding: 30px;
+  padding: 20px;
+  width: unset;
 }
 
 .kanban-detail-block img {
   margin-right: 0!important;
+}
+
+.gantt-block > p {
+  margin: 20px 10px;
 }
 }
 

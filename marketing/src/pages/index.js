@@ -82,11 +82,17 @@ const KanbanDetailBlock = () => (
     <h4 style={{marginBottom: "60px"}}>Time tracking & project planning with the Gantt chart. Schedule todos, and view your week at a glance, with the calendar.</h4>
   <div className="kanban-detail-block">
     <img style={{marginRight: '20px'}} src={GraphImage} alt="kanban graph" />
-    <div
-      className="card"
-    >
-      <h1 style={{fontSize: '1.75em', fontstyle: 'normal', color: '#555'}}>Break down large tasks into bite-sized, nested subtasks.</h1>
-      <h2 style={{fontSize: '1.3em', fontstyle: 'normal', color: '#555'}}>Use the nested Kanban board to model the hierarchy that is inherent to complex tasks.</h2>
+    <div className="card-container">
+      <div
+        className="card"
+      >
+        <h2 style={{fontSize: '1.3em', fontstyle: 'normal', color: '#555'}}>Break down large tasks into bite-sized, nested subtasks.</h2>
+      </div>
+      <div
+        className="card"
+      >
+        <h2 style={{fontSize: '1.3em', fontstyle: 'normal', color: '#555'}}>Use the nested Kanban board to model the hierarchy that is inherent to complex tasks.</h2>
+      </div>
     </div>
   </div>
   </div>
