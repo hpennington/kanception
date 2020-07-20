@@ -1,6 +1,7 @@
 p {
   max-width: 900px;
   margin: 20px auto;
+  font-size: 1.25em;
 }
 
 .title {
