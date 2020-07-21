@@ -40,6 +40,13 @@ module.exports = {
         siteUrl: `https://www.kanception.io`,
       },
     },
+    {
+      resolve: `gatsby-plugin-hotjar`,
+      options: {
+        id: 1912190,
+        sv: 6
+      },
+    },
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
