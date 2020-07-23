@@ -148,7 +148,7 @@ export default function CustomizedTreeView(props) {
             <StyledTreeItem
               data-space-id={space._id}
               nodeId={space._id + '-add'}
-              label={<span><strong>New</strong> Board</span>}
+              label={<span><strong style={{color: "rebeccapurple"}}>New</strong> Board +</span>}
             />
             {
             props.projects.filter(project => project.space === space._id)
