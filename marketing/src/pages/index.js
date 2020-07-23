@@ -28,7 +28,7 @@ const IndexPage = () => (
 const MainVideoBlock = () => (
   <>
     <h1 className="title center-text mid-width">A nested Kanban board for creative teams</h1>
-    <p style={{whiteSpace: "nowrap"}}>Open Beta</p>
+    <p style={{whiteSpace: "nowrap"}}>In Beta</p>
     <a style={{whiteSpace: "nowrap"}} className="sign-up-btn" href="https://app.kanception.io">Sign In / Sign Up</a>
     <video
       className="main-video"
