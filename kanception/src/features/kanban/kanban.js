@@ -137,6 +137,7 @@ const Kanban = forwardRef((props, ref) => {
                 setContextMenuCardPosition={setContextMenuCardPosition}
                 onAddCard={props.onAddCard}
                 onUpdateCard={props.onUpdateCard}
+                onUpdateGroup={props.onUpdateGroup}
                 onCardClick={props.onCardClick}
               />
             )}

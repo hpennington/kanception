@@ -400,7 +400,7 @@ const KanbanContainer = props => {
         onAddCard={onAddCard}
         onUpdateCard={onUpdateCard}
         onAddGroupClick={onAddGroup}
-        onUpdateGroup={props.onUpdateGroup}
+        onUpdateGroup={onUpdateGroup}
         onCardDelete={onCardDelete}
         onGroupDelete={onGroupDelete}
         onGroupOrderUpdate={onGroupOrderUpdate}
