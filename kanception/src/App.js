@@ -360,7 +360,7 @@ const App = props => {
   }
 
   const onBack = async (e) => {
-    if (props.tree.find(node => node._id === selectedNode).parent !== null) {
+    if (props.tree.find(node => node._id === selectedNode)?.parent !== null) {
       const project = props.selectedProject
       const api = process.env.REACT_APP_API
       const treeUrl = api + '/tree?project=' + project
