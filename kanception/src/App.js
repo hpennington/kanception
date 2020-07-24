@@ -617,10 +617,24 @@ const App = props => {
               width: sideMenuOpen === true ? "calc(100vw - 300px)" : "100vw",
             }}
           >
+            {
+            process.env.REACT_APP_GANTT_FLAG === '1'
+            ?
             <GanttChart
               token={token}
               selectedNode={props.selectedNode}
             />
+            :
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "calc(100% - 50px)",
+              color: "white",
+            }}>
+              <h1>Coming soon...</h1>
+            </div>
+            }
           </div>
         }
         { nameOpen === false && kanbanReady === true && kanbanOpen === true &&

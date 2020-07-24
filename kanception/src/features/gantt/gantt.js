@@ -6,21 +6,6 @@ import { updateBoard, setTree } from '../kanban/kanbanSlice'
 import { setSelectedNode } from '../projects/projectsSlice'
 import './gantt.css'
 
-const todos = [
-  'Todo X',
-  'Todo X',
-  'Todo X',
-  'Todo X',
-  'Todo X',
-  'Todo X',
-  'Todo X',
-  'Todo X',
-  'Todo X',
-  'Todo X',
-  'Todo X',
-  'Todo X',
-]
-
 const hourMS = 60 * 60 * 1000
 const dayMS = 24 * hourMS
 const HOUR = 'hour'
