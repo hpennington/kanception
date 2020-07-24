@@ -23,6 +23,7 @@ import {
   setProjects,
   addProject,
   setSelectedProject,
+  setSelectedNode,
 } from './features/projects/projectsSlice'
 import { removeNewCard } from './features/teams/teamsSlice'
 import Toolbar from './toolbar'
@@ -40,12 +41,12 @@ const App = props => {
   const [ganttOpen, setGanttOpen] = useState(false)
   const [user, setUser] = useState(null)
   const [prevUser, setPrevUser] = useState(null)
-  const [selectedNode, setSelectedNode] = useState(null)
   const [nameOpen, setNameOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [sideMenuOpen, setSideMenuOpen] = useState(true)
   const [tree, setTree] = useState([])
   const [teamInvites, setTeamInvites] = useState([])
+  const [token, setToken] = useState(null)
   const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
   const [prevSelectedTeam, setPrevSelectedTeam] = useState(null)
   const [prevSelectedProject, setPrevSelectedProject] = useState(null)
@@ -96,7 +97,7 @@ const App = props => {
 
       const root = tree.find(node => node.parent == null)
       console.log(root)
-      setSelectedNode(root._id)
+      props.dispatch(setSelectedNode({id: root._id}))
 
     } catch (error) {
       console.log(error)
@@ -196,6 +197,8 @@ const App = props => {
 
   const startAsyncFetching = async () => {
     try {
+      const token = await getTokenSilently()
+      setToken(token)
       const post = await postUser()
       const res = await fetchUser()
       await fetchSpaces()
@@ -377,8 +380,8 @@ const App = props => {
         const tree = await treeResult.json()
         console.log(tree)
         setTree(tree)
-        const root = tree.find(node => node._id === selectedNode)
-        setSelectedNode(root.parent)
+        const root = tree.find(node => node._id === props.selectedNode)
+        props.dispatch(setSelectedNode({id: root.parent}))
       } catch(error) {
         console.log(error)
       }
@@ -497,7 +500,7 @@ const App = props => {
   const onAcceptCard = async (refId, group) => {
     try {
       const id = props.newCards.find(node => node._id === refId).board
-      const parent = selectedNode
+      const parent = props.selectedNode
       const team = props.selectedTeam
       const url = process.env.REACT_APP_API + '/team/board/accept'
         + '?board=' + id
@@ -612,13 +615,12 @@ const App = props => {
               marginLeft: sideMenuOpen === true ? "300px" : 0,
               marginTop: "50px",
               width: sideMenuOpen === true ? "calc(100vw - 300px)" : "100vw",
-              overflow: "auto",
             }}
           >
-            <DragDropContext>
-              <GanttChart />
-              <BoardsListView />
-            </DragDropContext>
+            <GanttChart
+              token={token}
+              selectedNode={props.selectedNode}
+            />
           </div>
         }
         { nameOpen === false && kanbanReady === true && kanbanOpen === true &&
@@ -626,9 +628,8 @@ const App = props => {
           <KanbanContainer
             style={{marginLeft: sideMenuOpen === true ? "300px" : 0}}
             owner={user._id}
-            selectedNode={selectedNode}
+            selectedNode={props.selectedNode}
             selectedProject={props.selectedProject}
-            setSelectedNode={setSelectedNode}
           />
         }
         {
@@ -729,6 +730,7 @@ const mapStateToProps = state => {
     teams: state.teams.teams,
     selectedTeam: state.teams.selectedTeam,
     selectedProject: state.projects.selectedProject,
+    selectedNode: state.projects.selectedNode,
     members: state.teams.members,
     boards: state.kanban.boards,
     newCards: state.teams.newCards,

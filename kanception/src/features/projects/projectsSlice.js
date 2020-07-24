@@ -4,6 +4,7 @@ export const projectsSlice = createSlice({
   name: 'projects',
   initialState: {
     selectedProject: null,
+    selectedNode: null,
     projects: []
   },
   reducers: {
@@ -16,6 +17,9 @@ export const projectsSlice = createSlice({
     setSelectedProject: (state, action) => {
       state.selectedProject = action.payload.project
     },
+    setSelectedNode: (state, action) => {
+      state.selectedNode = action.payload.id
+    },
   },
 });
 
@@ -23,6 +27,7 @@ export const {
   setProjects,
   addProject,
   setSelectedProject,
+  setSelectedNode,
 } = projectsSlice.actions
 
 export default projectsSlice.reducer

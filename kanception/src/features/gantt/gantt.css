@@ -10,3 +10,33 @@
 .gantt-channel {
   height: calc(65vh / 8);
 }
+
+.todo-panel {
+  position: absolute;
+  background: rgb(22, 22, 22);
+  height: calc(100vh - 50px);
+  width: 200px!important;
+}
+
+.todo-inner-panel {
+  overflow-y: auto;
+  height: calc(100% - 150px);
+  scrollbar-width: none;  /* Firefox */
+}
+
+.todo-inner-panel::-webkit-scrollbar {
+  display: none;  /* Safari and Chrome */
+}
+
+.todo-cell {
+  height: 50px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.todo-cell > p {
+  margin-bottom: 0;
+  color: white;
+}
