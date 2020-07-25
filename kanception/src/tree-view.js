@@ -28,7 +28,7 @@ function PlusSquare(props) {
 
 function CloseSquare(props) {
   return (
-    <SvgIcon onClick={e => e.preventDefault()} className="close" fontSize="inherit" style={{ width: 14, height: 14 }} {...props}>
+    <SvgIcon onClick={props.onClick} className="close" fontSize="inherit" style={{ width: 14, height: 14 }} {...props}>
       {/* tslint:disable-next-line: max-line-length */}
       <path d="M17.485 17.512q-.281.281-.682.281t-.696-.268l-4.12-4.147-4.12 4.147q-.294.268-.696.268t-.682-.281-.281-.682.294-.669l4.12-4.147-4.12-4.147q-.294-.268-.294-.669t.281-.682.682-.281.696 .268l4.12 4.147 4.12-4.147q.294-.268.696-.268t.682.281 .281.669-.294.682l-4.12 4.147 4.12 4.147q.294.268 .294.669t-.281.682zM22.047 22.074v0 0-20.147 0h-20.12v0 20.147 0h20.12zM22.047 24h-20.12q-.803 0-1.365-.562t-.562-1.365v-20.147q0-.776.562-1.351t1.365-.575h20.147q.776 0 1.351.575t.575 1.351v20.147q0 .803-.575 1.365t-1.378.562v0z" />
     </SvgIcon>
@@ -62,7 +62,7 @@ const StyledTreeItem = withStyles((theme) => ({
     },
   },
   group: {
-    marginLeft: 7,
+    marginLeft: 0,
     paddingLeft: 18,
     borderLeft: `1px dashed ${fade(theme.palette.text.primary, 0.4)}`,
   },
@@ -73,6 +73,7 @@ const useStyles = makeStyles({
     height: "fit-content",
     flexGrow: 1,
     maxWidth: 400,
+    width: '200px',
   },
 });
 
@@ -85,7 +86,19 @@ export default function CustomizedTreeView(props) {
     // If project selected
     if (props.projects.find(project => project._id === value) != null) {
       props.setSelectedProject(value, event.target.nodeId)
-      if (event.target.className.includes('MuiTypography-root') === true) {
+      console.log(event.target.className)
+      if (event.target.className?.baseVal?.includes('MuiSvgIcon-root') === true
+        || event.target.className?.baseVal === ''
+        || event.target.className.includes('close')
+        || (event.target.className.includes('Mui')
+          && !event.target.className.includes('MuiTypography-root'))
+      ) {
+        event.preventDefault()
+        event.stopPropagation()
+        console.log('Delete project')
+        const projectName = window.prompt('Type the project name to delete:')
+        console.log(projectName)
+      } else if (event.target.className.includes('MuiTypography-root') === true) {
         console.log(event.target.parentElement.parentElement)
         props.setSelectedTeam(event.target.parentElement.parentElement.dataset.spaceId)
       } else {
@@ -116,6 +129,10 @@ export default function CustomizedTreeView(props) {
     setProjectTitleMenuOpen(false)
   }
 
+  const onDeleteProject = e => {
+    console.log(e.target.parentNode.parentNode)
+  }
+
   return (
     <div
       style={{
@@ -134,9 +151,6 @@ export default function CustomizedTreeView(props) {
         className={classes.root}
         defaultExpanded={['1']}
         defaultSelected={"2"}
-        defaultCollapseIcon={<MinusSquare />}
-        defaultExpandIcon={<PlusSquare />}
-        defaultEndIcon={<CloseSquare />}
         onNodeSelect={onNodeSelect}
         expanded={props.spaces.map(space => space._id)}
         selected={props.selectedProject != null ? props.selectedProject : props.selectedTeam}
@@ -148,11 +162,11 @@ export default function CustomizedTreeView(props) {
             <StyledTreeItem
               data-space-id={space._id}
               nodeId={space._id + '-add'}
-              label={<span><strong style={{color: "rebeccapurple"}}>New</strong> Board +</span>}
+              label={<span><strong style={{color: "rebeccapurple"}}>New +</strong></span>}
             />
             {
             props.projects.filter(project => project.space === space._id)
-              .map(project =>
+            .map(project =>
               <StyledTreeItem data-space-id={space._id}
                 nodeId={project._id} label={project.title} />
               )
