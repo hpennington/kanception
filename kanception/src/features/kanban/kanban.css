@@ -65,7 +65,7 @@
 .context-menu {
    position: fixed;
    width: 200px;
-   height: 250px;
+   height: 150px;
    background: white;
    border-radius: 5px;
    color: black;

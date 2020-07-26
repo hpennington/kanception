@@ -48,6 +48,32 @@ function TransitionComponent(props) {
   );
 }
 
+const TreeContextMenu = props => {
+  const style = {
+    //visibility: props.isOpen === true ? 'visible' : 'hidden',
+    //top: props.position.y, left: props.position.x,
+    zIndex: 10,
+    textAlign: 'center',
+  }
+
+  const onContextMenu = e => {
+    e.preventDefault()
+    props.onClose(e)
+  }
+
+  return (
+    <div
+      data-card-id={props.cardId}
+      className="context-menu"
+      style={style}
+      onContextMenu={onContextMenu}
+    >
+      <h6 onClick={props.onCardDelete} className="border-bottom">Delete Project</h6>
+      <h6 onClick={props.onClose} className="border-top">Close</h6>
+    </div>
+  )
+}
+
 TransitionComponent.propTypes = {
   /**
    * Show the component; triggers the enter or exit states
@@ -81,6 +107,7 @@ export default function CustomizedTreeView(props) {
   const classes = useStyles();
   const [projectTitleMenuOpen, setProjectTitleMenuOpen] = useState(false)
   const [selectedSpace, setSelectedSpace] = useState(null)
+  const [contextMenuOpen, setContextMenuOpen] = useState(false)
 
   const onNodeSelect = (event, value) => {
     // If project selected
@@ -95,9 +122,9 @@ export default function CustomizedTreeView(props) {
       ) {
         event.preventDefault()
         event.stopPropagation()
-        console.log('Delete project')
-        const projectName = window.prompt('Type the project name to delete:')
-        console.log(projectName)
+        //console.log('Delete project')
+        //const projectName = window.prompt('Type the project name to delete:')
+        // console.log(projectName)
       } else if (event.target.className.includes('MuiTypography-root') === true) {
         console.log(event.target.parentElement.parentElement)
         props.setSelectedTeam(event.target.parentElement.parentElement.dataset.spaceId)
@@ -155,6 +182,10 @@ export default function CustomizedTreeView(props) {
         expanded={props.spaces.map(space => space._id)}
         selected={props.selectedProject != null ? props.selectedProject : props.selectedTeam}
       >
+        {
+        contextMenuOpen === true &&
+        <TreeContextMenu onClose={e => setContextMenuOpen(false)} />
+        }
         {
         props.spaces.map(
           space =>
