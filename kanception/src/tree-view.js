@@ -136,6 +136,7 @@ export default function CustomizedTreeView(props) {
 
     } else if (props.spaces.find(space => space._id === value) != null) {
       props.setSelectedTeam(value)
+      props.setSelectedProject(null, value)
     } else if (value.includes('add') === true) {
       onAddProject(value.replace('-add', ''))
     }

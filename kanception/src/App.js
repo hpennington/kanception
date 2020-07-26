@@ -26,6 +26,7 @@ import {
   setSelectedProject,
   setSelectedNode,
 } from './features/projects/projectsSlice'
+import Space from './space'
 import { removeNewCard } from './features/teams/teamsSlice'
 import Toolbar from './toolbar'
 import KanbanContainer from './features/kanban/kanban-container'
@@ -418,7 +419,7 @@ const App = props => {
     }
   }
 
-  const onAddProject = async (title, space, board) => {
+  const onAddProject = async (title, space) => {
     try {
       const api = process.env.REACT_APP_API + '/projects/add?title=' + title
         + '&space=' + space
@@ -670,6 +671,12 @@ const App = props => {
             selectedNode={props.selectedNode}
             selectedProject={props.selectedProject}
           />
+        }
+        {
+        props.selectedProject === null && props.selectedTeam != null &&
+        <Space
+          title={props.spaces
+            .find(space => space._id === props.selectedTeam).title} />
         }
         {
           nameOpen === true && <CollectInfo onSubmit={onSubmit} />

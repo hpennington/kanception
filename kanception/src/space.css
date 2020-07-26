@@ -1,0 +1,30 @@
+.space {
+  width: calc(100vw - 300px);
+  margin-left: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.space h1 {
+  color: white;
+  text-align: center;
+  margin: 0 auto;
+  margin-top: 100px;
+}
+
+.space h2 {
+  color: #bbb;
+  text-align: center;
+  margin-top: 30px;
+}
+
+.space button {
+  width: 150px;
+  height: 40px;
+  margin-top: 100px;
+  background: rebeccapurple;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
