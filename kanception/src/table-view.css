@@ -31,3 +31,7 @@
 .btn-container {
   margin: auto;
 }
+
+.MuiTreeItem-iconContainer {
+  display: none;
+}

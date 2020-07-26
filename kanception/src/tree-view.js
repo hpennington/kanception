@@ -68,7 +68,7 @@ const TreeContextMenu = props => {
       style={style}
       onContextMenu={onContextMenu}
     >
-      <h6 onClick={props.onCardDelete} className="border-bottom">Delete Project</h6>
+      <h6 onClick={props.onDelete} className="border-bottom">Delete Project</h6>
       <h6 onClick={props.onClose} className="border-top">Close</h6>
     </div>
   )
@@ -108,6 +108,7 @@ export default function CustomizedTreeView(props) {
   const [projectTitleMenuOpen, setProjectTitleMenuOpen] = useState(false)
   const [selectedSpace, setSelectedSpace] = useState(null)
   const [contextMenuOpen, setContextMenuOpen] = useState(false)
+  const [contextProject, setContextProject] = useState(null)
 
   const onNodeSelect = (event, value) => {
     // If project selected
@@ -157,7 +158,19 @@ export default function CustomizedTreeView(props) {
   }
 
   const onDeleteProject = e => {
-    console.log(e.target.parentNode.parentNode)
+    setContextMenuOpen(false)
+    const projectName = window.prompt('Type project name to confirm delete')
+    console.log(contextProject)
+    if (projectName === props.projects.find(p => p._id === contextProject).title) {
+      console.log(projectName)
+      props.onDeleteProject(contextProject)
+    }
+  }
+
+  const onContextClick = e => {
+    e.preventDefault()
+    setContextMenuOpen(!contextMenuOpen)
+    setContextProject(e.target.parentNode.parentNode.dataset.nodeId)
   }
 
   return (
@@ -184,7 +197,10 @@ export default function CustomizedTreeView(props) {
       >
         {
         contextMenuOpen === true &&
-        <TreeContextMenu onClose={e => setContextMenuOpen(false)} />
+        <TreeContextMenu
+          onDelete={onDeleteProject}
+          onClose={e => setContextMenuOpen(false)}
+        />
         }
         {
         props.spaces.map(
@@ -199,6 +215,8 @@ export default function CustomizedTreeView(props) {
             props.projects.filter(project => project.space === space._id)
             .map(project =>
               <StyledTreeItem data-space-id={space._id}
+                onContextMenu={onContextClick}
+                data-node-id={project._id}
                 nodeId={project._id} label={project.title} />
               )
             }

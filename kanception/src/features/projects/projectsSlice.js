@@ -14,6 +14,12 @@ export const projectsSlice = createSlice({
     addProject: (state, action) => {
       state.projects.push(action.payload.project)
     },
+    deleteProject: (state, action) => {
+      state.projects = state.projects.filter(p => p._id !== action.payload.project)
+      if (state.projects.length > 0) {
+        state.selectedProject = state.projects[0]._id
+      }
+    },
     setSelectedProject: (state, action) => {
       state.selectedProject = action.payload.project
     },
@@ -21,11 +27,12 @@ export const projectsSlice = createSlice({
       state.selectedNode = action.payload.id
     },
   },
-});
+})
 
 export const {
   setProjects,
   addProject,
+  deleteProject,
   setSelectedProject,
   setSelectedNode,
 } = projectsSlice.actions

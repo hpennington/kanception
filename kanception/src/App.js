@@ -22,6 +22,7 @@ import {
 import {
   setProjects,
   addProject,
+  deleteProject,
   setSelectedProject,
   setSelectedNode,
 } from './features/projects/projectsSlice'
@@ -559,6 +560,29 @@ const App = props => {
     props.dispatch(setSelectedTeam({team: team}))
   }
 
+  const onDeleteProject = async id => {
+    props.dispatch(deleteProject({project: id}))
+
+    const api = process.env.REACT_APP_API
+
+    try {
+      const token = await getTokenSilently()
+
+      const result = await fetch(api + '/project?id=' + id, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      console.log(result)
+
+    } catch(error) {
+      console.log(error)
+    }
+
+  }
+
   if (
     props.selectedTeam === null
     && props.selectedProject === null
@@ -586,6 +610,7 @@ const App = props => {
             spaces={props.spaces}
             projects={props.projects}
             onAddProject={onAddProject}
+            onDeleteProject={onDeleteProject}
             setSelectedProject={onSetSelectedProject}
             onTeamInviteAccept={teamInviteAccept}
             setSelectedTeam={team => props.dispatch(setSelectedTeam({team: team}))}
