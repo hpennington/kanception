@@ -600,7 +600,7 @@ const App = props => {
   }
 
   const onClose = e => {
-    props.setProjectTitleMenuOpen(false)
+    setProjectTitleMenuOpen(false)
   }
 
   if (
