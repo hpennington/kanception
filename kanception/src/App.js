@@ -31,7 +31,7 @@ import { removeNewCard } from './features/teams/teamsSlice'
 import Toolbar from './toolbar'
 import KanbanContainer from './features/kanban/kanban-container'
 import SideMenu from './side-menu'
-import { TeamTitleMenu } from './menu'
+import { ProjectTitleMenu, TeamTitleMenu } from './menu'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 
@@ -52,6 +52,7 @@ const App = props => {
   const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
   const [prevSelectedTeam, setPrevSelectedTeam] = useState(null)
   const [prevSelectedProject, setPrevSelectedProject] = useState(null)
+  const [projectTitleMenuOpen, setProjectTitleMenuOpen] = useState(false)
 
   useEffect(() => {
     if (mounted === false) {
@@ -586,6 +587,22 @@ const App = props => {
 
   }
 
+  const onAddProjectClick = value => {
+    console.log(value)
+    setSelectedTeam(value)
+    setProjectTitleMenuOpen(true)
+  }
+
+  const onProjectSave = title => {
+    console.log(title)
+    setProjectTitleMenuOpen(false)
+    onAddProject(title, props.selectedTeam)
+  }
+
+  const onClose = e => {
+    props.setProjectTitleMenuOpen(false)
+  }
+
   if (
     props.selectedTeam === null
     && props.selectedProject === null
@@ -599,6 +616,13 @@ const App = props => {
 
   return (
       <div className="App">
+        {
+        projectTitleMenuOpen === true &&
+        <ProjectTitleMenu
+          onSave={onProjectSave}
+          close={onClose}
+        />
+        }
         {menuOpen === true &&
         <TeamTitleMenu onSave={onTeamSave} close={() => setMenuOpen(false)} />}
         <Toolbar
@@ -612,8 +636,10 @@ const App = props => {
           <SideMenu
             spaces={props.spaces}
             projects={props.projects}
-            onAddProject={onAddProject}
+            onAddProject={onAddProjectClick}
             onDeleteProject={onDeleteProject}
+            projectTitleMenuOpen={projectTitleMenuOpen}
+            setProjectTitleMenuOpen={setProjectTitleMenuOpen}
             setSelectedProject={onSetSelectedProject}
             onTeamInviteAccept={teamInviteAccept}
             setSelectedTeam={team => props.dispatch(setSelectedTeam({team: team}))}
@@ -684,6 +710,9 @@ const App = props => {
           }}
         >
           <Space
+            data-space-id={props.selectedTeam}
+            onNewProject={e => setProjectTitleMenuOpen(true)}
+            onDeleteSpace={e => console.log(e)}
             title={props.spaces
             .find(space => space._id === props.selectedTeam).title} />
         </div>

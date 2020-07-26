@@ -6,7 +6,6 @@ import TreeView from '@material-ui/lab/TreeView';
 import TreeItem from '@material-ui/lab/TreeItem';
 import Collapse from '@material-ui/core/Collapse';
 import { useSpring, animated } from 'react-spring/web.cjs';
-import { ProjectTitleMenu } from './menu'
 
 function MinusSquare(props) {
   return (
@@ -105,10 +104,8 @@ const useStyles = makeStyles({
 
 export default function CustomizedTreeView(props) {
   const classes = useStyles();
-  const [projectTitleMenuOpen, setProjectTitleMenuOpen] = useState(false)
-  const [selectedSpace, setSelectedSpace] = useState(null)
-  const [contextMenuOpen, setContextMenuOpen] = useState(false)
   const [contextProject, setContextProject] = useState(null)
+  const [contextMenuOpen, setContextMenuOpen] = useState(false)
 
   const onNodeSelect = (event, value) => {
     // If project selected
@@ -138,25 +135,10 @@ export default function CustomizedTreeView(props) {
       props.setSelectedTeam(value)
       props.setSelectedProject(null, value)
     } else if (value.includes('add') === true) {
-      onAddProject(value.replace('-add', ''))
+      props.onAddProject(value.replace('-add', ''))
     }
   }
 
-  const onAddProject = value => {
-    console.log(value)
-    setSelectedSpace(value)
-    setProjectTitleMenuOpen(true)
-  }
-
-  const onProjectSave = title => {
-    console.log(title)
-    setProjectTitleMenuOpen(false)
-    props.onAddProject(title, selectedSpace)
-  }
-
-  const onClose = e => {
-    setProjectTitleMenuOpen(false)
-  }
 
   const onDeleteProject = e => {
     setContextMenuOpen(false)
@@ -181,13 +163,6 @@ export default function CustomizedTreeView(props) {
         marginLeft: "20px",
       }}
     >
-      {
-      projectTitleMenuOpen === true &&
-      <ProjectTitleMenu
-        onSave={onProjectSave}
-        close={onClose}
-      />
-      }
       <TreeView
         className={classes.root}
         defaultExpanded={['1']}
