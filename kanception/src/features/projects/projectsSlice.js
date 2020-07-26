@@ -15,9 +15,13 @@ export const projectsSlice = createSlice({
       state.projects.push(action.payload.project)
     },
     deleteProject: (state, action) => {
+      const project = state.projects.find(p => p._id === action.payload.project)
       state.projects = state.projects.filter(p => p._id !== action.payload.project)
-      if (state.projects.length > 0) {
-        state.selectedProject = state.projects[0]._id
+      if (state.projects.filter(p => p.space === project.space).length > 0) {
+        state.selectedProject = state.projects
+          .filter(p => p.space === project.space)[0]._id
+      } else {
+        state.selectedProject = null
       }
     },
     setSelectedProject: (state, action) => {
