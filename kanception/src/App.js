@@ -413,6 +413,8 @@ const App = props => {
 
       const space = await spaceResult.json()
       props.dispatch(addSpace({space: space}))
+      props.dispatch(setSelectedTeam({team: space._id}))
+      props.dispatch(setSelectedProject({project: null}))
 
     } catch(error) {
       console.log(error)
