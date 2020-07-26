@@ -26,7 +26,7 @@ const TeamTitleMenu = props => {
       }}>
       <div style={{
           width: "300px",
-          height: "150px",
+          height: "200px",
           background: "white",
           display: "flex",
           flexDirection: "column",
@@ -44,6 +44,7 @@ const TeamTitleMenu = props => {
           id="team-title-input"
           onChange={onTitleChange}
           type="text" placeholder="Add space title"></input>
+          <p style={{color: "black", textAlign: "center"}}>Usually a company name or umbrella project title.</p>
           <div>
             <Button
               variant="secondary"
