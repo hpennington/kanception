@@ -676,9 +676,17 @@ const App = props => {
         }
         {
         props.selectedProject === null && props.selectedTeam != null &&
-        <Space
-          title={props.spaces
+        <div
+          style={{
+            marginLeft: sideMenuOpen === true ? "300px" : 0,
+            marginTop: "50px",
+            width: sideMenuOpen === true ? "calc(100vw - 300px)" : "100vw",
+          }}
+        >
+          <Space
+            title={props.spaces
             .find(space => space._id === props.selectedTeam).title} />
+        </div>
         }
         {
           nameOpen === true && <CollectInfo onSubmit={onSubmit} />
