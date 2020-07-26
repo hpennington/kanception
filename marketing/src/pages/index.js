@@ -177,7 +177,7 @@ const ContactBlock = () => (
       flexDirection: 'column',
     }}
   >
-    <p>Contact us @ kanception.io@gmail.com</p>
+    <p>Contact us @ info@kanception.io</p>
   </div>
 )
 
