@@ -714,7 +714,7 @@ const App = props => {
             onNewProject={e => setProjectTitleMenuOpen(true)}
             onDeleteSpace={e => console.log(e)}
             title={props.spaces
-            .find(space => space._id === props.selectedTeam).title} />
+            .find(space => space._id === props.selectedTeam)?.title} />
         </div>
         }
         {
