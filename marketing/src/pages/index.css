@@ -58,7 +58,7 @@ h4 {
 }
 
 .kanban-detail-block {
-  background: #4d27cf;
+  background: linear-gradient(90deg, #6f27cf, #4d27cf);
   width: 100vw;
   display: flex;
   align-items: center;
@@ -66,7 +66,7 @@ h4 {
   padding-bottom: 100px;
 }
 .kanban-detail-text-block {
-  background: #4d27cf;
+  background: linear-gradient(90deg, #6f27cf, #4d27cf);
   text-align: center;
   color: white;
   font-size: 1.2em;
@@ -85,7 +85,7 @@ h4 {
   width: 450px;
   text-align: center;
   padding: 40px;
-  box-shadow: 5px 5px 10px 10px rgba(127, 127, 127, 0.25);
+  box-shadow: 5px 5px 10px 10px rgb(68 68 68 / 59%);
   margin: 20px;
 }
 
@@ -119,7 +119,7 @@ h4 {
 }
 
 .kanban-detail-block {
-  flex-direction: column;
+  flex-direction: column-reverse;
 }
 
 .main-video {

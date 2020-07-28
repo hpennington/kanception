@@ -54,10 +54,18 @@ const CurveBlock = () => (
     preserveAspectRatio="none"
     style={{height: "100%", width: "100%", marginBottom: "-1px"}}
   >
-    <path
-      d="M0.00,49.98 C247.74,167.27 246.05,-24.17 500.00,49.98 L523.14,173.19 L0.00,150.00 Z"
-      style={{stroke: "none", fill: "#4d27cf"}}>
-    </path>
+    <defs>
+      <linearGradient id="gradient">
+        <stop offset="0%" style={{stopColor: "#6f27cf"}} />
+        <stop offset="100%" style={{stopColor: "#4d27cf"}} />
+      </linearGradient>
+    </defs>
+    <g fill={"url(#gradient)"}>
+      <path
+        d="M0.00,49.98 C247.74,167.27 246.05,-24.17 500.00,49.98 L523.14,173.19 L0.00,150.00 Z"
+        style={{stroke: "none"}}>
+      </path>
+    </g>
   </svg>
 )
 
@@ -67,7 +75,6 @@ const KanbanDetailBlock = () => (
     <h4>Create spaces, projects, boards, and nested cards with the Kanban board.</h4>
     <h4 style={{marginBottom: "60px"}}>Time tracking & project planning with the Gantt chart. Schedule todos, and view your week at a glance, with the calendar.</h4>
   <div className="kanban-detail-block">
-    <img style={{marginRight: '20px'}} src={GraphImage} alt="kanban graph" />
     <div className="card-container">
       <div
         className="card"
@@ -84,6 +91,7 @@ const KanbanDetailBlock = () => (
         <h2 style={{fontSize: '1.3em', fontstyle: 'normal', color: '#555'}}>Use the nested Kanban board to model the hierarchy that is inherent to complex tasks.</h2>
       </div>
     </div>
+    <img src={GraphImage} alt="kanban graph" />
   </div>
   </div>
 )
