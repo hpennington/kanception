@@ -63,6 +63,7 @@ h4 {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-bottom: 100px;
 }
 .kanban-detail-text-block {
   background: #4d27cf;
