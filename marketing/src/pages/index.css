@@ -13,6 +13,10 @@ h4 {
   margin: 20px 10px;
 }
 
+.card h4 {
+  font-size: 1em;
+}
+
 .title {
   margin-bottom: 20px;
 }
@@ -82,9 +86,9 @@ h4 {
 .card {
   background: white;
   border-radius: 10px;
-  width: 450px;
+  width: 400px;
   text-align: center;
-  padding: 40px;
+  padding: 30px;
   box-shadow: 5px 5px 10px 10px rgb(68 68 68 / 59%);
   margin: 20px;
 }
