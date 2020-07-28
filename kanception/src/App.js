@@ -229,6 +229,9 @@ const App = props => {
 
       const spaces = await result.json()
       props.dispatch(setSpaces({spaces: spaces}))
+      if (spaces.length > 0) {
+        props.dispatch(setSelectedTeam({team: spaces[0]._id}))
+      }
 
     } catch(error) {
       console.log(error)
@@ -250,6 +253,10 @@ const App = props => {
 
       const projects = await result.json()
       props.dispatch(setProjects({projects: projects}))
+
+      if (projects.length > 0) {
+        props.dispatch(setSelectedProject({project: projects[0]._id}))
+      }
 
     } catch(error) {
       console.log(error)
@@ -285,7 +292,7 @@ const App = props => {
       props.dispatch(setTeams({teams: results}))
 
       if (results.length > 0) {
-        props.dispatch(setSelectedTeam({team: results[0]._id}))
+        console.log(results[0])
         fetchMemberProfiles(props.selectedTeam)
         //fetchNewTeamCards(props.selectedTeam)
       }
