@@ -29,7 +29,7 @@ services:
     container_name: 'kanception'
     build:
       context: ./kanception
-      dockerfile: Dockefile.prod
+      dockerfile: Dockerfile.prod
     stdin_open: true
     ports:
       - "3333:8080"
