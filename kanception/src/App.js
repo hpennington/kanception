@@ -170,6 +170,8 @@ const App = props => {
           user.push(team)
           setUser(user)
           fetchTeams(user)
+          fetchSpaces()
+          fetchProjects()
         })
 
     } catch (error) {
