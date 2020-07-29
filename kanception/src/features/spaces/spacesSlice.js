@@ -13,12 +13,17 @@ export const spacesSlice = createSlice({
     addSpace: (state, action) => {
       state.spaces.push(action.payload.space)
     },
+    deleteSpace: (state, action) => {
+      state.spaces = state.spaces
+        .filter(space => space._id !== action.payload.space)
+    },
   },
 });
 
 export const {
   setSpaces,
   addSpace,
+  deleteSpace,
 } = spacesSlice.actions
 
 export default spacesSlice.reducer

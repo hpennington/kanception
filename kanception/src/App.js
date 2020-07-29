@@ -18,6 +18,7 @@ import {
 import {
   setSpaces,
   addSpace,
+  deleteSpace,
 } from './features/spaces/spacesSlice'
 import {
   setProjects,
@@ -612,6 +613,12 @@ const App = props => {
     setProjectTitleMenuOpen(false)
   }
 
+  const onDeleteSpace = e => {
+    console.log(e)
+    props.dispatch(deleteSpace({space: props.selectedTeam}))
+
+  }
+
   if (
     props.selectedTeam === null
     && props.selectedProject === null
@@ -721,7 +728,7 @@ const App = props => {
           <Space
             data-space-id={props.selectedTeam}
             onNewProject={e => setProjectTitleMenuOpen(true)}
-            onDeleteSpace={e => console.log(e)}
+            onDeleteSpace={onDeleteSpace}
             title={props.spaces
             .find(space => space._id === props.selectedTeam)?.title} />
         </div>

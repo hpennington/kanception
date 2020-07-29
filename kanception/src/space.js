@@ -9,6 +9,10 @@ const Space = props => (
       onClick={props.onNewProject}
       className="new-project"
     >New Project</button>
+    <button
+      onClick={props.onDeleteSpace}
+      className="delete-space"
+    >Delete Space</button>
   </div>
 )
 
