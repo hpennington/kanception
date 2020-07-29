@@ -3,11 +3,14 @@ services:
   mongo:
     container_name: 'mongo'
     image: mongo
+    restart_policy: always
     volumes:
       - ./data/mongodb:/data/db
   kanception-api:
     container_name: 'kanception-api'
-    build: ./api
+    build:
+      context: ./api
+      dockerfile: Dockerfile.prod
     ports:
       - "4444:4000"
     volumes:
@@ -17,16 +20,20 @@ services:
       - /home/ubuntu/api/node_modules/
     depends_on:
       - mongo
+    restart_policy: always
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.kanception-api.rule=Host(`api.kanception.io`)"
       - "traefik.http.routers.kanception-api.entrypoints=web"
   kanception:
     container_name: 'kanception'
-    build: ./kanception
+    build:
+      context: ./kanception
+      dockerfile: Dockefile.prod
     stdin_open: true
     ports:
-      - "3333:3000"
+      - "3333:8080"
+    restart_policy: always
     depends_on:
       - kanception-api
     volumes:
@@ -43,6 +50,7 @@ services:
     image: "traefik:latest"
     ports:
       - "8080:8080"
+    restart_policy: always
     command:
       #- "--log.level=DEBUG"
       - "--api.insecure=false"
@@ -53,6 +61,7 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
   nginx:
     image: nginx
+    restart_policy: always
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ./logs/nginx:/var/log/nginx
