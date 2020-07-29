@@ -27,6 +27,7 @@ import {
   setSelectedProject,
   setSelectedNode,
 } from './features/projects/projectsSlice'
+
 import Space from './space'
 import { removeNewCard } from './features/teams/teamsSlice'
 import Toolbar from './toolbar'
@@ -613,14 +614,47 @@ const App = props => {
     setProjectTitleMenuOpen(false)
   }
 
-  const onDeleteSpace = e => {
+  const onDeleteSpace = async e => {
     console.log(e)
-    props.dispatch(deleteSpace({space: props.selectedTeam}))
+
+    const selectedSpace = props.selectedTeam
+    const spaceName = window.prompt('Enter space name to confirm delete')
+    if (spaceName === props.spaces.find(space => space._id === selectedSpace).title) {
+      props.dispatch(deleteSpace({space: props.selectedTeam}))
+      console.log(props.selectedTeam)
+      console.log(props.spaces)
+      if (props.spaces.filter(space => space._id !== props.selectedTeam).length > 0) {
+        const space = props.spaces.filter(space => space._id !== props.selectedTeam)[0]._id
+        props.dispatch(setSelectedTeam({team: space}))
+
+      } else {
+        props.dispatch(setSelectedTeam({team: null}))
+        props.dispatch(setMembers({members: []}))
+      }
+
+      const api = process.env.REACT_APP_API
+
+      try {
+        const token = await getTokenSilently()
+
+        const result = await fetch(api + '/space?id=' + selectedSpace, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+
+        console.log(result)
+
+      } catch(error) {
+        console.log(error)
+      }
+    }
 
   }
 
   if (
-    props.selectedTeam === null
+    props.selectedTeam == null
     && props.selectedProject === null
     && props.projects.length > 0
     && props.spaces.length > 0
