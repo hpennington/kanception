@@ -15,8 +15,6 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build-stage /app/build/index.html /usr/share/nginx/html/app/index.html
 COPY --from=build-stage /app/build/index.html /etc/nginx/html/app/index.html
 COPY --from=build-stage /app/build/index.html /var/www/html/index.html
-COPY --from=build-stage /app/build/index.html /var/www/html/sign_in/index.html
-COPY --from=build-stage /app/build/index.html /var/www/html/callback/index.html
 COPY --from=build-stage /app/build/static /var/www/html/static
 COPY --from=build-stage /app/build/*.png /var/www/html/
 

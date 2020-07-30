@@ -32,7 +32,7 @@ services:
       dockerfile: Dockerfile.prod
     stdin_open: true
     ports:
-      - "3333:8080"
+      - "3333:8000"
     restart: always
     depends_on:
       - kanception-api
@@ -48,8 +48,6 @@ services:
 
   traefik:
     image: "traefik:latest"
-    ports:
-      - "8080:8080"
     restart: always
     command:
       #- "--log.level=DEBUG"
