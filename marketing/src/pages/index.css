@@ -21,6 +21,12 @@ h4 {
   margin-bottom: 20px;
 }
 
+.top-block {
+  width: 100vw;
+  height: 400px;
+  background #1b2448;
+}
+
 .gantt-block > p {
   margin: 20px auto;
 }
