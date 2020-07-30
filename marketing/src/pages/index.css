@@ -22,13 +22,42 @@ h4 {
 }
 
 .top-block {
-  width: 100vw;
-  height: 400px;
-  background #1b2448;
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 90vw;
+  border-radius: 30px;
+  height: fit-content;
+  background: #1b2448;
+}
+
+.top-block h1 {
+  font-size: 3em;
+  max-width: 1000px;
+  width: 100%;
+}
+.top-block h2 {
+  color: #ccc;
+  width: 90%;
+  max-width: 700px;
+  margin: 20px auto;
+}
+
+.top-block h1, .top-block p {
+  text-align: center;
+  margin: 20px auto;
+  color: white;
 }
 
 .gantt-block > p {
   margin: 20px auto;
+}
+
+.top-block a {
+  margin: 20px;
 }
 
 .color-strip {
@@ -116,6 +145,12 @@ h4 {
 
 .roadmap-block > h1 {
   font-size: 3em;
+}
+
+@media screen and (max-width: 768px) {
+  .top-block h1 {
+    font-size: 2em;
+  }
 }
 
 @media screen and (max-width: 1024px) {

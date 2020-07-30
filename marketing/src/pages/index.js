@@ -27,7 +27,9 @@ const IndexPage = () => (
 const MainVideoBlock = () => (
   <>
     <div className="top-block">
-      <h1 className="title center-text mid-width">A nested Kanban board for creative teams</h1>
+      <h1 className="title center-text mid-width">A Nested Kanban Board for Creative Teams</h1>
+      <h2>Breakdown tasks in a natural way with nested cards. Organize your tasks and plan your day or week with the Gantt chart.
+      </h2>
       <p style={{whiteSpace: "nowrap"}}>In Beta</p>
       <a style={{whiteSpace: "nowrap"}} className="sign-up-btn" href="https://app.kanception.io">Sign In / Sign Up</a>
     </div>
