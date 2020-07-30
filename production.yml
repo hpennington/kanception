@@ -63,7 +63,7 @@ services:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ./logs/nginx:/var/log/nginx
       - ./data/letsencrypt:/etc/letsencrypt
-      - ./cache/ecom_cache:/var/www/ecom_cache
+      - ./cache/kanception-cache:/var/www/kanception-cache
     ports:
      - "80:80"
      - "443:443"
