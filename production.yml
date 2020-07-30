@@ -31,8 +31,6 @@ services:
       context: ./kanception
       dockerfile: Dockerfile.prod
     stdin_open: true
-    ports:
-      - "3333:8000"
     restart: always
     depends_on:
       - kanception-api
@@ -45,12 +43,13 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.kanception.rule=Host(`app.kanception.io`)"
       - "traefik.http.routers.kanception.entrypoints=web"
+      - "traefik.http.services.kanception.loadbalancer.server.port=80"
 
   traefik:
     image: "traefik:latest"
     restart: always
     command:
-      #- "--log.level=DEBUG"
+        #- "--log.level=DEBUG"
       - "--api.insecure=false"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
