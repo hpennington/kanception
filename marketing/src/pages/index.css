@@ -156,28 +156,12 @@ h4 {
   font-size: 3em;
 }
 
-@media screen and (max-width: 768px) {
-  .top-block {
-    margin-bottom: 20px;
-  }
-
-  .top-block h1 {
-    font-size: 2em;
-  }
-
-  .card {
-    max-width: 95%;
-    padding: 20px;
-    width: unset;
-    margin: 20px auto;
-  }
-}
-
 @media screen and (max-width: 1024px) {
 .top-block h1 {
   margin-left: 10px;
   margin-right: 10px;
   width: auto;
+  margin-top: 120px;
 }
 
 .card-container {
@@ -214,5 +198,38 @@ h4 {
 .gantt-block > p {
   margin: 20px 10px;
 }
+
+.top-block a {
+  margin-bottom: 120px;
+}
 }
 
+@media screen and (max-width: 768px) {
+  .top-block {
+    margin-bottom: 20px;
+  }
+
+  .top-block h1 {
+    font-size: 2em;
+  }
+
+  .card {
+    max-width: 70%;
+    padding: 20px;
+    width: unset;
+    margin: 20px auto;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .top-block h1 {
+    margin-top: 60px;
+  }
+  .top-block a {
+    margin-bottom: 60px;
+  }
+  .card {
+    width: 100%;
+    max-width: 95%;
+  }
+}
