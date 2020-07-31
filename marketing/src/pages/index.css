@@ -156,7 +156,7 @@ h4 {
   font-size: 3em;
 }
 
-@media screen and (min-height: 1000px) {
+@media screen and (min-height: 900px) {
   .top-block {
     margin-bottom: 120px;
   }
