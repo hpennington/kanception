@@ -237,10 +237,10 @@ h4 {
 
 @media screen and (max-width: 400px) {
   .top-block h1 {
-    margin-top: 60px;
+    margin-top: 60px!important;
   }
   .top-block a {
-    margin-bottom: 60px;
+    margin-bottom: 60px!important;
   }
   .card {
     width: 100%;
