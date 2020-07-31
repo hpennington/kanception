@@ -167,6 +167,10 @@ h4 {
 }
 
 @media screen and (max-width: 1024px) {
+.top-block h1 {
+  margin: 10px;
+}
+
 .card-container {
   width: 95%;
   max-width: 600px;
