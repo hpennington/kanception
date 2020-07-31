@@ -164,6 +164,12 @@ h4 {
   .top-block h1 {
     font-size: 2em;
   }
+
+  .card {
+    max-width: 95%;
+    padding: 20px;
+    width: unset;
+  }
 }
 
 @media screen and (max-width: 1024px) {
@@ -193,10 +199,9 @@ h4 {
 #gantt-chart {
   max-width: 95%;
 }
-
 .card {
-  max-width: 95%;
-  padding: 20px;
+  max-width: 70%;
+  padding: 20px auto;
   width: unset;
 }
 
