@@ -14,7 +14,7 @@ import "./index.css"
 const IndexPage = () => (
   <Layout>
     <SEO title="Kanban Board | Project Management Software" />
-    <MainVideoBlock />
+    <MainBlock />
     <CurveBlock />
     <KanbanDetailBlock />
     <GanttBlock />
@@ -24,31 +24,17 @@ const IndexPage = () => (
   </Layout>
 )
 
-const MainVideoBlock = () => (
+const MainBlock = () => (
   <>
     <div className="top-block">
-      <h1 className="title center-text mid-width">A Nested Kanban Board for Creative Teams</h1>
-      <h2>Breakdown tasks in a natural way with nested cards. Organize your tasks and plan your day with the Gantt chart.
-      </h2>
-      <p style={{whiteSpace: "nowrap"}}>In Beta</p>
-      <a style={{whiteSpace: "nowrap"}} className="sign-up-btn" href="https://app.kanception.io">Sign In / Sign Up</a>
+      <div className="top-block-inner">
+        <h1 className="title center-text mid-width">A Nested Kanban Board for Creative Teams</h1>
+        <h2>Breakdown tasks in a natural way with nested cards. Organize your tasks and plan your day with the Gantt chart.
+        </h2>
+        <p style={{whiteSpace: "nowrap"}}>In Beta</p>
+        <a style={{whiteSpace: "nowrap"}} className="sign-up-btn" href="https://app.kanception.io">Sign In / Sign Up</a>
+      </div>
     </div>
-    <video
-      className="main-video"
-      autoPlay={true}
-      loop={true}
-      controls={true}
-      muted={true}
-      width={900}
-      style={{
-        boxShadow: "0 0 5px 10px #ccc",
-        margin: "40px auto",
-        borderRadius: "5px",
-      }}
-    >
-      <source src={Demo} type="video/mp4" />
-    </video>
-    <p style={{textAlign: "center"}}>Single click on a card to access the inner Kanban board.</p>
   </>
 )
 
@@ -109,7 +95,24 @@ const KanbanDetailBlock = () => (
 
 const GanttBlock = () => (
   <div className="gantt-block" style={{paddingBottom: "40px", background: 'white', width: '100vw', textAlign: 'center'}}>
-    <h1 style={{fontSize: '3em', margin: '40px auto', maxWidth: '700px'}}>Schedule cards with the Gantt chart</h1>
+    <h2 style={{margin: "40px", fontSize: "2em"}}>Video Demo</h2>
+    <p style={{textAlign: "center"}}>Single click on a card to access the inner Kanban board.</p>
+    <video
+      className="main-video"
+      autoPlay={true}
+      loop={true}
+      controls={true}
+      muted={true}
+      width={900}
+      style={{
+        boxShadow: "0 0 5px 10px #ccc",
+        margin: "40px auto",
+        borderRadius: "5px",
+      }}
+    >
+      <source src={Demo} type="video/mp4" />
+    </video>
+    <h3 style={{fontSize: '2em', margin: '40px auto', maxWidth: '700px'}}>Schedule cards with the Gantt chart</h3>
     <p>Simple to use.</p>
     <video
       className="main-video"

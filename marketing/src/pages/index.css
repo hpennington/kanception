@@ -22,28 +22,20 @@ h4 {
 }
 
 .top-block {
-  padding: 20px;
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   width: 90vw;
-  border-radius: 30px;
+  border-radius: 24px;
   height: fit-content;
   background: #1b2448;
+  box-shadow: 0 20px 44px 0 rgba(27,36,72,.26);
 }
 
-.top-block h1 {
-  font-size: 3em;
-  max-width: 1000px;
-  width: 100%;
-}
-.top-block h2 {
-  color: #ddd;
-  width: 90%;
-  max-width: 700px;
-  margin: 20px auto;
+.top-block-inner {
+  background-image: radial-gradient(circle farthest-corner at 50% 50%,rgba(62,56,127,.45),rgba(62,56,127,0));
 }
 
 .top-block h1, .top-block p {
@@ -52,12 +44,28 @@ h4 {
   color: white;
 }
 
-.gantt-block > p {
-  margin: 20px auto;
+.top-block h1 {
+  font-size: 50px;
+  max-width: 1000px;
+  width: 100%;
+  margin-top: 60px;
 }
 
 .top-block a {
-  margin: 20px;
+  margin-bottom: 60px;
+  display: inline-block;
+}
+
+.top-block h2 {
+  color: #d6dbf0;
+  width: 90%;
+  max-width: 700px;
+  margin: 20px auto;
+  font-size: 24px;
+}
+
+.gantt-block > p {
+  margin: 20px auto;
 }
 
 .color-strip {
@@ -80,8 +88,9 @@ h4 {
   background: orange;
   border-radius: 5px;
   padding: 5px 10px;
-  color: black;
+  color: white;
   text-decoration: none;
+  margin-bottom: 60px;
 }
 
 .sign-up-btn-bottom {
@@ -148,6 +157,10 @@ h4 {
 }
 
 @media screen and (max-width: 768px) {
+  .top-block {
+    margin-bottom: 20px;
+  }
+
   .top-block h1 {
     font-size: 2em;
   }
