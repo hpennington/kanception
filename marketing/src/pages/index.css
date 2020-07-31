@@ -169,6 +169,7 @@ h4 {
     max-width: 95%;
     padding: 20px;
     width: unset;
+    margin: 20px auto;
   }
 }
 
@@ -204,7 +205,6 @@ h4 {
   max-width: 70%;
   margin: 20px auto;
   width: unset;
-  margin: auto;
 }
 
 .kanban-detail-block img {
