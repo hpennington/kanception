@@ -199,10 +199,12 @@ h4 {
 #gantt-chart {
   max-width: 95%;
 }
+
 .card {
   max-width: 70%;
-  padding: 20px auto;
+  padding: 20px auto!important;
   width: unset;
+  margin: auto;
 }
 
 .kanban-detail-block img {
