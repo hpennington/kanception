@@ -91,10 +91,12 @@ h4 {
   color: white;
   text-decoration: none;
   margin-bottom: 60px;
+  font-weight: bold;
 }
 
 .sign-up-btn-bottom {
   margin: 60px;
+  font-weight: bold;
 }
 
 .center-text {
