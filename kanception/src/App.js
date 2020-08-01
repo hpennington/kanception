@@ -56,7 +56,7 @@ const App = props => {
   const [prevSelectedTeam, setPrevSelectedTeam] = useState(null)
   const [prevSelectedProject, setPrevSelectedProject] = useState(null)
   const [projectTitleMenuOpen, setProjectTitleMenuOpen] = useState(false)
-  const [theme, setTheme] = useState(themes.light)
+  const [theme, setTheme] = useState(themes.dark)
 
   useEffect(() => {
     setThemeCSS()
