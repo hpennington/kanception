@@ -59,11 +59,16 @@ const App = props => {
   const [theme, setTheme] = useState(themes.dark)
 
   useEffect(() => {
-    setThemeCSS()
     if (mounted === false) {
       setMounted(true)
       startAsyncFetching()
+      const persistantTheme = window.localStorage.getItem('theme')
+      if (persistantTheme === 'light') {
+        setTheme(themes.light)
+      }
+      setThemeCSS()
     } else {
+      setThemeCSS()
       if (user !== null && user !== prevUser) {
         fetchTeams(user)
         fetchTeamInvites()
@@ -660,6 +665,11 @@ const App = props => {
 
   }
 
+  const onDarkModeChange = e => {
+    setTheme(theme.variant === 'dark' ? themes.light : themes.dark)
+    window.localStorage.setItem('theme', theme.variant === 'dark' ? 'light' : 'dark')
+  }
+
   if (
     props.selectedTeam == null
     && props.selectedProject === null
@@ -691,7 +701,7 @@ const App = props => {
         <TeamTitleMenu onSave={onTeamSave} close={() => setMenuOpen(false)} />}
         <Toolbar
           darkMode={theme.variant === 'dark'}
-          onDarkModeChange={e => setTheme(theme.variant === 'dark' ? themes.light : themes.dark)}
+          onDarkModeChange={onDarkModeChange}
           onBack={onBack}
           onOpenKanban={onOpenKanban}
           onOpenGantt={onOpenGantt}
