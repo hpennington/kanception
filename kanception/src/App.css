@@ -4,3 +4,7 @@
   width: fit-content;
   overflow-y: hidden;
 }
+
+.App .coming-soon {
+  color: var(--text-color);
+}
