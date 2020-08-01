@@ -51,6 +51,7 @@ const Kanban = forwardRef((props, ref) => {
 
     document.onmousemove = e => {
       if (dragging === true) {
+        console.log('mousemove')
         window.scrollTo(dragX - e.screenX, 0)
       }
     }

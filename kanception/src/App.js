@@ -673,6 +673,7 @@ const App = props => {
 
   return (
     <div style={{
+      height: "100%",
       "--background-color": theme.background,
       "--foreground-color": theme.foreground,
       "--text-color": theme.text,
