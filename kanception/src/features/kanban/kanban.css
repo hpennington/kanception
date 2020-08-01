@@ -15,7 +15,7 @@
 #kanbanRoot button {
   background: inherit;
   border: none;
-  color: white;
+  color: var(--text-color);
   font-size: 2em;
   outline: none;
 }
@@ -24,13 +24,13 @@
   width: 300px;
   min-height: 50px;
   max-height: calc(100vh - 275px);
-  background: #242628;
+  background: var(--foreground-color);
   margin: 10px;
-  border: solid #242628 10px;
+  border: solid var(--foreground-color) 10px;
   border-radius: 5px;
   overflow-y: auto;
+  box-shadow: 0 0 5px 1px var(--shadow-color);
   scrollbar-width: none;  /* Firefox */
-  box-shadow: 0 0 5px 1px #111;
 }
 
 .column::-webkit-scrollbar {
@@ -43,14 +43,14 @@
 
 #kanbanRoot .add-group-btn {
   font-size: 1em;
-  background: #242628;
+  background: var(--foreground-color);
 }
 
 .group-title-input {
   font-size: 1.5em;
   width: 70%;
   background: inherit;
-  color: white;
+  color: var(--text-color);
   border: none;
   text-align: center;
   margin-top: 20px;

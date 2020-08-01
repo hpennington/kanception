@@ -1,5 +1,7 @@
 import React from 'react'
 import { Dropdown, Pagination, ToggleButtonGroup, ToggleButton } from 'react-bootstrap'
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import HamburgerMenu from 'react-hamburger-menu'
 import './toolbar.css'
 
@@ -65,7 +67,20 @@ const Toolbar = (props) => {
         <Dropdown.Toggle id="dropdown-basic">
         </Dropdown.Toggle>
         <Dropdown.Menu>
-          <Dropdown.Item href="/logout?returnTo=/">Sign Out</Dropdown.Item>
+          <div style={{marginLeft: "20px"}}>
+            <FormControlLabel
+              labelPlacement="top"
+              control={
+                <Switch
+                  color="primary"
+                  checked={props.darkMode}
+                  onChange={props.onDarkModeChange}
+                />
+              }
+              label="Dark Mode"
+            />
+          </div>
+          <Dropdown.Item style={{textAlign: "center"}}href="/logout?returnTo=/">Sign Out</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     </div>

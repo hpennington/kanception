@@ -1,9 +1,12 @@
 html, body, #root {
   height: 100%;
   width: 100%;
-  background: #1c1c1c;
   user-select: none;
   overscroll-behavior-x: none;
+}
+
+body {
+  background: #1c1c1c;
 }
 
 h1, h2, h3, h4, h5, h6 {

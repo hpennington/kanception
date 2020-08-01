@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  background: #1c1c1c;
+  background: var(--background-color);
   width: 275px;
   margin: auto;
   border-radius: 5px;

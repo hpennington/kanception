@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useReducer, useRef } from 'react'
 import { connect } from 'react-redux'
+import { themes } from './theme.js'
 import { DragDropContext } from 'react-beautiful-dnd'
 import GanttChart from './features/gantt/gantt.js'
 import BoardsListView from './features/list-view/list-view.js'
@@ -55,8 +56,10 @@ const App = props => {
   const [prevSelectedTeam, setPrevSelectedTeam] = useState(null)
   const [prevSelectedProject, setPrevSelectedProject] = useState(null)
   const [projectTitleMenuOpen, setProjectTitleMenuOpen] = useState(false)
+  const [theme, setTheme] = useState(themes.light)
 
   useEffect(() => {
+    setThemeCSS()
     if (mounted === false) {
       setMounted(true)
       startAsyncFetching()
@@ -81,6 +84,10 @@ const App = props => {
       }
     }
   })
+
+  const setThemeCSS = () => {
+    document.body.style.background = theme.background
+  }
 
   const fetchTreeInit = async () => {
     const project = props.selectedProject
@@ -665,6 +672,12 @@ const App = props => {
    }
 
   return (
+    <div style={{
+      "--background-color": theme.background,
+      "--foreground-color": theme.foreground,
+      "--text-color": theme.text,
+      "--shadow-color": theme.shadow,
+    }}>
       <div className="App">
         {
         projectTitleMenuOpen === true &&
@@ -676,6 +689,8 @@ const App = props => {
         {menuOpen === true &&
         <TeamTitleMenu onSave={onTeamSave} close={() => setMenuOpen(false)} />}
         <Toolbar
+          darkMode={theme.variant === 'dark'}
+          onDarkModeChange={e => setTheme(theme.variant === 'dark' ? themes.light : themes.dark)}
           onBack={onBack}
           onOpenKanban={onOpenKanban}
           onOpenGantt={onOpenGantt}
@@ -771,6 +786,7 @@ const App = props => {
           nameOpen === true && <CollectInfo onSubmit={onSubmit} />
         }
       </div>
+    </div>
   )
 }
 
