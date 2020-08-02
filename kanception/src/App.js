@@ -7,6 +7,7 @@ import BoardsListView from './features/list-view/list-view.js'
 import { setTeams, setMembers, setSelectedTeam, setNewCards } from './features/teams/teamsSlice'
 import { Button } from 'react-bootstrap'
 import { useAuth0 } from './react-auth0-spa'
+import ThemePicker from './theme-picker'
 import {
   setGroups,
   setBoards,
@@ -56,6 +57,7 @@ const App = props => {
   const [prevSelectedTeam, setPrevSelectedTeam] = useState(null)
   const [prevSelectedProject, setPrevSelectedProject] = useState(null)
   const [projectTitleMenuOpen, setProjectTitleMenuOpen] = useState(false)
+  const [themePickerOpen, setThemePickerOpen] = useState(false)
   const [theme, setTheme] = useState(themes.dark)
 
   useEffect(() => {
@@ -517,6 +519,7 @@ const App = props => {
       })
 
       setNameOpen(false)
+      setThemePickerOpen(true)
 
       console.log(userResult)
 
@@ -665,9 +668,17 @@ const App = props => {
 
   }
 
+  const changeThemeMode = theme => {
+    setTheme(theme)
+    window.localStorage.setItem('theme', theme.variant)
+  }
+
   const onDarkModeChange = e => {
-    setTheme(theme.variant === 'dark' ? themes.light : themes.dark)
-    window.localStorage.setItem('theme', theme.variant === 'dark' ? 'light' : 'dark')
+    changeThemeMode(theme.variant === 'dark' ? themes.light : themes.dark)
+  }
+
+  const onUIThemeChange = mode => {
+    changeThemeMode(mode === 'light' ? themes.light : themes.dark)
   }
 
   if (
@@ -795,6 +806,14 @@ const App = props => {
         {
           nameOpen === true && <CollectInfo onSubmit={onSubmit} />
         }
+        {
+        themePickerOpen === true &&
+        <ThemePicker
+          mode={theme.variant}
+          onModeChange={onUIThemeChange}
+          onResign={e => setThemePickerOpen(false)}
+        />
+        }
       </div>
     </div>
   )
@@ -833,6 +852,7 @@ const CollectInfo = props => {
       firstName.current.value,
       lastName.current.value,
     )
+
   }
 
   return (
@@ -842,7 +862,7 @@ const CollectInfo = props => {
       left: 0,
       right: 0,
       bottom: 0,
-      background: "rgba(128, 128, 128, 0.25)",
+      background: "rgba(128, 128, 128, 0.5)",
       zIndex: 200,
       display: "flex",
       alignItems: "center",
