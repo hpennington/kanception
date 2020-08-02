@@ -52,7 +52,8 @@ const Card = props => {
         />
         <span
           style={{
-            fontSize: "0.75em"
+            fontSize: "0.75em",
+            margin: "5px",
           }}
         >
           {props.count > 0 ? props.count + " cards" : ""}
