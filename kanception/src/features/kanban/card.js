@@ -22,6 +22,8 @@ const Card = props => {
     }
   })
 
+  console.log('count: ' + props.count)
+
   return (
     <Draggable
       draggableId={props.id} index={props.index}
@@ -48,6 +50,13 @@ const Card = props => {
           }}
           value={props.title}
         />
+        <span
+          style={{
+            fontSize: "0.75em"
+          }}
+        >
+          {props.count > 0 ? props.count + " cards" : ""}
+        </span>
       </div>
       )}
     </Draggable>

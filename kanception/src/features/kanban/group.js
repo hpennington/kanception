@@ -113,6 +113,7 @@ const Group = props => {
                     column={props.index}
                     index={cardIndex}
                     onContextClick={onContextMenuCardClick}
+                    count={column.count}
                   />
                 )
                 }
