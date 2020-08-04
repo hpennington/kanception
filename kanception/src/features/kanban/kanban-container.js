@@ -25,7 +25,9 @@ const KanbanContainer = props => {
   const { getTokenSilently } = useAuth0()
 
   useEffect(() => {
-    fetchTree()
+    if (props.selectedNode != "" && props.selectedNode != null) {
+      fetchTree()
+    }
   }, [props.selectedNode])
 
   const fetchTree = async () => {
@@ -44,10 +46,13 @@ const KanbanContainer = props => {
       const tree = await treeResult.json()
       props.dispatch(setTree({tree: tree}))
 
-      const root = tree.find(node => node._id == props.selectedNode)
-      props.dispatch(setSelectedNode({id: root._id}))
-      console.log(root)
-      fetchGroups(root._id)
+      console.log('selectedNode: ' + props.selectedNode)
+      if (props.selectedNode.length > 20) {
+        const root = tree.find(node => node._id == props.selectedNode)
+        props.dispatch(setSelectedNode({id: root._id}))
+        console.log(root)
+        fetchGroups(root._id)
+      }
 
     } catch (error) {
       console.log(error)
@@ -150,6 +155,7 @@ const KanbanContainer = props => {
   const onCardClick = async (cardId) => {
     try {
 
+      console.log({cardId})
       props.dispatch(setSelectedNode({id: cardId}))
 
     } catch(error) {

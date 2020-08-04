@@ -6,6 +6,7 @@ import React, {
   useImperativeHandle
 } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import { CardContextMenu, GroupContextMenu } from './context-menu'
 import Group from './group'
 import './kanban.css'
 
@@ -182,52 +183,3 @@ const Kanban = forwardRef((props, ref) => {
 
 export default Kanban
 
-const CardContextMenu = props => {
-  const style = {
-    visibility: props.isOpen === true ? 'visible' : 'hidden',
-    top: props.position.y,
-    left: props.position.x,
-  }
-
-  const onContextMenu = e => {
-    e.preventDefault()
-    props.onClose(e)
-  }
-
-  return (
-    <div
-      data-card-id={props.cardId}
-      className="context-menu"
-      style={style}
-      onContextMenu={onContextMenu}
-    >
-      <h6 onClick={props.onCardDelete} className="border-bottom">Delete Card</h6>
-      <h6 onClick={props.onClose} className="border-top">Close</h6>
-    </div>
-  )
-}
-
-const GroupContextMenu = props => {
-  const style = {
-    visibility: props.isOpen === true ? 'visible' : 'hidden',
-    top: props.position.y,
-    left: props.position.x,
-  }
-
-  const onContextMenu = e => {
-    e.preventDefault()
-    props.onClose(e)
-  }
-
-  return (
-    <div
-      data-group-id={props.groupId}
-      className="context-menu"
-      style={style}
-      onContextMenu={onContextMenu}
-    >
-      <h6 onClick={props.onGroupDelete} className="border-bottom">Delete Group</h6>
-      <h6 onClick={props.onClose} className="border-top">Close</h6>
-    </div>
-  )
-}

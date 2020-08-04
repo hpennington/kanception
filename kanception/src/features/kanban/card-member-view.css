@@ -1,0 +1,14 @@
+.card-member-container {
+  display: flex;
+  width: 80%;
+  flex-wrap: wrap;
+}
+
+.card-member-view {
+  border-radius: 100%;
+  background: rebeccapurple;
+  height: 40px;
+  width: 40px;
+  line-height: 40px;
+  margin: 2px;
+}

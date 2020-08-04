@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import TextAreaAutoSize from 'react-textarea-autosize'
+import CardMemberView from './card-member-view'
 import './card.css'
 
 const Card = props => {
@@ -27,18 +28,23 @@ const Card = props => {
   return (
     <Draggable
       draggableId={props.id} index={props.index}
+      data-card-id={props.id}
     >
       {provided => (
       <div className="kanception-card"
+        data-card-id={props.id}
         ref={provided.innerRef}
         {...provided.dragHandleProps}
         {...provided.draggableProps}
-        onClick={e => props.onCardClick(e.target.id)}
+        onClick={e => props.onCardClick(e.target.dataset.cardId)}
         id={props.id}
       >
         <TextAreaAutoSize
           data-card-id={props.id}
-          onClick={e => e.stopPropagation()}
+          onClick={e => {
+            e.preventDefault()
+            e.stopPropagation()
+          }}
           onChange={props.onUpdateCardTitle}
           placeholder="Write to-do..."
           style={{
@@ -50,7 +56,16 @@ const Card = props => {
           }}
           value={props.title}
         />
+        <div
+          data-card-id={props.id}
+          onClick={e => e.preventDefault()}
+          className="card-member-container"
+        >
+          <CardMemberView />
+          <CardMemberView />
+        </div>
         <span
+          data-card-id={props.id}
           style={{
             fontSize: "0.75em",
             margin: "5px",

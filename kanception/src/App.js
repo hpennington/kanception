@@ -8,6 +8,7 @@ import { setTeams, setMembers, setSelectedTeam, setNewCards } from './features/t
 import { Button } from 'react-bootstrap'
 import { useAuth0 } from './react-auth0-spa'
 import ThemePicker from './theme-picker'
+import AssignmentList from './assignment-list'
 import {
   setGroups,
   setBoards,
@@ -57,6 +58,7 @@ const App = props => {
   const [prevSelectedTeam, setPrevSelectedTeam] = useState(null)
   const [prevSelectedProject, setPrevSelectedProject] = useState(null)
   const [projectTitleMenuOpen, setProjectTitleMenuOpen] = useState(false)
+  const [assignmentListOpen, setAssignmentListOpen] = useState(false)
   const [themePickerOpen, setThemePickerOpen] = useState(false)
   const [theme, setTheme] = useState(themes.dark)
 
@@ -98,6 +100,7 @@ const App = props => {
 
   const fetchTreeInit = async () => {
     const project = props.selectedProject
+    console.log({project})
     const api = process.env.REACT_APP_API
     const treeUrl = api + '/tree' + '?project=' + project
 
@@ -112,12 +115,14 @@ const App = props => {
 
       const tree = await treeResult.json()
       console.log(tree)
-      //props.dispatch(setTree({tree: tree}))
+      if (tree.length > 0) {
+        const root = tree.find(node => node.parent == null)
+        console.log(root)
+        if (root != null) {
+          props.dispatch(setSelectedNode({id: root._id}))
+        }
 
-      const root = tree.find(node => node.parent == null)
-      console.log(root)
-      props.dispatch(setSelectedNode({id: root._id}))
-
+      }
     } catch (error) {
       console.log(error)
     }
@@ -813,6 +818,10 @@ const App = props => {
           onModeChange={onUIThemeChange}
           onResign={e => setThemePickerOpen(false)}
         />
+        }
+        {
+        assignmentListOpen === true &&
+        <AssignmentList />
         }
       </div>
     </div>
