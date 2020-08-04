@@ -173,7 +173,9 @@ const Kanban = forwardRef((props, ref) => {
           />
           {
           assignmentListOpen === true &&
-          <AssignmentList onClose={e => setAssignmentListOpen(false)} />
+          <AssignmentList
+            onClose={e => setAssignmentListOpen(false)}
+          />
           }
           <GroupContextMenu
             groupId={contextGroupId}

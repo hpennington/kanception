@@ -1,7 +1,21 @@
+.assignment-list-overlay {
+  display: flex;
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: fixed;
+  background: rgba(128, 128, 128, 0.5);
+}
+
 .assignment-list {
   position: absolute;
-  top: 200px;
-  left: 500px;
+  z-index: 1001;
   border-radius: 5px;
   padding: 10px;
   box-shadow: 1px 1px 3px black;

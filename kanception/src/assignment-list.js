@@ -3,43 +3,45 @@ import CardMemberView from './features/kanban/card-member-view'
 import './assignment-list.css'
 
 const AssignmentList = props => (
-  <div className="assignment-list">
-    <h5>Assign to</h5>
-    <table>
-      <tbody>
-        <tr>
-          <AssignmentListCell />
-        </tr>
-        <tr>
-          <AssignmentListCell />
-        </tr>
-        <tr>
-          <AssignmentListCell />
-        </tr>
-        <tr>
-          <AssignmentListCell />
-        </tr>
-        <tr>
-          <AssignmentListCell />
-        </tr>
-        <tr>
-          <AssignmentListCell />
-        </tr>
-        <tr>
-          <AssignmentListCell />
-        </tr>
-        <tr>
-          <AssignmentListCell />
-        </tr>
-        <tr>
-          <AssignmentListCell />
-        </tr>
-        <tr>
-          <AssignmentListCell />
-        </tr>
-      </tbody>
-    </table>
-    <button onClick={props.onClose} className="close-assignment-list">Close</button>
+  <div className="assignment-list-overlay">
+    <div className="assignment-list">
+      <h5>Assign to</h5>
+      <table>
+        <tbody>
+          <tr>
+            <AssignmentListCell />
+          </tr>
+          <tr>
+            <AssignmentListCell />
+          </tr>
+          <tr>
+            <AssignmentListCell />
+          </tr>
+          <tr>
+            <AssignmentListCell />
+          </tr>
+          <tr>
+            <AssignmentListCell />
+          </tr>
+          <tr>
+            <AssignmentListCell />
+          </tr>
+          <tr>
+            <AssignmentListCell />
+          </tr>
+          <tr>
+            <AssignmentListCell />
+          </tr>
+          <tr>
+            <AssignmentListCell />
+          </tr>
+          <tr>
+            <AssignmentListCell />
+          </tr>
+        </tbody>
+      </table>
+      <button onClick={props.onClose} className="close-assignment-list">Close</button>
+    </div>
   </div>
 )
 
