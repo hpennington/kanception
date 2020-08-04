@@ -8,7 +8,6 @@ import { setTeams, setMembers, setSelectedTeam, setNewCards } from './features/t
 import { Button } from 'react-bootstrap'
 import { useAuth0 } from './react-auth0-spa'
 import ThemePicker from './theme-picker'
-import AssignmentList from './assignment-list'
 import {
   setGroups,
   setBoards,
@@ -58,7 +57,6 @@ const App = props => {
   const [prevSelectedTeam, setPrevSelectedTeam] = useState(null)
   const [prevSelectedProject, setPrevSelectedProject] = useState(null)
   const [projectTitleMenuOpen, setProjectTitleMenuOpen] = useState(false)
-  const [assignmentListOpen, setAssignmentListOpen] = useState(false)
   const [themePickerOpen, setThemePickerOpen] = useState(false)
   const [theme, setTheme] = useState(themes.dark)
 
@@ -818,10 +816,6 @@ const App = props => {
           onModeChange={onUIThemeChange}
           onResign={e => setThemePickerOpen(false)}
         />
-        }
-        {
-        assignmentListOpen === true &&
-        <AssignmentList />
         }
       </div>
     </div>

@@ -7,6 +7,7 @@ import React, {
 } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { CardContextMenu, GroupContextMenu } from './context-menu'
+import AssignmentList from '../../assignment-list'
 import Group from './group'
 import './kanban.css'
 
@@ -17,6 +18,7 @@ const Kanban = forwardRef((props, ref) => {
   const [contextMenuGroupPosition, setContextMenuGroupPosition] = useState({x: 0, y: 0})
   const [contextMenuGroupOpen, setContextMenuGroupOpen] = useState(false)
   const [contextGroupId, setContextGroupId] = useState(null)
+  const [assignmentListOpen, setAssignmentListOpen] = useState(false)
   const [dragging, setDragging] = useState(null)
   const [dragX, setDragX] = useState(0)
 
@@ -85,7 +87,6 @@ const Kanban = forwardRef((props, ref) => {
     }
   }
 
-
   const onGroupDrop = e => {
     if (e.source.index !== e.destination.index) {
       props.onGroupOrderUpdate(
@@ -113,6 +114,9 @@ const Kanban = forwardRef((props, ref) => {
     }
   }
 
+  const onCardAssignment = e => {
+    setAssignmentListOpen(true)
+  }
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -163,9 +167,14 @@ const Kanban = forwardRef((props, ref) => {
             cardId={contextCardId}
             isOpen={contextMenuCardOpen}
             onClose={e => setContextMenuCardOpen(false)}
+            onCardAssignment={onCardAssignment}
             onCardDelete={e => props.onCardDelete(contextCardId)}
             position={contextMenuCardPosition}
           />
+          {
+          assignmentListOpen === true &&
+          <AssignmentList onClose={e => setAssignmentListOpen(false)} />
+          }
           <GroupContextMenu
             groupId={contextGroupId}
             isOpen={contextMenuGroupOpen}

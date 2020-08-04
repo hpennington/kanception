@@ -62,7 +62,6 @@ const Card = props => {
           className="card-member-container"
         >
           <CardMemberView />
-          <CardMemberView />
         </div>
         <span
           data-card-id={props.id}

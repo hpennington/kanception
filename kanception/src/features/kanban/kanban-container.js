@@ -377,6 +377,10 @@ const KanbanContainer = props => {
     }
   }
 
+  const onCardAssignment = id => {
+    console.log()
+  }
+
   const constructQueryArray = (url, array, name) => {
     var i = 0
 

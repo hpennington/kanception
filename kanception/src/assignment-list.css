@@ -1,0 +1,65 @@
+.assignment-list {
+  position: absolute;
+  top: 200px;
+  left: 500px;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 1px 1px 3px black;
+  background: white;
+  color: black;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.assignment-list h5 {
+  margin: 10px;
+}
+
+.assignment-list > table {
+  margin: auto;
+}
+
+.assignment-list > table > tbody {
+  display: block;
+  border: solid 1px #ddd;
+  border-radius: 5px;
+  overflow: scroll;
+  height: calc(300px - 1.5rem);
+}
+
+.assignment-list-cell {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 2px;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.assignment-list-cell > input {
+  margin: 0 10px;
+}
+
+.assignment-list .close-assignment-list {
+  background: #00ffc4!important;
+  width: 80px;
+  font-size: 1em!important;
+  margin: 20px auto 10px auto;
+  border-radius: 80px;
+  color: white!important;
+}
+
+.card-member-view {
+  margin: 0 10px;
+}
+
+.name-container {
+  text-align: start;
+  font-size: 12px;
+  margin: 0 10px;
+}
+
+.name-container > p {
+  margin-bottom: 0;
+}
