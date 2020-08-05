@@ -105,6 +105,8 @@ const Group = props => {
                   <Card
                     key={column._id}
                     team={props.tree.find(node => node._id === column._id).project}
+                    assignees={column.assignees}
+                    members={props.members}
                     onCardClick={props.onCardClick}
                     id={column._id}
                     onTeamChange={props.onTeamChange}

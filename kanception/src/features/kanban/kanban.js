@@ -143,6 +143,7 @@ const Kanban = forwardRef((props, ref) => {
                 boards={props.boards}
                 tree={props.tree}
                 teams={props.teams}
+                members={props.members}
                 setContextCardId={setContextCardId}
                 contextMenuCardOpen={contextMenuCardOpen}
                 setContextMenuCardOpen={setContextMenuCardOpen}

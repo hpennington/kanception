@@ -25,6 +25,10 @@ const Card = props => {
 
   console.log('count: ' + props.count)
 
+  const nameToInitials = name => {
+    return name.first.slice(0, 1).toUpperCase() + name.last.slice(0, 1).toUpperCase()
+  }
+
   return (
     <Draggable
       draggableId={props.id} index={props.index}
@@ -61,9 +65,15 @@ const Card = props => {
           onClick={e => e.preventDefault()}
           className="card-member-container"
         >
-          <CardMemberView
-            text="HP"
-          />
+        {
+          props.assignees.map(a => {
+            return (
+              <CardMemberView
+                text={nameToInitials(props.members.find(m => m._id === a).name)}
+              />
+            )
+          })
+        }
         </div>
         <span
           data-card-id={props.id}
