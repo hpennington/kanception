@@ -44,7 +44,7 @@
 
 .assignment-list-cell {
   display: flex;
-  justify-content: space-between;
+  justify-content: start;
   align-items: center;
   padding: 5px 2px;
   border-top: 1px solid #eee;

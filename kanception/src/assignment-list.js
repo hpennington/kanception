@@ -24,12 +24,12 @@ const AssignmentList = props => (
 
 const AssignmentListCell = props => (
   <div className="assignment-list-cell">
+    <input type="checkbox" />
     <CardMemberView text={props.name.first.slice(0, 1).toUpperCase() + props.name.last.slice(0, 1).toUpperCase()} />
     <div className="name-container">
       <p>{props.name.first + " " + props.name.last}</p>
       <p>{props.email}</p>
     </div>
-    <input type="checkbox" />
   </div>
 )
 
