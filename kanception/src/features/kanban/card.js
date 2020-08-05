@@ -70,7 +70,7 @@ const Card = props => {
           props.assignees.map(a => {
             return (
               <CardMemberView
-                text={nameToInitials(props.members.find(m => m._id === a).name)}
+                text={props.members && nameToInitials(props.members.find(m => m._id === a).name)}
               />
             )
           })
