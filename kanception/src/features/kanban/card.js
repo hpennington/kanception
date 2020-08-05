@@ -61,7 +61,9 @@ const Card = props => {
           onClick={e => e.preventDefault()}
           className="card-member-container"
         >
-          <CardMemberView />
+          <CardMemberView
+            text="HP"
+          />
         </div>
         <span
           data-card-id={props.id}

@@ -6,7 +6,7 @@ const CardMemberView = props => (
       e.stopPropagation()
       e.preventDefault()
     }}>
-    HP
+    {props.text}
   </div>
 )
 

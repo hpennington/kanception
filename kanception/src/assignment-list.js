@@ -8,36 +8,13 @@ const AssignmentList = props => (
       <h5>Assign to</h5>
       <table>
         <tbody>
-          <tr>
-            <AssignmentListCell />
-          </tr>
-          <tr>
-            <AssignmentListCell />
-          </tr>
-          <tr>
-            <AssignmentListCell />
-          </tr>
-          <tr>
-            <AssignmentListCell />
-          </tr>
-          <tr>
-            <AssignmentListCell />
-          </tr>
-          <tr>
-            <AssignmentListCell />
-          </tr>
-          <tr>
-            <AssignmentListCell />
-          </tr>
-          <tr>
-            <AssignmentListCell />
-          </tr>
-          <tr>
-            <AssignmentListCell />
-          </tr>
-          <tr>
-            <AssignmentListCell />
-          </tr>
+          {
+          props.members.map(member =>
+            <tr>
+              <AssignmentListCell name={member.name} email={member.email} />
+            </tr>
+          )
+          }
         </tbody>
       </table>
       <button onClick={props.onClose} className="close-assignment-list">Close</button>
@@ -47,10 +24,10 @@ const AssignmentList = props => (
 
 const AssignmentListCell = props => (
   <div className="assignment-list-cell">
-    <CardMemberView />
+    <CardMemberView text={props.name.first.slice(0, 1).toUpperCase() + props.name.last.slice(0, 1).toUpperCase()} />
     <div className="name-container">
-      <p>Hayden Travis Pennington</p>
-      <p>haydenpennington@ecomseating.com</p>
+      <p>{props.name.first + " " + props.name.last}</p>
+      <p>{props.email}</p>
     </div>
     <input type="checkbox" />
   </div>

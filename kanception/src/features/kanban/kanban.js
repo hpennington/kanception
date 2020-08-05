@@ -175,6 +175,7 @@ const Kanban = forwardRef((props, ref) => {
           assignmentListOpen === true &&
           <AssignmentList
             onClose={e => setAssignmentListOpen(false)}
+            members={props.members}
           />
           }
           <GroupContextMenu

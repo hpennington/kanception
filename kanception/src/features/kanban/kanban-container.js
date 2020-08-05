@@ -418,6 +418,7 @@ const KanbanContainer = props => {
         onCardOrderUpdate={onCardOrderUpdate}
         onCardGroupUpdate={onCardGroupUpdate}
         onTeamChange={onTeamChange}
+        members={props.members}
       />
     </div>
   )
@@ -425,6 +426,7 @@ const KanbanContainer = props => {
 
 const mapStateToProps = state => {
   return {
+    members: state.teams.members,
     groups: state.kanban.groups,
     teams: state.teams.teams,
     tree: state.kanban.tree,
