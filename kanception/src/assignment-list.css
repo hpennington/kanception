@@ -38,7 +38,7 @@
   display: block;
   border: solid 1px #ddd;
   border-radius: 5px;
-  overflow: scroll;
+  overflow-y: scroll;
   height: calc(300px - 1.5rem);
 }
 
