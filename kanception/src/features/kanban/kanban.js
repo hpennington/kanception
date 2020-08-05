@@ -184,6 +184,7 @@ const Kanban = forwardRef((props, ref) => {
           <AssignmentList
             onClose={e => setAssignmentListOpen(false)}
             members={props.members}
+            assignees={contextCardId == null ? [] : props.tree.find(board => board._id === contextCardId).assignees}
             onAddAssignment={onAddAssignment}
             onDeleteAssignment={onDeleteAssignment}
           />

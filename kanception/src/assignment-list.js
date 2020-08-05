@@ -12,6 +12,7 @@ const AssignmentList = props => (
           props.members.map(member =>
             <tr>
               <AssignmentListCell
+                checked={props.assignees.includes(member._id)}
                 userId={member._id}
                 name={member.name}
                 email={member.email}
@@ -39,7 +40,12 @@ const AssignmentListCell = props => {
 
   return (
     <div className="assignment-list-cell">
-      <input onChange={onChange} data-user-id={props.userId} type="checkbox" />
+      <input
+        checked={props.checked}
+        onChange={onChange}
+        data-user-id={props.userId}
+        type="checkbox"
+      />
       <CardMemberView text={props.name.first.slice(0, 1).toUpperCase() + props.name.last.slice(0, 1).toUpperCase()} />
       <div className="name-container">
         <p>{props.name.first + " " + props.name.last}</p>

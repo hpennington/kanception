@@ -15,6 +15,8 @@ import {
   updateGroup,
   setTree,
   setBoardTeam,
+  addAssignment,
+  deleteAssignment,
 } from './kanbanSlice'
 
 import { useAuth0 } from '../../react-auth0-spa'
@@ -395,6 +397,7 @@ const KanbanContainer = props => {
 
   const onAddAssignment = async (userId, cardId) => {
     try {
+      props.dispatch(addAssignment({board: cardId, assignee: userId}))
 
       const token = await getTokenSilently()
       const api = process.env.REACT_APP_API
@@ -416,6 +419,8 @@ const KanbanContainer = props => {
 
   const onDeleteAssignment = async (userId, cardId) => {
     try {
+
+      props.dispatch(deleteAssignment({board: cardId, assignee: userId}))
 
       const token = await getTokenSilently()
       const api = process.env.REACT_APP_API
