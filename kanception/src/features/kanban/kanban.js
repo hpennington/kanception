@@ -118,6 +118,14 @@ const Kanban = forwardRef((props, ref) => {
     setAssignmentListOpen(true)
   }
 
+  const onAddAssignment = userId => {
+    props.onAddAssignment(userId, contextCardId)
+  }
+
+  const onDeleteAssignment = userId => {
+    props.onDeleteAssignment(userId, contextCardId)
+  }
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
     <div className="kanban" onClick={onBoardClick}>
@@ -176,6 +184,8 @@ const Kanban = forwardRef((props, ref) => {
           <AssignmentList
             onClose={e => setAssignmentListOpen(false)}
             members={props.members}
+            onAddAssignment={onAddAssignment}
+            onDeleteAssignment={onDeleteAssignment}
           />
           }
           <GroupContextMenu

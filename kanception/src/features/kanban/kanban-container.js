@@ -377,10 +377,6 @@ const KanbanContainer = props => {
     }
   }
 
-  const onCardAssignment = id => {
-    console.log()
-  }
-
   const constructQueryArray = (url, array, name) => {
     var i = 0
 
@@ -395,6 +391,48 @@ const KanbanContainer = props => {
     }
 
     return url
+  }
+
+  const onAddAssignment = async (userId, cardId) => {
+    try {
+
+      const token = await getTokenSilently()
+      const api = process.env.REACT_APP_API
+      const url = api + '/assignment'
+        + '?board=' + cardId
+        + '&assignee=' + userId
+
+      const assignmentResult = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      })
+
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
+  const onDeleteAssignment = async (userId, cardId) => {
+    try {
+
+      const token = await getTokenSilently()
+      const api = process.env.REACT_APP_API
+      const url = api + '/assignment'
+        + '?board=' + cardId
+        + '&assignee=' + userId
+
+      const assignmentResult = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      })
+
+    } catch(error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -412,6 +450,8 @@ const KanbanContainer = props => {
         onUpdateCard={onUpdateCard}
         onAddGroupClick={onAddGroup}
         onUpdateGroup={onUpdateGroup}
+        onAddAssignment={onAddAssignment}
+        onDeleteAssignment={onDeleteAssignment}
         onCardDelete={onCardDelete}
         onGroupDelete={onGroupDelete}
         onGroupOrderUpdate={onGroupOrderUpdate}

@@ -11,7 +11,13 @@ const AssignmentList = props => (
           {
           props.members.map(member =>
             <tr>
-              <AssignmentListCell name={member.name} email={member.email} />
+              <AssignmentListCell
+                userId={member._id}
+                name={member.name}
+                email={member.email}
+                onAddAssignment={props.onAddAssignment}
+                onDeleteAssignment={props.onDeleteAssignment}
+              />
             </tr>
           )
           }
@@ -22,15 +28,25 @@ const AssignmentList = props => (
   </div>
 )
 
-const AssignmentListCell = props => (
-  <div className="assignment-list-cell">
-    <input type="checkbox" />
-    <CardMemberView text={props.name.first.slice(0, 1).toUpperCase() + props.name.last.slice(0, 1).toUpperCase()} />
-    <div className="name-container">
-      <p>{props.name.first + " " + props.name.last}</p>
-      <p>{props.email}</p>
+const AssignmentListCell = props => {
+  const onChange = e => {
+    if (e.target.checked === true) {
+      props.onAddAssignment(e.target.dataset.userId)
+    } else {
+      props.onDeleteAssignment(e.target.dataset.userId)
+    }
+  }
+
+  return (
+    <div className="assignment-list-cell">
+      <input onChange={onChange} data-user-id={props.userId} type="checkbox" />
+      <CardMemberView text={props.name.first.slice(0, 1).toUpperCase() + props.name.last.slice(0, 1).toUpperCase()} />
+      <div className="name-container">
+        <p>{props.name.first + " " + props.name.last}</p>
+        <p>{props.email}</p>
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 export default AssignmentList
