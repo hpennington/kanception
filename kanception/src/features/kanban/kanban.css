@@ -65,11 +65,10 @@
 .context-menu {
    position: fixed;
    width: 200px;
-   height: 150px;
    background: white;
    border-radius: 5px;
    color: black;
-   box-shadow: 0 0 2px 2px #444;
+   box-shadow: 0 2px 2px #444;
    display: flex;
    flex-direction: column;
    justify-content: space-between;

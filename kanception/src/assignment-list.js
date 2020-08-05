@@ -12,7 +12,7 @@ const AssignmentList = props => (
           props.members.map(member =>
             <tr>
               <AssignmentListCell
-                checked={props.assignees.includes(member._id)}
+                checked={props.assignees && props.assignees.includes(member._id)}
                 userId={member._id}
                 name={member.name}
                 email={member.email}

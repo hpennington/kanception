@@ -66,6 +66,7 @@ const Card = props => {
           className="card-member-container"
         >
         {
+          props.assignees &&
           props.assignees.map(a => {
             return (
               <CardMemberView
