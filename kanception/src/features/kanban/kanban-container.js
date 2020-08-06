@@ -4,6 +4,7 @@ import React, {
 import { connect } from 'react-redux'
 import Kanban from './kanban'
 import { setSelectedNode } from '../projects/projectsSlice'
+import { addAssignment2, deleteAssignment2 } from '../assignments/assignmentsSlice'
 import {
   setGroups,
   setBoards,
@@ -412,6 +413,8 @@ const KanbanContainer = props => {
         },
       })
 
+      props.fetchAssignments()
+
     } catch(error) {
       console.log(error)
     }
@@ -434,6 +437,8 @@ const KanbanContainer = props => {
           Authorization: `Bearer ${token}`
         },
       })
+
+      props.fetchAssignments()
 
     } catch(error) {
       console.log(error)

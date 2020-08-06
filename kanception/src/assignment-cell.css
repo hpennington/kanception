@@ -1,0 +1,6 @@
+.assignment-cell {
+  background: var(--background-color);
+  margin: 10px;
+  border-radius: 5px;
+  padding: 10px;
+}

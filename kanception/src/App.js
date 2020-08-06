@@ -8,6 +8,7 @@ import { setTeams, setMembers, setSelectedTeam, setNewCards } from './features/t
 import { Button } from 'react-bootstrap'
 import { useAuth0 } from './react-auth0-spa'
 import ThemePicker from './theme-picker'
+import { setEntries } from './features/assignments/assignmentsSlice'
 import {
   setGroups,
   setBoards,
@@ -37,6 +38,7 @@ import KanbanContainer from './features/kanban/kanban-container'
 import SideMenu from './side-menu'
 import { ProjectTitleMenu, TeamTitleMenu } from './menu'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { SPACES, ASSIGNMENTS } from './constants'
 import './App.css'
 
 const App = props => {
@@ -59,6 +61,7 @@ const App = props => {
   const [projectTitleMenuOpen, setProjectTitleMenuOpen] = useState(false)
   const [themePickerOpen, setThemePickerOpen] = useState(false)
   const [theme, setTheme] = useState(themes.dark)
+  const [switcher, setSwitcher] = useState(SPACES)
 
   useEffect(() => {
     if (mounted === false) {
@@ -684,6 +687,26 @@ const App = props => {
     changeThemeMode(mode === 'light' ? themes.light : themes.dark)
   }
 
+  const fetchAssignments = async () => {
+    const api = process.env.REACT_APP_API
+    const url = api + '/assignments'
+
+    try {
+      const token = await getTokenSilently()
+
+      const result = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      const assignments = await result.json()
+      props.dispatch(setEntries({entries: assignments}))
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
   if (
     props.selectedTeam == null
     && props.selectedProject === null
@@ -725,7 +748,12 @@ const App = props => {
         { sideMenuOpen === true &&
           <SideMenu
             spaces={props.spaces}
+            tree={props.tree}
             projects={props.projects}
+            switcher={switcher}
+            setSwitcher={setSwitcher}
+            assignments={props.assignments}
+            fetchAssignments={fetchAssignments}
             onAddProject={onAddProjectClick}
             onDeleteProject={onDeleteProject}
             projectTitleMenuOpen={projectTitleMenuOpen}
@@ -783,6 +811,7 @@ const App = props => {
         { nameOpen === false && kanbanReady === true && kanbanOpen === true &&
           props.selectedProject != null &&
           <KanbanContainer
+            fetchAssignments={fetchAssignments}
             style={{marginLeft: sideMenuOpen === true ? "300px" : 0}}
             owner={user._id}
             selectedNode={props.selectedNode}
@@ -909,6 +938,7 @@ const CollectInfo = props => {
 
 const mapStateToProps = state => {
   return {
+    assignments: state.assignments.entries,
     spaces: state.spaces.spaces,
     projects: state.projects.projects,
     teams: state.teams.teams,

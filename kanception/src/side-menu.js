@@ -3,12 +3,20 @@ import TeamTableView from './team-table-view'
 import NewCardsTableView from './new-cards-table-view'
 import InviteTableView from './invite-table-view'
 import MembersView from './members-view'
+import AssignmentCell from './assignment-cell'
 import TreeView from './tree-view'
 import { ToggleButtonGroup, ToggleButton } from 'react-bootstrap'
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { SPACES, ASSIGNMENTS } from './constants'
 import './side-menu.css'
 
 const SideMenu = props => {
+  useEffect(() => {
+    if (props.switcher === ASSIGNMENTS) {
+      props.fetchAssignments()
+    }
+  }, [props.switcher])
+
   return (
     <div id="side-menu">
       <div id="side-menu-scroll">
@@ -28,9 +36,10 @@ const SideMenu = props => {
               boxShadow: "none",
               borderRight: "1px solid #4d27cf",
               background: "white",
-              color: props.kanbanOpen === true ? "gray" : "#4d27cf",
+              color: props.switcher === ASSIGNMENTS ? "#4d27cf" : "gray",
             }}
             checked={false}
+            onClick={e => props.setSwitcher(SPACES)}
           >
             Spaces
           </ToggleButton>
@@ -38,16 +47,20 @@ const SideMenu = props => {
             type="radio"
             variant="secondary"
             name="radio"
+            onClick={e => props.setSwitcher(ASSIGNMENTS)}
             style={{
               boxShadow: "none",
               borderLeft: "1px solid #4d27cf",
               background: "white",
-              color: props.kanbanOpen === true ? "#4d27cf" : "gray",
+              color: props.switcher === SPACES ? "#4d27cf" : "gray",
             }}
           >
             Assignments
           </ToggleButton>
-      </ToggleButtonGroup>
+        </ToggleButtonGroup>
+        {
+        props.switcher === SPACES ?
+        <>
         <h1>Spaces</h1>
         {props.invites.length > 0 &&
         <div>
@@ -95,6 +108,19 @@ const SideMenu = props => {
         {
           props.members.length > 0 &&
           <MembersView team={props.selectedTeam} members={props.members} />
+        }
+        </>
+        :
+        <>
+        {
+        props.assignments?.map(assignment =>
+          <AssignmentCell
+            title={props.tree.find(board => board._id === assignment.board)?.title}
+            assigner={props.members.find(member => member._id === assignment.assigner)?.name}
+          />
+        )
+        }
+        </>
         }
       </div>
     </div>
