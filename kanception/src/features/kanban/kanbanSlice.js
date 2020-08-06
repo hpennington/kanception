@@ -49,13 +49,13 @@ export const kanbanSlice = createSlice({
       state.groups = state.groups.filter(group => group._id !== action.payload.group)
     },
     addAssignment: (state, action) => {
-      if (state.tree.find(board => board._id === action.payload.board).assignees.includes(action.payload.assignee) === false) {
+      if (state.tree.find(board => board._id === action.payload.board).assignees?.includes(action.payload.assignee) === false) {
         state.tree.find(board => board._id === action.payload.board).assignees.push(action.payload.assignee)
       }
     },
     deleteAssignment: (state, action) => {
       state.tree.find(board => board._id === action.payload.board).assignees =
-        state.tree.find(board => board._id === action.payload.board).assignees.filter(assignee => assignee !== action.payload.assignee)
+        state.tree.find(board => board._id === action.payload.board).assignees?.filter(assignee => assignee !== action.payload.assignee)
     },
   },
 });
