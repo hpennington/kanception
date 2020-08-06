@@ -4,12 +4,50 @@ import NewCardsTableView from './new-cards-table-view'
 import InviteTableView from './invite-table-view'
 import MembersView from './members-view'
 import TreeView from './tree-view'
+import { ToggleButtonGroup, ToggleButton } from 'react-bootstrap'
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import './side-menu.css'
 
 const SideMenu = props => {
   return (
     <div id="side-menu">
       <div id="side-menu-scroll">
+        <ToggleButtonGroup
+          style={{
+            margin: "auto",
+            width: "fit-content",
+            marginTop: "20px",
+            display: "block",
+          }}
+          toggle name="side-toggle">
+          <ToggleButton
+            type="radio"
+            variant="secondary"
+            name="radio"
+            style={{
+              boxShadow: "none",
+              borderRight: "1px solid #4d27cf",
+              background: "white",
+              color: props.kanbanOpen === true ? "gray" : "#4d27cf",
+            }}
+            checked={false}
+          >
+            Spaces
+          </ToggleButton>
+          <ToggleButton
+            type="radio"
+            variant="secondary"
+            name="radio"
+            style={{
+              boxShadow: "none",
+              borderLeft: "1px solid #4d27cf",
+              background: "white",
+              color: props.kanbanOpen === true ? "#4d27cf" : "gray",
+            }}
+          >
+            Assignments
+          </ToggleButton>
+      </ToggleButtonGroup>
         <h1>Spaces</h1>
         {props.invites.length > 0 &&
         <div>
