@@ -1,7 +1,8 @@
 .card-member-container {
   display: flex;
-  width: 80%;
+  width: calc(100% - 20px);
   flex-wrap: wrap;
+  margin: 10px;
 }
 
 .card-member-view {
@@ -10,5 +11,5 @@
   height: 37px;
   width: 37px;
   line-height: 37px;
-  margin: 2px;
+  margin: 2px!important;
 }

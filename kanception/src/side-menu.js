@@ -113,12 +113,17 @@ const SideMenu = props => {
         :
         <>
         {
+        props.assignments?.length > 0 ?
         props.assignments?.map(assignment =>
           <AssignmentCell
             title={props.tree.find(board => board._id === assignment.board)?.title}
             assigner={props.members.find(member => member._id === assignment.assigner)?.name}
           />
-        )
+          )
+          :
+          <p style={{textAlign: "center", width: "100%", marginTop: "50px"}}>
+            No assignments
+          </p>
         }
         </>
         }

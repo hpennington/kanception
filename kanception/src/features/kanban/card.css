@@ -4,8 +4,8 @@
   min-height: 70px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
   border-radius: 5px;
   background: #4d27cf;
   box-shadow: 0 0 10px 3px var(--shadow-color);
@@ -27,10 +27,41 @@
   scrollbar-width: none;  /* Firefox */
   width: 80%;
   margin-top: 5px;
-  margin-bottom: 35px;
+  margin-bottom: 25px;
+  margin-left: 10px;
+  text-align: start;
 }
 
 textarea::-webkit-scrollbar {
     display: none;  /* Safari and Chrome */
 }
 
+.icon-cards {
+  border: solid 2px white;
+  border-radius: 4px;
+  min-width: 32px;
+  text-align: center;
+  font-size: 12px;
+}
+
+.go-into-btn {
+  width: 25%;
+}
+
+.kanception-card .go-into-btn  {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kanception-card:hover .go-into-btn > div {
+  width: 30px;
+  height: 30px;
+  background: url(./arrow.png) no-repeat;
+  filter: invert(1);
+  object-fit: scale-down;
+}
+
+.go-into-btn:hover div {
+  filter: none!important;
+}

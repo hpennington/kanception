@@ -37,10 +37,13 @@ const Kanban = forwardRef((props, ref) => {
 
     }
 
-    document.querySelector('#kanbanRoot').onmousedown = e => {
-      if (e.target.id === "kanbanRoot") {
-        setDragX(window.scrollX + e.screenX)
-        setDragging(true)
+    const root = document.querySelector('#kanbanRoot')
+    if (root != undefined) {
+      root.onmousedown = e => {
+        if (e.target.id === "kanbanRoot") {
+          setDragX(window.scrollX + e.screenX)
+          setDragging(true)
+        }
       }
     }
 
