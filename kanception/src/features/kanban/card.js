@@ -3,12 +3,14 @@ import { Draggable } from 'react-beautiful-dnd'
 import TextAreaAutoSize from 'react-textarea-autosize'
 import CardMemberView from './card-member-view'
 import CommentIcon from './icon-comment.png'
+import CommentsView from './comments-view'
 import './card.css'
 
 const Card = props => {
   const container = useRef(null)
   const [mounted, setMounted] = useState(false)
   const [dragging, setDragging] = useState(false)
+  const [commentsViewOpen, setCommentsViewOpen] = useState(false)
 
   useEffect(() => {
     if (mounted !== true) {
@@ -41,8 +43,16 @@ const Card = props => {
         ref={provided.innerRef}
         {...provided.dragHandleProps}
         {...provided.draggableProps}
+        onClick={e => setCommentsViewOpen(true)}
         id={props.id}
       >
+        {
+        commentsViewOpen === true &&
+        <CommentsView
+          title={props.title}
+          onClose={e => setCommentsViewOpen(false)}
+        />
+        }
         <div style={{display: "flex", width: "100%"}}>
           <TextAreaAutoSize
             data-card-id={props.id}

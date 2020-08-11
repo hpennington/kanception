@@ -1,0 +1,21 @@
+.comment-box {
+  display: block;
+  text-align: start!important;
+  width: 90%;
+  min-height: 50px;
+  background: white;
+  border-radius: 5px;
+  margin: 20px;
+}
+
+.comment-box-submit {
+  min-height: 90px;
+}
+
+.comment-submit-btn {
+  background: #420E97!important;
+  color: white;
+  font-size: 1em!important;
+  border-radius: 5px!important;
+  margin: 10px;
+}
