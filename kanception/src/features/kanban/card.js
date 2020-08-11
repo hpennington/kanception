@@ -94,12 +94,15 @@ const Card = props => {
             justifyContent: "flex-end",
           }}
         >
+        {
+        props.hasComments === true &&
         <img
-          style={{height: "auto", width: "32px", margin: "5px"}}
+          style={{height: "28px", width: "32px", margin: "5px"}}
           onClick={e => e.stopPropagation()}
           src={CommentIcon}
           alt="Comment icon"
         />
+        }
         <span
           data-card-id={props.id}
           style={{

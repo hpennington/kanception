@@ -62,6 +62,10 @@ textarea::-webkit-scrollbar {
   object-fit: scale-down;
 }
 
+.go-into-btn:hover {
+  cursor: pointer;
+}
+
 .go-into-btn:hover div {
   filter: none!important;
 }
