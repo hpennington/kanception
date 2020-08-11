@@ -20,6 +20,8 @@ const SideMenu = props => {
   return (
     <div id="side-menu">
       <div id="side-menu-scroll">
+        {
+        /*
         <ToggleButtonGroup
           style={{
             margin: "auto",
@@ -58,6 +60,8 @@ const SideMenu = props => {
             Assignments
           </ToggleButton>
         </ToggleButtonGroup>
+        */
+        }
         {
         props.switcher === SPACES ?
         <>
