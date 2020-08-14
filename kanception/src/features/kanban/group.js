@@ -5,6 +5,7 @@ import NewCardPopup from './new-card-popup'
 
 const Group = props => {
   const [popupOpen, setPopupOpen] = useState(false)
+  const [dragEnabled, setDragEnabled] = useState(true)
 
   const onContextMenuCardClick = (id, event) => {
     props.setContextCardId(id)
@@ -59,6 +60,7 @@ const Group = props => {
         draggableId={props.group._id}
         index={props.index} type="COLUMN"
         data-group-id={props.group._id}
+        isDragDisabled={!dragEnabled}
       >
         {dragProvided =>
       <div
@@ -104,6 +106,11 @@ const Group = props => {
                 .map((column, cardIndex) =>
                   <Card
                     key={column._id}
+                    onSubmitComment={props.onSubmitComment}
+                    comments={props.comments
+                      .filter(comment => comment.board === column._id)}
+                    dragEnabled={dragEnabled}
+                    setDragEnabled={setDragEnabled}
                     team={props.tree.find(node => node._id === column._id).project}
                     assignees={column.assignees}
                     members={props.members}

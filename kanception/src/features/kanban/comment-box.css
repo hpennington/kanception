@@ -1,6 +1,29 @@
 .comment-box {
   width: 90%;
-  min-height: 50px;
+  min-height: fit-content;
   background: white;
   border-radius: 5px;
+  display: block;
+  text-align: start!important;
+  margin: 20px;
+}
+
+.comment-box p {
+  color: black;
+  margin: 5px;
+}
+
+.comment-box > p {
+  color: black;
+  margin: 10px;
+  margin-left: 65px;
+}
+
+.user-box {
+  display: flex;
+  align-items: center;
+}
+
+.user-box > .card-member-view {
+  margin: 10px;
 }

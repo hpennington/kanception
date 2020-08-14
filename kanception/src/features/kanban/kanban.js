@@ -29,9 +29,11 @@ const Kanban = forwardRef((props, ref) => {
       for (const group of groups) {
 
         group.oncontextmenu = e => {
-          e.preventDefault()
-          e.stopPropagation()
-          onContextMenuGroupClick(e.target.dataset.groupId, e)
+          if (e.target.className === 'column') {
+            e.preventDefault()
+            e.stopPropagation()
+            onContextMenuGroupClick(e.target.dataset.groupId, e)
+          }
         }
       }
 
@@ -142,6 +144,8 @@ const Kanban = forwardRef((props, ref) => {
             {props.groups.map((group, index) =>
               <Group
                 group={group}
+                comments={props.comments}
+                onSubmitComment={props.onSubmitComment}
                 index={index}
                 boards={props.boards}
                 tree={props.tree}

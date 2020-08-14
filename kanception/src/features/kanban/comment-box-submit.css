@@ -1,21 +1,12 @@
-.comment-box {
-  display: block;
-  text-align: start!important;
-  width: 90%;
-  min-height: 50px;
-  background: white;
-  border-radius: 5px;
-  margin: 20px;
-}
-
 .comment-box-submit {
-  min-height: 90px;
+  min-height: fit-content;
 }
 
 .comment-submit-btn {
   background: #420E97!important;
-  color: white;
+  color: white!important;
   font-size: 1em!important;
   border-radius: 5px!important;
   margin: 10px;
+  display: inherit;
 }

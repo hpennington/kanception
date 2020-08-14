@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useReducer } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import TextAreaAutoSize from 'react-textarea-autosize'
 import CardMemberView from './card-member-view'
@@ -7,54 +7,68 @@ import CommentsView from './comments-view'
 import './card.css'
 
 const Card = props => {
-  const container = useRef(null)
   const [mounted, setMounted] = useState(false)
-  const [dragging, setDragging] = useState(false)
   const [commentsViewOpen, setCommentsViewOpen] = useState(false)
 
   useEffect(() => {
     if (mounted !== true) {
       document.getElementById(props.id).oncontextmenu = e => {
-        console.log('card context menu')
-        e.preventDefault()
-        e.stopPropagation()
+        if (e.target.className.includes('context-click') === true) {
+          console.log('card context menu')
+          e.preventDefault()
+          e.stopPropagation()
 
-        props.onContextClick(props.id, e)
+          props.onContextClick(props.id, e)
+        }
       }
 
       setMounted(true)
     }
   })
 
-  console.log('count: ' + props.count)
-
   const nameToInitials = name => {
     return name.first.slice(0, 1).toUpperCase() + name.last.slice(0, 1).toUpperCase()
+  }
+
+  const onClose = e => {
+    e.stopPropagation()
+    setCommentsViewOpen(false)
+    props.setDragEnabled(true)
   }
 
   return (
     <Draggable
       draggableId={props.id} index={props.index}
       data-card-id={props.id}
+      isDragDisabled={!props.dragEnabled}
     >
       {provided => (
-      <div className="kanception-card"
+      <div className="kanception-card context-click"
         data-card-id={props.id}
         ref={provided.innerRef}
         {...provided.dragHandleProps}
         {...provided.draggableProps}
-        onClick={e => setCommentsViewOpen(true)}
+        onClick={e => {
+          setCommentsViewOpen(true)
+          props.setDragEnabled(false)
+        }}
         id={props.id}
       >
         {
         commentsViewOpen === true &&
         <CommentsView
+          onSubmitComment={text => props.onSubmitComment(text, props.id)}
+          comments={props.comments}
+          members={props.members}
+          open={commentsViewOpen}
           title={props.title}
-          onClose={e => setCommentsViewOpen(false)}
+          onClose={onClose}
+          board={props.id}
         />
         }
-        <div style={{display: "flex", width: "100%"}}>
+        <div style={{display: "flex", width: "100%"}} className="context-click">
           <TextAreaAutoSize
+            className="context-click"
             data-card-id={props.id}
             onClick={e => {
               e.preventDefault()
@@ -72,11 +86,12 @@ const Card = props => {
             value={props.title}
           />
           <div
-            className="go-into-btn"
+            className="go-into-btn context-click"
             data-card-id={props.id}
             onClick={e => props.onCardClick(e.target.dataset.cardId)}
           >
             <div
+              className="context-click"
               data-card-id={props.id}
             >
             </div>
@@ -85,7 +100,7 @@ const Card = props => {
           <div
             data-card-id={props.id}
             onClick={e => e.preventDefault()}
-            className="card-member-container"
+            className="card-member-container context-click"
           >
           {
             props.assignees &&
@@ -103,6 +118,7 @@ const Card = props => {
             width: props.assignees && props.assignees.length > 0 ? "auto" : "100%",
             justifyContent: "flex-end",
           }}
+          className="context-click"
         >
         {
         props.hasComments === true &&
@@ -131,7 +147,7 @@ const Card = props => {
 }
 
 const IconCards = props => (
-  <div className="icon-cards">
+  <div className="icon-cards context-click">
     {props.text}
   </div>
 )

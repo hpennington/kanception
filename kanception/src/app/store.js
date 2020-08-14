@@ -4,6 +4,7 @@ import teamsReducer from '../features/teams/teamsSlice'
 import spacesReducer from '../features/spaces/spacesSlice'
 import projectsReducer from '../features/projects/projectsSlice'
 import assignmentsReducer from '../features/assignments/assignmentsSlice'
+import commentsReducer from '../features/comments/commentsSlice'
 
 export default configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export default configureStore({
     teams: teamsReducer,
     spaces: spacesReducer,
     projects: projectsReducer,
+    comments: commentsReducer,
   },
 });

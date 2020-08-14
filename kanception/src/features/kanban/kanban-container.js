@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import Kanban from './kanban'
 import { setSelectedNode } from '../projects/projectsSlice'
 import { addAssignment2, deleteAssignment2 } from '../assignments/assignmentsSlice'
+import { addComment } from '../comments/commentsSlice'
 import {
   setGroups,
   setBoards,
@@ -445,6 +446,27 @@ const KanbanContainer = props => {
     }
   }
 
+  const onSubmitComment = async (text, board) => {
+    try {
+      const token = await getTokenSilently()
+      const url = process.env.REACT_APP_API + '/comments'
+        + '?text=' + text
+        + '&board=' + board
+      const result = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      const comment = await result.json()
+      props.dispatch(addComment({comment: comment}))
+
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div style={props.style}>
       <Kanban
@@ -453,6 +475,8 @@ const KanbanContainer = props => {
         .sort((a, b) => b.order - a.order)
         }
         groups={props.groups}
+        comments={props.comments}
+        onSubmitComment={onSubmitComment}
         teams={props.teams}
         tree={props.tree}
         onCardClick={onCardClick}
@@ -480,6 +504,7 @@ const mapStateToProps = state => {
     groups: state.kanban.groups,
     teams: state.teams.teams,
     tree: state.kanban.tree,
+    comments: state.comments.comments,
   }
 }
 
