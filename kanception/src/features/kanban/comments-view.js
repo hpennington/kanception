@@ -35,7 +35,6 @@ const CommentsView = props => {
     <div className="comments-view-overlay">
       <div className="comments-view">
         <h3>{props.title}</h3>
-        <h4>{"Description text goes here but hasn't been implemented yet."}</h4>
         <CommentBoxSubmit onSubmit={props.onSubmitComment} />
         <div className="comments-box">
         {
