@@ -134,7 +134,7 @@ const Card = props => {
           data-card-id={props.id}
           style={{
             fontSize: "0.75em",
-            margin: "5px",
+            margin: `${props.count > 0 ? '5' : '0'}px`,
           }}
         >
           {props.count > 0 ? <IconCards text={props.count.toString()} /> : ""}
