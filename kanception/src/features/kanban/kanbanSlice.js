@@ -57,6 +57,9 @@ export const kanbanSlice = createSlice({
       state.tree.find(board => board._id === action.payload.board).assignees =
         state.tree.find(board => board._id === action.payload.board).assignees?.filter(assignee => assignee !== action.payload.assignee)
     },
+    addCommentIcon: (state, action) => {
+      state.tree.find(board => board._id === action.payload.board).comments = true
+    },
   },
 });
 
@@ -73,6 +76,7 @@ export const {
   groupDelete,
   addAssignment,
   deleteAssignment,
+  addCommentIcon,
 } = kanbanSlice.actions
 
 export default kanbanSlice.reducer

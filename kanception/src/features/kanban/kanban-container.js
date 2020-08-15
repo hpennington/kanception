@@ -19,6 +19,7 @@ import {
   setBoardTeam,
   addAssignment,
   deleteAssignment,
+  addCommentIcon,
 } from './kanbanSlice'
 
 import { useAuth0 } from '../../react-auth0-spa'
@@ -462,6 +463,7 @@ const KanbanContainer = props => {
 
       const comment = await result.json()
       props.dispatch(addComment({comment: comment}))
+      props.dispatch(addCommentIcon({board: board}))
 
     } catch(error) {
       console.log(error)
