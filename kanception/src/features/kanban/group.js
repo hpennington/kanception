@@ -107,6 +107,7 @@ const Group = props => {
                   <Card
                     key={column._id}
                     onSubmitComment={props.onSubmitComment}
+                    hasComments={column.comments}
                     comments={props.comments
                       .filter(comment => comment.board === column._id)}
                     dragEnabled={dragEnabled}
