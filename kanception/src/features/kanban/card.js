@@ -124,8 +124,9 @@ const Card = props => {
         {
         props.hasComments === true &&
         <img
+          data-card-id={props.id}
+          className="context-click"
           style={{height: "28px", width: "32px", margin: "5px"}}
-          onClick={e => e.stopPropagation()}
           src={CommentIcon}
           alt="Comment icon"
         />
@@ -137,7 +138,10 @@ const Card = props => {
             margin: `${props.count > 0 ? '5' : '0'}px`,
           }}
         >
-          {props.count > 0 ? <IconCards text={props.count.toString()} /> : ""}
+          {props.count > 0
+          ? <IconCards
+              onCardClick={props.onCardClick}
+              id={props.id} text={props.count.toString()} /> : ""}
         </span>
         </div>
         </div>
@@ -148,7 +152,11 @@ const Card = props => {
 }
 
 const IconCards = props => (
-  <div className="icon-cards context-click">
+  <div
+    className="icon-cards context-click"
+    data-card-id={props.id}
+    onClick={e => props.onCardClick(e.target.dataset.cardId)}
+  >
     {props.text}
   </div>
 )
