@@ -19,6 +19,7 @@ const CommentBoxSubmit = props => {
           textAlign: "start",
           resize: "none",
         }}
+        wrap="hard"
         onChange={e => {
           if (e.target.value.length < 1000) {
             setText(e.target.value)
@@ -28,6 +29,8 @@ const CommentBoxSubmit = props => {
       <button
         onClick={e => {
           if (text != '') {
+            console.log({text: text.includes('\n')})
+            console.log((text.match(/\n/g) || []).length)
             props.onSubmit(text)
             setText('')
           }
