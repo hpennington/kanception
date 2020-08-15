@@ -56,3 +56,10 @@
   border-radius: 30px;
   margin: 20px;
 }
+
+@media screen and (max-width: 600px) {
+  .comments-view {
+    width: 100%;
+    height: 100%;
+  }
+}
