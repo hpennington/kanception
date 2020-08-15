@@ -41,6 +41,7 @@ const CommentsView = props => {
         props.comments && props.comments.map(
         comment =>
           <CommentBox
+            timestamp={comment.timestamp}
             name={props.members.find(m => m._id === comment.owner)?.name}
             text={comment.text}
           />

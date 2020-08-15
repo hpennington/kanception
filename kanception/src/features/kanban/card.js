@@ -62,6 +62,7 @@ const Card = props => {
           members={props.members}
           open={commentsViewOpen}
           title={props.title}
+          timestamp={props.timestamp}
           onClose={onClose}
           board={props.id}
         />

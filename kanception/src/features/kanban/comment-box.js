@@ -13,6 +13,11 @@ const displayName = ({first, last}) => {
     + last[0].toUpperCase() + last.slice(1)
 }
 
+const displayDate = timestamp => {
+  const date = new Date(Math.floor(timestamp))
+  return date.toLocaleString()
+}
+
 const CommentBox = props => (
   <div className="comment-box">
     <div className="user-box">
@@ -21,9 +26,14 @@ const CommentBox = props => (
         text={nameToInitials(props.name)}
       />
       </div>
-      <p>
-        {displayName(props.name)}
-      </p>
+      <div>
+        <p>
+          {displayName(props.name)}
+        </p>
+        <p style={{fontSize: "0.75em"}}>
+          {displayDate(props.timestamp)}
+        </p>
+      </div>
     </div>
     <p>{props.text}</p>
   </div>
