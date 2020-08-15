@@ -46,7 +46,7 @@ const Toolbar = (props) => {
             checked={false}
             onClick={props.onOpenKanban}
           >
-            Kanban Board
+            Kanban
           </ToggleButton>
           <ToggleButton
             type="radio"
@@ -60,7 +60,7 @@ const Toolbar = (props) => {
             }}
             onClick={props.onOpenGantt}
           >
-            Gantt Chart
+            Gantt
           </ToggleButton>
       </ToggleButtonGroup>
       <Dropdown>
