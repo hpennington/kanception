@@ -15,7 +15,8 @@ const displayName = ({first, last}) => {
 
 const displayDate = timestamp => {
   const date = new Date(Math.floor(timestamp))
-  return date.toLocaleString()
+  return date.toLocaleString(undefined,
+    {dateStyle: 'full', timeStyle: 'short'})
 }
 
 const CommentBox = props => (
