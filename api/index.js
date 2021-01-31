@@ -788,7 +788,7 @@ db.once('open', () => {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
-        "client_id": "DmD1I0eIDD0vq1sDuW96c1pMpyFnjk0e",
+        "client_id": "",
         "client_secret": "",
         "audience": "https://kanception.auth0.com/api/v2/",
         "grant_type": "client_credentials"
@@ -823,7 +823,7 @@ db.once('open', () => {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
-        "client_id": "DmD1I0eIDD0vq1sDuW96c1pMpyFnjk0e",
+        "client_id": "",
         "client_secret": "",
         "audience": "https://kanception.auth0.com/api/v2/",
         "grant_type": "client_credentials"
