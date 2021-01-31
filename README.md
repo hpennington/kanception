@@ -1,4 +1,4 @@
-# kanception
+# Kanception
 
 # Contributing
 
