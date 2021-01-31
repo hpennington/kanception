@@ -1,4 +1,9 @@
-# Kanception (Open Source)
+# Kanception (Now Open Source)
+![Logo](https://github.com/hpennington/kanception/blob/master/marketing/src/images/logo.png)
+
+www.kanception.io
+
+![Logo](https://github.com/hpennington/kanception/blob/master/marketing/src/images/kanception.png)
 
 ## Contributing
 
@@ -11,3 +16,12 @@ The tech stack is React, NodeJS, MongoDB, and Docker.
 ### Roadmap
 
   - Migrate to MVC architecture with repository layer
+
+### Getting started
+
+ - Create auth0 account and configure an application with login / logout /origin /urls
+ - git clone git@github.com:hpennington/kanception.git
+ - cd kanception
+ - cp api/sample.env api/.env
+ - docker-compose up
+ - goto localhost:3000
