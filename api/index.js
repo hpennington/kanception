@@ -9,7 +9,7 @@ const { v4: uuidv4 } = require('uuid')
 const sendmail = require('sendmail')()
 const aws = require('aws-sdk')
 
-aws.config.loadFromPath('./.aws-config.json')
+//aws.config.loadFromPath('./.aws-config.json')
 
 const ObjectId = mongoose.Types.ObjectId
 const port = 4000

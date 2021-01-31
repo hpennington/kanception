@@ -24,6 +24,6 @@ The tech stack is React, NodeJS, MongoDB, and Docker.
  - Add you client_secret from auth0 to api/index.js
  - git clone https://github.com/hpennington/kanception.git
  - cd kanception
- - cp api/sample.env api/.env
+ - cp kanception/sample.env kanception/.env
  - docker-compose up
  - goto localhost:3000
