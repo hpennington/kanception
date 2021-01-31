@@ -16,10 +16,12 @@ The tech stack is React, NodeJS, MongoDB, and Docker.
 ### Roadmap
 
   - Migrate to MVC architecture with repository layer
+  - Move all client_ids, and secrets to a .env file
 
 ### Getting started
 
- - Create auth0 account and configure an application with login / logout /origin /urls
+ - Create auth0 account and configure an application with login / logout / origin urls
+ - Add you client_secret from auth0 to api/index.js
  - git clone git@github.com:hpennington/kanception.git
  - cd kanception
  - cp api/sample.env api/.env
