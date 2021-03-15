@@ -439,6 +439,8 @@ db.once('open', () => {
         owner: owner._id,
       })
 
+      console.log({project})
+
       const projectRoot = await Board.create({
         title: title,
         owner: owner._id,

@@ -164,6 +164,7 @@ export default function CustomizedTreeView(props) {
       toggleExpanded(value)
 
     } else if (props.spaces.find(space => space._id === value) != null) {
+      console.log('here')
       props.setSelectedTeam(value)
       props.setSelectedProject(null, value)
       toggleExpanded(value)
@@ -172,7 +173,11 @@ export default function CustomizedTreeView(props) {
     } else if (props.tree.find(node => node._id === value) != null) {
       const node = props.tree.find(node => node._id === value)
 
-      props.setSelectedProject(node.project, props.projects.find(project => project._id === node.project).space)
+      const team = props.projects.find(project => project._id === node.project).space
+
+      console.log({team})
+      props.setSelectedTeam(team)
+      props.setSelectedProject(node.project, team)
       props.setSelectedBoard(value)
       toggleExpanded(value)
     }
@@ -240,7 +245,16 @@ export default function CustomizedTreeView(props) {
             />
             {
             props.projects.filter(project => project.space === space._id)
-            .map(project => recurseTree(props.tree.filter(node => node.project === project._id)))
+            .map(project =>
+            <StyledTreeItem
+              nodeId={project._id}
+              label={project.title}
+            >
+            {
+              recurseTree(props.tree.filter(node => node.project === project._id))
+            }
+            </StyledTreeItem>
+            )
             }
           </StyledTreeItem>
         )

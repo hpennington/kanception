@@ -30,10 +30,10 @@ const KanbanContainer = props => {
   const { getTokenSilently } = useAuth0()
 
   useEffect(() => {
-    if (props.selectedNode != "" && props.selectedNode != null) {
+    if (props.selectedNode != "" && props.selectedNode != null && props.selectedProject != "" && props.selectedProject != null) {
       fetchTree()
     }
-  }, [props.selectedNode])
+  }, [props.selectedProject, props.selectedNode])
 
   const fetchTree = async () => {
     const api = process.env.REACT_APP_API

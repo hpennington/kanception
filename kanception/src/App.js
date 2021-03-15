@@ -453,7 +453,9 @@ const App = props => {
       })
 
       const project = await projectResult.json()
+      console.log({project})
       props.dispatch(addProject({project: project}))
+
       props.dispatch(setSelectedProject({project: project._id}))
 
     } catch(error) {
