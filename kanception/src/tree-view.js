@@ -102,6 +102,39 @@ const useStyles = makeStyles({
   },
 });
 
+const postOrderTraversal = (tree, root, map={}) => {
+  console.log({map})
+  const children = tree.filter(node => node.parent === root._id)
+
+  for (const child of children) {
+    postOrderTraversal(tree, child, map=map)
+  }
+
+  map[root._id] = (
+      <StyledTreeItem
+        nodeId={root._id}
+        label={root.title}
+      >
+      {
+        children.map(child => map[child._id])
+      }
+      </StyledTreeItem>
+  )
+
+  return map
+}
+
+const recurseTree = (tree) => {
+  const root = tree.find(node => node.parent === null)
+  if (root != null) {
+    const map = postOrderTraversal(tree, root)
+
+    return map[root._id]  
+  }
+  
+  return null
+}
+
 export default function CustomizedTreeView(props) {
   const classes = useStyles();
   const [contextProject, setContextProject] = useState(null)
@@ -168,7 +201,7 @@ export default function CustomizedTreeView(props) {
         defaultExpanded={['1']}
         defaultSelected={"2"}
         onNodeSelect={onNodeSelect}
-        expanded={props.spaces.map(space => space._id)}
+        expanded={props.spaces.map(space => space._id).concat(props.projects.map(node => node._id)).concat(props.tree.map(node => node._id))}
         selected={props.selectedProject != null ? props.selectedProject : props.selectedTeam}
       >
         {
@@ -189,12 +222,7 @@ export default function CustomizedTreeView(props) {
             />
             {
             props.projects.filter(project => project.space === space._id)
-            .map(project =>
-              <StyledTreeItem data-space-id={space._id}
-                onContextMenu={onContextClick}
-                data-node-id={project._id}
-                nodeId={project._id} label={project.title} />
-              )
+            .map(project => recurseTree(props.tree.filter(node => node.project === project._id)))
             }
           </StyledTreeItem>
         )

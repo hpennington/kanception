@@ -84,6 +84,7 @@ const SideMenu = props => {
         </div>
         {props.spaces.length > 0 &&
         <TreeView
+          tree={props.tree}
           spaces={props.spaces}
           projects={props.projects}
           onAddProject={props.onAddProject}
