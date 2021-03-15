@@ -127,8 +127,7 @@ const recurseTree = (tree) => {
   const root = tree.find(node => node.parent === null)
   if (root != null) {
     const map = postOrderTraversal(tree, root)
-
-    return map[root._id]  
+    return map[root._id].props.children
   }
   
   return null
@@ -143,7 +142,7 @@ export default function CustomizedTreeView(props) {
   const onNodeSelect = (event, value) => {
     // If project selected
     if (props.projects.find(project => project._id === value) != null) {
-      props.setSelectedProject(value, event.target.nodeId)
+      props.setSelectedProject(value, event.currentTarget.parentElement.dataset.spaceId)
       if (event.target.className?.baseVal?.includes('MuiSvgIcon-root') === true
         || event.target.className?.baseVal === ''
         || event.target.className.includes('close')
@@ -156,15 +155,22 @@ export default function CustomizedTreeView(props) {
         //const projectName = window.prompt('Type the project name to delete:')
         // console.log(projectName)
       } else if (event.target.className.includes('MuiTypography-root') === true) {
-        props.setSelectedTeam(event.target.parentElement.parentElement.dataset.spaceId)
+        console.log(event.target.parentElement.parentElement.dataset.spaceId)
+        props.setSelectedProject(
+          event.target.parentElement.parentElement.dataset.projectId, 
+          event.target.parentElement.parentElement.dataset.spaceId
+        )
+
       } else {
-        props.setSelectedTeam(event.target.parentElement.parentElement.dataset.spaceId)
+        props.setSelectedProject(
+          event.target.parentElement.parentElement.dataset.projectId, 
+          event.target.parentElement.parentElement.dataset.spaceId
+        )
       }
 
       toggleExpanded(value)
 
     } else if (props.spaces.find(space => space._id === value) != null) {
-      console.log('here')
       props.setSelectedTeam(value)
       props.setSelectedProject(null, value)
       toggleExpanded(value)
@@ -175,7 +181,6 @@ export default function CustomizedTreeView(props) {
 
       const team = props.projects.find(project => project._id === node.project).space
 
-      console.log({team})
       props.setSelectedTeam(team)
       props.setSelectedProject(node.project, team)
       props.setSelectedBoard(value)
@@ -249,6 +254,8 @@ export default function CustomizedTreeView(props) {
             <StyledTreeItem
               nodeId={project._id}
               label={project.title}
+              data-space-id={project.space}
+              data-project-id={project._id}
             >
             {
               recurseTree(props.tree.filter(node => node.project === project._id))

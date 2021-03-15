@@ -609,7 +609,7 @@ const App = props => {
   }
 
   const onAddProjectClick = value => {
-    setSelectedTeam(value)
+    props.dispatch(setSelectedTeam({team: value}))
     setProjectTitleMenuOpen(true)
   }
 
