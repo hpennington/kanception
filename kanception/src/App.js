@@ -582,7 +582,11 @@ const App = props => {
     props.dispatch(setSelectedTeam({team: team}))
 
     const node = props.tree.find(node => node.parent === null)
-    props.dispatch(setSelectedNode({id: node._id}))
+
+    if (node != null) {
+      props.dispatch(setSelectedNode({id: node._id}))  
+    }
+    
   }
 
   const onDeleteProject = async id => {

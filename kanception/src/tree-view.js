@@ -213,7 +213,8 @@ export default function CustomizedTreeView(props) {
   const onContextClick = e => {
     e.preventDefault()
     setContextMenuOpen(!contextMenuOpen)
-    setContextProject(e.target.parentNode.parentNode.dataset.nodeId)
+    console.log(e.currentTarget.dataset.projectId)
+    setContextProject(e.currentTarget.dataset.projectId)
   }
 
   return (
@@ -253,6 +254,7 @@ export default function CustomizedTreeView(props) {
             <StyledTreeItem
               nodeId={project._id}
               label={project.title}
+              onContextMenu={onContextClick}
               data-space-id={project.space}
               data-project-id={project._id}
             >
