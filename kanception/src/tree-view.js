@@ -155,7 +155,6 @@ export default function CustomizedTreeView(props) {
         //const projectName = window.prompt('Type the project name to delete:')
         // console.log(projectName)
       } else if (event.target.className.includes('MuiTypography-root') === true) {
-        console.log(event.target.parentElement.parentElement.dataset.spaceId)
         props.setSelectedProject(
           event.target.parentElement.parentElement.dataset.projectId, 
           event.target.parentElement.parentElement.dataset.spaceId
