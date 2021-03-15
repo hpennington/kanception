@@ -44,7 +44,6 @@ const MembersView = props => {
 }
 
 const TooltipInfo = props => {
-  console.log(props.email)
   return (
     <div>
       <div>
@@ -58,7 +57,6 @@ const TooltipInfo = props => {
 }
 
 const MemberView = props => {
-  console.log(props.name)
   return (
     <OverlayTrigger
       placement="top"

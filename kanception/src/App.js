@@ -101,7 +101,6 @@ const App = props => {
 
   const fetchTreeInit = async () => {
     const project = props.selectedProject
-    console.log({project})
     const api = process.env.REACT_APP_API
     const treeUrl = api + '/tree' + '?project=' + project
 
@@ -115,10 +114,8 @@ const App = props => {
       })
 
       const tree = await treeResult.json()
-      console.log(tree)
       if (tree.length > 0) {
         const root = tree.find(node => node.parent == null)
-        console.log(root)
         if (root != null) {
           props.dispatch(setSelectedNode({id: root._id}))
         }
@@ -142,7 +139,6 @@ const App = props => {
         }
       }).then(res => res.json())
         .then(res => {
-          console.log(res)
           props.dispatch(setNewCards({cards: res}))
         })
         .catch(error => console.log(error))
@@ -153,7 +149,6 @@ const App = props => {
   }
 
   const fetchMemberProfiles = async (team) => {
-    console.log('fetchMemberProfiles')
     try {
 
       const token = await getTokenSilently()
@@ -165,7 +160,6 @@ const App = props => {
         }
       }).then(res => res.json())
         .then(res => {
-          console.log(res)
           props.dispatch(setMembers({members: res}))
         })
 
@@ -185,9 +179,7 @@ const App = props => {
           Authorization: `Bearer ${token}`
         }
       }).then(res => {
-          console.log(res)
           const filteredTeams = teamInvites.filter(invite => invite._id !== team)
-          console.log(filteredTeams)
           setTeamInvites(filteredTeams)
           user.push(team)
           setUser(user)
@@ -212,9 +204,7 @@ const App = props => {
           Authorization: `Bearer ${token}`
         }
       }).then(res => {
-          console.log(res)
           const filteredTeams = teamInvites.filter(invite => invite._id !== team)
-          console.log(filteredTeams)
           setTeamInvites(filteredTeams)
         })
     } catch (error) {
@@ -316,7 +306,6 @@ const App = props => {
       props.dispatch(setTeams({teams: results}))
 
       if (results.length > 0) {
-        console.log(results[0])
         fetchMemberProfiles(props.selectedTeam)
         //fetchNewTeamCards(props.selectedTeam)
       }
@@ -340,7 +329,6 @@ const App = props => {
         }
       }).then(res => res.json())
         .then(res => {
-          console.log(res)
           setTeamInvites(res)
         })
 
@@ -383,7 +371,6 @@ const App = props => {
       })
 
       const user = await userResult.json()
-      console.log(user)
 
       if (user.name === undefined) {
         setNameOpen(true)
@@ -412,7 +399,6 @@ const App = props => {
         })
 
         const tree = await treeResult.json()
-        console.log(tree)
         setTree(tree)
         const root = tree.find(node => node._id === props.selectedNode)
         props.dispatch(setSelectedNode({id: root.parent}))
@@ -491,7 +477,6 @@ const App = props => {
       const teamMember = await teamResult.json()
       const newTeams = props.teams.slice()
       newTeams.unshift(teamMember)
-      console.log(newTeams)
       props.dispatch(setTeams({teams: newTeams}))
 
       if (newTeams.length > 0) {
@@ -527,7 +512,6 @@ const App = props => {
       setNameOpen(false)
       setThemePickerOpen(true)
 
-      console.log(userResult)
 
     } catch(error) {
       console.log(error)
@@ -611,7 +595,6 @@ const App = props => {
         }
       })
 
-      console.log(result)
 
     } catch(error) {
       console.log(error)
@@ -619,14 +602,16 @@ const App = props => {
 
   }
 
+  const onSetSelectedNode = value => {
+    props.dispatch(setSelectedNode({id: value}))
+  }
+
   const onAddProjectClick = value => {
-    console.log(value)
     setSelectedTeam(value)
     setProjectTitleMenuOpen(true)
   }
 
   const onProjectSave = title => {
-    console.log(title)
     setProjectTitleMenuOpen(false)
     onAddProject(title, props.selectedTeam)
   }
@@ -636,14 +621,11 @@ const App = props => {
   }
 
   const onDeleteSpace = async e => {
-    console.log(e)
 
     const selectedSpace = props.selectedTeam
     const spaceName = window.prompt('Enter space name to confirm delete')
     if (spaceName === props.spaces.find(space => space._id === selectedSpace).title) {
       props.dispatch(deleteSpace({space: props.selectedTeam}))
-      console.log(props.selectedTeam)
-      console.log(props.spaces)
       if (props.spaces.filter(space => space._id !== props.selectedTeam).length > 0) {
         const space = props.spaces.filter(space => space._id !== props.selectedTeam)[0]._id
         props.dispatch(setSelectedTeam({team: space}))
@@ -665,7 +647,6 @@ const App = props => {
           }
         })
 
-        console.log(result)
 
       } catch(error) {
         console.log(error)
@@ -747,6 +728,7 @@ const App = props => {
         />
         { sideMenuOpen === true &&
           <SideMenu
+            setSelectedBoard={onSetSelectedNode}
             spaces={props.spaces}
             tree={props.tree}
             projects={props.projects}

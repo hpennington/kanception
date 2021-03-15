@@ -103,7 +103,6 @@ const useStyles = makeStyles({
 });
 
 const postOrderTraversal = (tree, root, map={}) => {
-  console.log({map})
   const children = tree.filter(node => node.parent === root._id)
 
   for (const child of children) {
@@ -139,12 +138,12 @@ export default function CustomizedTreeView(props) {
   const classes = useStyles();
   const [contextProject, setContextProject] = useState(null)
   const [contextMenuOpen, setContextMenuOpen] = useState(false)
+  const [expanded, setExpanded] = useState([])
 
   const onNodeSelect = (event, value) => {
     // If project selected
     if (props.projects.find(project => project._id === value) != null) {
       props.setSelectedProject(value, event.target.nodeId)
-      console.log(event.target.className)
       if (event.target.className?.baseVal?.includes('MuiSvgIcon-root') === true
         || event.target.className?.baseVal === ''
         || event.target.className.includes('close')
@@ -157,21 +156,40 @@ export default function CustomizedTreeView(props) {
         //const projectName = window.prompt('Type the project name to delete:')
         // console.log(projectName)
       } else if (event.target.className.includes('MuiTypography-root') === true) {
-        console.log(event.target.parentElement.parentElement)
         props.setSelectedTeam(event.target.parentElement.parentElement.dataset.spaceId)
       } else {
-        console.log(event.target.parentElement.parentElement.parentElement)
         props.setSelectedTeam(event.target.parentElement.parentElement.dataset.spaceId)
       }
+
+      toggleExpanded(value)
 
     } else if (props.spaces.find(space => space._id === value) != null) {
       props.setSelectedTeam(value)
       props.setSelectedProject(null, value)
+      toggleExpanded(value)
     } else if (value.includes('add') === true) {
       props.onAddProject(value.replace('-add', ''))
+    } else if (props.tree.find(node => node._id === value) != null) {
+      const node = props.tree.find(node => node._id === value)
+
+      props.setSelectedProject(node.project, props.projects.find(project => project._id === node.project).space)
+      props.setSelectedBoard(value)
+      toggleExpanded(value)
     }
+
+    
   }
 
+  const toggleExpanded = id => {
+    if (expanded.includes(id) === true) {
+      const ex = [...expanded].filter(exId => exId !== id)
+      setExpanded(ex)
+    } else {
+      const ex = [...expanded]
+      ex.push(id)
+      setExpanded(ex)
+    }
+  }
 
   const onDeleteProject = e => {
     setContextMenuOpen(false)
@@ -201,7 +219,7 @@ export default function CustomizedTreeView(props) {
         defaultExpanded={['1']}
         defaultSelected={"2"}
         onNodeSelect={onNodeSelect}
-        expanded={props.spaces.map(space => space._id).concat(props.projects.map(node => node._id)).concat(props.tree.map(node => node._id))}
+        expanded={expanded}
         selected={props.selectedProject != null ? props.selectedProject : props.selectedTeam}
       >
         {

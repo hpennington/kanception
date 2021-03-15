@@ -51,11 +51,9 @@ const KanbanContainer = props => {
       const tree = await treeResult.json()
       props.dispatch(setTree({tree: tree}))
 
-      console.log('selectedNode: ' + props.selectedNode)
       if (props.selectedNode.length > 20) {
         const root = tree.find(node => node._id == props.selectedNode)
         props.dispatch(setSelectedNode({id: root._id}))
-        console.log(root)
         fetchGroups(root._id)
       }
 
@@ -81,7 +79,6 @@ const KanbanContainer = props => {
       const groups = await groupsResult.json()
 
       groups.sort((a, b) => a.order - b.order)
-      console.log(groups)
 
       props.dispatch(setGroups({groups: groups}))
 
@@ -133,10 +130,8 @@ const KanbanContainer = props => {
         }
       })
       const tree = await treeResult.json()
-      console.log(tree)
 
       const parent = props.selectedNode
-      console.log(parent)
       const team = props.tree.find(node => node._id === parent).team
       const url = api + '/boards/add?group=' + groupId
         + '&title=' + title + '&parent=' + parent
