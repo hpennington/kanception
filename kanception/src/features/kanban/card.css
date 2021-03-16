@@ -1,13 +1,13 @@
 .kanception-card {
   margin: 10px;
-  background: #4043b9;
+  background: #382d5a;
   min-height: 70px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
   border-radius: 5px;
-  background: #4d27cf;
+  background: #382d5a;
   box-shadow: 0 0 10px 3px var(--shadow-color);
 }
 
