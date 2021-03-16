@@ -84,6 +84,7 @@ const SideMenu = props => {
         </div>
         {props.spaces.length > 0 &&
         <TreeView
+          theme={props.theme}
           setSelectedBoard={props.setSelectedBoard}
           tree={props.tree}
           spaces={props.spaces}

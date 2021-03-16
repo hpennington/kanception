@@ -6,26 +6,31 @@
   right: 0;
   align-items: center;
   justify-content: space-between;
-  background: #4d27cf;
+  background: black;
   height: 50px;
   width: 100%;
   z-index: 2;
 }
 
 .toolbar .btn-primary {
-  background: #4d27cf;
+  background: black;
   border: solid 1px white;
-  box-shadow: 0 0 0 0.2rem #4d27cf;
+  box-shadow: 0 0 0 0.2rem #white;
   margin: 10px;
+}
+
+.toolbar .btn-primary:hover {
+  background: black;
+  border: solid 1px #4043b9;
 }
 
 .toolbar .btn-primary:focus {
   border: solid 1px white;
-  box-shadow: 0 0 0 0.2rem #4d27cf;
+  box-shadow: 0 0 0 0.2rem #white;
 }
 
 .toolbar .btn-primary.dropdown-toggle:focus {
-  background: #4d27cf;
-  box-shadow: 0 0 0 0.2rem #4d27cf;
+  background: black;
+  box-shadow: 0 0 0 0.2rem #white;
 }
 

@@ -737,6 +737,7 @@ const App = props => {
         />
         { sideMenuOpen === true &&
           <SideMenu
+            theme={theme}
             setSelectedBoard={onSetSelectedNode}
             spaces={props.spaces}
             tree={props.tree}

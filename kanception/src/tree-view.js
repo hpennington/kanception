@@ -47,6 +47,14 @@ function TransitionComponent(props) {
   );
 }
 
+const formatLabel = (text) => {
+  if (text.length < 20) {
+    return text
+  } else {
+    return text.substring(0, 17) + '...'
+  }
+}
+
 const TreeContextMenu = props => {
   const style = {
     //visibility: props.isOpen === true ? 'visible' : 'hidden',
@@ -80,65 +88,75 @@ TransitionComponent.propTypes = {
   in: PropTypes.bool,
 };
 
-const StyledTreeItem = withStyles((theme) => ({
-  iconContainer: {
-    '& .close': {
-      opacity: 0.3,
-    },
-  },
-  group: {
-    marginLeft: 0,
-    paddingLeft: 18,
-    borderLeft: `1px dashed ${fade(theme.palette.text.primary, 0.4)}`,
-  },
-}))((props) => <TreeItem {...props} />);
 
-const useStyles = makeStyles({
-  root: {
-    height: "fit-content",
-    flexGrow: 1,
-    maxWidth: 400,
-    width: '200px',
-  },
-});
-
-const postOrderTraversal = (tree, root, map={}) => {
-  const children = tree.filter(node => node.parent === root._id)
-
-  for (const child of children) {
-    postOrderTraversal(tree, child, map=map)
-  }
-
-  map[root._id] = (
-      <StyledTreeItem
-        nodeId={root._id}
-        label={root.title}
-      >
-      {
-        children.map(child => map[child._id])
-      }
-      </StyledTreeItem>
-  )
-
-  return map
-}
-
-const recurseTree = (tree) => {
-  const root = tree.find(node => node.parent === null)
-  if (root != null) {
-    const map = postOrderTraversal(tree, root)
-    return map[root._id].props.children
-  }
-  
-  return null
-}
 
 export default function CustomizedTreeView(props) {
-  const classes = useStyles();
+  
   const [contextProject, setContextProject] = useState(null)
   const [contextMenuOpen, setContextMenuOpen] = useState(false)
   const [expanded, setExpanded] = useState([])
 
+  const StyledTreeItem = withStyles((theme) => ({
+    label: {
+      background: props.theme.background,
+      border: "solid 1px dodgerblue",
+      margin: "4px",
+      borderRadius: "20px",
+      padding: "6px",
+      paddingLeft: "12px"
+    },
+    iconContainer: {
+      '& .close': {
+        opacity: 0.3,
+      },
+    },
+    group: {
+      marginLeft: 0,
+      paddingLeft: 18,
+      borderLeft: `1px dashed ${fade(theme.palette.text.primary, 0.4)}`,
+    },
+  }))((props) => <TreeItem {...props} />);
+
+  const useStyles = makeStyles({
+    root: {
+      height: "fit-content",
+      flexGrow: 1,
+      maxWidth: 400,
+    },
+  });
+  
+  const classes = useStyles();
+  
+  const postOrderTraversal = (tree, root, map={}) => {
+    const children = tree.filter(node => node.parent === root._id)
+
+    for (const child of children) {
+      postOrderTraversal(tree, child, map=map)
+    }
+
+    map[root._id] = (
+        <StyledTreeItem
+          nodeId={root._id}
+          label={formatLabel(root.title)}
+        >
+        {
+          children.map(child => map[child._id])
+        }
+        </StyledTreeItem>
+    )
+
+    return map
+  }
+
+  const recurseTree = (tree) => {
+    const root = tree.find(node => node.parent === null)
+    if (root != null) {
+      const map = postOrderTraversal(tree, root)
+      return map[root._id].props.children
+    }
+    
+    return null
+  }
   const onNodeSelect = (event, value) => {
     // If project selected
     if (props.projects.find(project => project._id === value) != null) {
