@@ -8,6 +8,7 @@ import React, {
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { CardContextMenu, GroupContextMenu } from './context-menu'
 import AssignmentList from '../../assignment-list'
+import SubToolbar from '../../sub-toolbar'
 import Group from './group'
 import './kanban.css'
 
@@ -133,6 +134,11 @@ const Kanban = forwardRef((props, ref) => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
+    <SubToolbar title={
+      props.tree.length > 0 &&
+      props.tree.find(node => node._id === props.selectedNode)?.title
+    } 
+    />
     <div className="kanban" onClick={onBoardClick}>
       <Droppable droppableId="kanbanRoot" direction="horizontal" type="COLUMN">
         {provided => (

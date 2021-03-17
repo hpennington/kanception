@@ -491,6 +491,7 @@ const KanbanContainer = props => {
         onCardGroupUpdate={onCardGroupUpdate}
         onTeamChange={onTeamChange}
         members={props.members}
+        selectedNode={props.selectedNode}
       />
     </div>
   )
