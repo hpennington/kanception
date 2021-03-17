@@ -7,7 +7,7 @@
 
 .space h1 {
   color: var(--text-color);
-  text-align: center;
+  text-align: flex-start;
   margin: 0 auto;
   margin-top: 100px;
 }
@@ -27,11 +27,16 @@
   border-radius: 5px;
 }
 
+.space .btn-container {
+  display: flex;
+}
+
 .space .new-project {
-  background: rebeccapurple;
+  background: black;
+  margin: 10px;
 }
 
 .space .delete-space {
-  margin-top: 250px;
   background: #dc3545;
+  margin: 10px;
 }
