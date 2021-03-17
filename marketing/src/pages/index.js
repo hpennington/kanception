@@ -111,10 +111,6 @@ const GanttBlock = () => (
     >
       <source src={Demo} type="video/mp4" />
     </video>
-    <p>
-      Here at Kanception we believe apps should be intuitive and simple to use.
-      We have a standard Gantt chart with the key difference being it is nested, like the Kanban board.
-    </p>
   </div>
 )
 
