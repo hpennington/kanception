@@ -29,7 +29,7 @@ const MainBlock = () => (
     <div className="top-block">
       <div className="top-block-inner">
         <h1 className="title center-text mid-width">A Nested Kanban Board for Creative Teams</h1>
-        <h2>Breakdown tasks in a natural way with nested cards. Organize your tasks and plan your day with the Gantt chart.
+        <h2>Breakdown tasks in a natural way with nested cards. Organize your tasks and plan your day.
         </h2>
         <p style={{whiteSpace: "nowrap"}}>In Beta</p>
         <a style={{whiteSpace: "nowrap"}} className="sign-up-btn" href="https://app.kanception.io">Sign In / Sign Up</a>
@@ -63,7 +63,6 @@ const KanbanDetailBlock = () => (
   <div className="kanban-detail-text-block">
     <h4>Team based project management software.</h4>
     <h4>Create spaces, projects, boards, and nested cards with the Kanban board.</h4>
-    <h4 style={{marginBottom: "60px"}}>Time tracking & project planning with the Gantt chart. Schedule todos, and view your week at a glance, with the calendar.</h4>
   <div className="kanban-detail-block">
     <div className="card-container">
       <div
@@ -85,7 +84,7 @@ const KanbanDetailBlock = () => (
       >
         <div className="color-strip blue">
         </div>
-        <h2 style={{fontSize: '1em', fontstyle: 'normal', color: '#555'}}>Schedule cards with the Gantt chart.</h2>
+        <h2 style={{fontSize: '1em', fontstyle: 'normal', color: '#555'}}>Give your brain a break.</h2>
       </div>
     </div>
     <img src={GraphImage} alt="kanban graph" />
@@ -112,25 +111,6 @@ const GanttBlock = () => (
     >
       <source src={Demo} type="video/mp4" />
     </video>
-    <h3 style={{fontSize: '2em', margin: '40px auto', maxWidth: '700px'}}>Schedule cards with the Gantt chart</h3>
-    <p>Simple to use.</p>
-    <video
-      className="main-video"
-      autoPlay={true}
-      loop={true}
-      controls={true}
-      muted={true}
-      width={900}
-      style={{
-        boxShadow: "0 0 5px 10px #ccc",
-        margin: "40px auto",
-        borderRadius: "5px",
-      }}
-    >
-      <source src={GanttDemo} type="video/mp4" />
-    </video>
-    <h4>Reorder tasks in the Gantt chart with drag and drop.</h4>
-    <h4>Double click to schedule todos in the Gantt chart.</h4>
     <p>
       Here at Kanception we believe apps should be intuitive and simple to use.
       We have a standard Gantt chart with the key difference being it is nested, like the Kanban board.

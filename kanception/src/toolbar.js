@@ -32,37 +32,39 @@ const Toolbar = (props) => {
           />
         </div>
       </div>
-        <ToggleButtonGroup toggle name="main-toggle">
-          <ToggleButton
-            type="radio"
-            variant="secondary"
-            name="radio"
-            style={{
-              boxShadow: "none",
-              borderRight: "1px solid #4d27cf",
-              background: "white",
-              color: props.kanbanOpen === true ? "gray" : "#4d27cf",
-            }}
-            checked={false}
-            onClick={props.onOpenKanban}
-          >
-            Kanban
-          </ToggleButton>
-          <ToggleButton
-            type="radio"
-            variant="secondary"
-            name="radio"
-            style={{
-              boxShadow: "none",
-              borderLeft: "1px solid #4d27cf",
-              background: "white",
-              color: props.kanbanOpen === true ? "#4d27cf" : "gray",
-            }}
-            onClick={props.onOpenGantt}
-          >
-            Gantt
-          </ToggleButton>
-      </ToggleButtonGroup>
+      {
+      //   <ToggleButtonGroup toggle name="main-toggle">
+      //     <ToggleButton
+      //       type="radio"
+      //       variant="secondary"
+      //       name="radio"
+      //       style={{
+      //         boxShadow: "none",
+      //         borderRight: "1px solid #4d27cf",
+      //         background: "white",
+      //         color: props.kanbanOpen === true ? "gray" : "#4d27cf",
+      //       }}
+      //       checked={false}
+      //       onClick={props.onOpenKanban}
+      //     >
+      //       Kanban
+      //     </ToggleButton>
+      //     <ToggleButton
+      //       type="radio"
+      //       variant="secondary"
+      //       name="radio"
+      //       style={{
+      //         boxShadow: "none",
+      //         borderLeft: "1px solid #4d27cf",
+      //         background: "white",
+      //         color: props.kanbanOpen === true ? "#4d27cf" : "gray",
+      //       }}
+      //       onClick={props.onOpenGantt}
+      //     >
+      //       Gantt
+      //     </ToggleButton>
+      // </ToggleButtonGroup>
+      }
       <Dropdown>
         <Dropdown.Toggle id="dropdown-basic">
         </Dropdown.Toggle>
