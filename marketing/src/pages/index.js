@@ -95,7 +95,6 @@ const KanbanDetailBlock = () => (
 const GanttBlock = () => (
   <div className="gantt-block" style={{paddingBottom: "40px", background: 'white', width: '100vw', textAlign: 'center'}}>
     <h2 style={{margin: "40px", fontSize: "2em"}}>Video Demo</h2>
-    <p style={{textAlign: "center"}}>Single click on a card to access the inner Kanban board.</p>
     <video
       className="main-video"
       autoPlay={true}
