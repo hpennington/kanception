@@ -739,6 +739,7 @@ const App = props => {
           <SideMenu
             theme={theme}
             setSelectedBoard={onSetSelectedNode}
+            selectedNode={props.selectedNode}
             spaces={props.spaces}
             tree={props.tree}
             projects={props.projects}

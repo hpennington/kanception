@@ -99,7 +99,28 @@ export default function CustomizedTreeView(props) {
   const StyledTreeItem = withStyles((theme) => ({
     label: {
       background: props.theme.background,
-      // border: "solid 1px dodgerblue",
+      border: "solid 2px rgba(0, 0, 0, 0)",
+      margin: "4px",
+      borderRadius: "20px",
+      padding: "6px",
+      paddingLeft: "12px"
+    },
+    iconContainer: {
+      '& .close': {
+        opacity: 0.3,
+      },
+    },
+    group: {
+      marginLeft: 0,
+      paddingLeft: 18,
+      borderLeft: `1px dashed ${fade(theme.palette.text.primary, 0.4)}`,
+    },
+  }))((props) => <TreeItem {...props} />);
+
+  const StyledActiveTreeItem = withStyles((theme) => ({
+    label: {
+      background: props.theme.background,
+      border: "solid 2px dodgerblue",
       margin: "4px",
       borderRadius: "20px",
       padding: "6px",
@@ -127,31 +148,45 @@ export default function CustomizedTreeView(props) {
   
   const classes = useStyles();
   
-  const postOrderTraversal = (tree, root, map={}) => {
+  const postOrderTraversal = (tree, root, selectedNode, map={}) => {
     const children = tree.filter(node => node.parent === root._id)
 
     for (const child of children) {
-      postOrderTraversal(tree, child, map=map)
+      postOrderTraversal(tree, child, selectedNode, map=map)
     }
 
-    map[root._id] = (
-        <StyledTreeItem
-          nodeId={root._id}
-          label={formatLabel(root.title)}
-        >
-        {
-          children.map(child => map[child._id])
-        }
-        </StyledTreeItem>
-    )
+    if (root._id === selectedNode) {
+      map[root._id] = (
+          <StyledActiveTreeItem
+            nodeId={root._id}
+            label={formatLabel(root.title)}
+          >
+          {
+            children.map(child => map[child._id])
+          }
+          </StyledActiveTreeItem>
+      )
+    } else {
+      map[root._id] = (
+          <StyledTreeItem
+            nodeId={root._id}
+            label={formatLabel(root.title)}
+          >
+          {
+            children.map(child => map[child._id])
+          }
+          </StyledTreeItem>
+      )  
+    }
+    
 
     return map
   }
 
-  const recurseTree = (tree) => {
+  const recurseTree = (tree, selectedNode) => {
     const root = tree.find(node => node.parent === null)
     if (root != null) {
-      const map = postOrderTraversal(tree, root)
+      const map = postOrderTraversal(tree, root, selectedNode)
       return map[root._id].props.children
     }
     
@@ -177,6 +212,7 @@ export default function CustomizedTreeView(props) {
           event.target.parentElement.parentElement.dataset.projectId, 
           event.target.parentElement.parentElement.dataset.spaceId
         )
+        // props.setSelectedBoard(null)
 
       } else {
         props.setSelectedProject(
@@ -248,7 +284,7 @@ export default function CustomizedTreeView(props) {
         defaultSelected={"2"}
         onNodeSelect={onNodeSelect}
         expanded={expanded}
-        selected={props.selectedProject != null ? props.selectedProject : props.selectedTeam}
+        selected={[props.selectedBoard].concat(props.selectedProject).concat(props.selectedTeam)}
       >
         {
         contextMenuOpen === true &&
@@ -264,22 +300,36 @@ export default function CustomizedTreeView(props) {
             <StyledTreeItem
               data-space-id={space._id}
               nodeId={space._id + '-add'}
-              label={<span><strong style={{color: "rebeccapurple"}}>New +</strong></span>}
+              label={<span><strong style={{color: "dodgerblue"}}>New +</strong></span>}
             />
             {
             props.projects.filter(project => project.space === space._id)
             .map(project =>
-            <StyledTreeItem
-              nodeId={project._id}
-              label={project.title}
-              onContextMenu={onContextClick}
-              data-space-id={project.space}
-              data-project-id={project._id}
-            >
-            {
-              recurseTree(props.tree.filter(node => node.project === project._id))
-            }
-            </StyledTreeItem>
+              props.selectedProject === project._id && props.selectedBoard === props.tree.find(node => node.parent === null)?._id
+              ?
+              <StyledActiveTreeItem
+                nodeId={project._id}
+                label={project.title}
+                onContextMenu={onContextClick}
+                data-space-id={project.space}
+                data-project-id={project._id}
+              >
+              {
+                recurseTree(props.tree.filter(node => node.project === project._id), props.selectedBoard)
+              }
+              </StyledActiveTreeItem>
+              :
+              <StyledTreeItem
+                nodeId={project._id}
+                label={project.title}
+                onContextMenu={onContextClick}
+                data-space-id={project.space}
+                data-project-id={project._id}
+              >
+              {
+                recurseTree(props.tree.filter(node => node.project === project._id), props.selectedBoard)
+              }
+              </StyledTreeItem>
             )
             }
           </StyledTreeItem>
