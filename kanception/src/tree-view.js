@@ -55,6 +55,26 @@ const formatLabel = (text) => {
   }
 }
 
+const pathToRoot = (tree, nodeId) => {
+  if (nodeId == null || tree == null) {
+    return null
+  }
+
+  var cur = tree.find(node => node._id === nodeId)
+  if (cur == null) {
+    return null
+  }
+
+  const paths = []
+
+  while(cur != null && cur.parent != null) {
+    paths.push(cur.parent)
+    cur = tree.find(node => node.id === cur.parent)
+  }
+
+  return paths
+}
+
 const TreeContextMenu = props => {
   const style = {
     //visibility: props.isOpen === true ? 'visible' : 'hidden',
@@ -270,7 +290,9 @@ export default function CustomizedTreeView(props) {
     console.log(e.currentTarget.dataset.projectId)
     setContextProject(e.currentTarget.dataset.projectId)
   }
-
+  const otherExpanded = pathToRoot(props.tree, props.selectedBoard)
+  const allExpanded = expanded.concat(otherExpanded)
+ 
   return (
     <div
       style={{
@@ -283,7 +305,7 @@ export default function CustomizedTreeView(props) {
         defaultExpanded={['1']}
         defaultSelected={"2"}
         onNodeSelect={onNodeSelect}
-        expanded={expanded}
+        expanded={allExpanded}
         selected={[props.selectedBoard].concat(props.selectedProject).concat(props.selectedTeam)}
       >
         {
