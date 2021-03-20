@@ -291,7 +291,7 @@ export default function CustomizedTreeView(props) {
     setContextProject(e.currentTarget.dataset.projectId)
   }
   const otherExpanded = pathToRoot(props.tree, props.selectedBoard)
-  const allExpanded = expanded.concat(otherExpanded)
+  const allExpanded = expanded.concat(otherExpanded).concat(props.selectedTeam).concat(props.selectedProject)
  
   return (
     <div

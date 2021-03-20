@@ -118,6 +118,10 @@ const App = props => {
         const root = tree.find(node => node.parent == null)
         if (root != null) {
           props.dispatch(setSelectedNode({id: root._id}))
+          const node = props.tree.find(node => node._id === root._id)
+          const team = props.projects.find(project => project._id === node.project).space
+          props.dispatch(setSelectedTeam({team: team._id}))
+          this.setSelectedProject(node.project, team)
         }
 
       }

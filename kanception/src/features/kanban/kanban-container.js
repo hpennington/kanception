@@ -158,6 +158,11 @@ const KanbanContainer = props => {
       console.log({cardId})
       props.dispatch(setSelectedNode({id: cardId}))
 
+      const node = props.tree.find(node => node._id === cardId)
+      const team = props.projects.find(project => project._id === node.project).space
+      props.setSelectedTeam(team._id)
+      props.setSelectedProject(node.project, team._id)
+
     } catch(error) {
       console.log(error)
     }
