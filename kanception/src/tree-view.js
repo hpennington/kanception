@@ -99,7 +99,7 @@ export default function CustomizedTreeView(props) {
   const StyledTreeItem = withStyles((theme) => ({
     label: {
       background: props.theme.background,
-      border: "solid 1px dodgerblue",
+      // border: "solid 1px dodgerblue",
       margin: "4px",
       borderRadius: "20px",
       padding: "6px",
