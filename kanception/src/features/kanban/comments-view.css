@@ -13,13 +13,30 @@
 
 .comments-view {
   display: flex;
+  width: 100%;
+  max-width: 1200px;
+  height: 100%;
+  max-height: 900px;
+  background: #eee;
+  border-radius: 15px;
+  z-index: 101;
+}
+
+.comments-view-left {
+  width: 45%;
+  margin: 1.25%;
+}
+
+.comments-view-right {
+  display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 101;
-  width: 600px;
-  height: 650px;
-  border-radius: 15px;
-  background: #eee;
+  width: 45%;
+  margin: 1.25%;
+}
+
+.comments-view-right-bar {
+  width: fit-content; 
 }
 
 .comments-view h3 {
@@ -27,6 +44,10 @@
   margin: 20px;
   font-size: 2em;
   text-align: center;
+
+}
+.comments-view-right > h3 {
+  font-weight: lighter;
 }
 
 .comments-view h4 {
@@ -45,17 +66,28 @@
 }
 
 .close-comments-btn {
-  color: black!important;
+  color: #420E97!important;
   font-size: 1em!important;
   display: inherit;
-  border: solid 2px #00ffc4!important;
-  width: 100px;
+  border: solid 2px #420E97!important;
+  width: 30px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 30px;
   margin: 20px;
 }
+
+.close-comments-btn > svg {
+  transform: scale(2.0);
+}
+
+.close-comments-btn:hover svg {
+  transform: rotate(90deg) scale(2.0);
+  transition: 0.5s;
+}
+
 
 @media screen and (max-width: 600px) {
   .comments-view {

@@ -1,11 +1,11 @@
 .comment-box {
-  width: 90%;
+  width: 100%;
   min-height: fit-content;
   background: white;
   border-radius: 5px;
   display: block;
   text-align: start!important;
-  margin: 20px;
+  margin: 10px auto;
 }
 
 .comment-box p {
