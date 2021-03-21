@@ -160,7 +160,7 @@ const ContactBlock = () => (
       flexDirection: 'column',
     }}
   >
-    <p><a href="https://www.github.com/hpennington/kanception"></a></p>
+    <a href="https://www.github.com/hpennington/kanception">Gitub (hpennington/kanception)</a>
     <p>Contact us @ info@kanception.io</p>
   </div>
 )
