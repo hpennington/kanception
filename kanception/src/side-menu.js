@@ -65,7 +65,7 @@ const SideMenu = props => {
         {
         props.switcher === SPACES ?
         <>
-        <h1>Spaces</h1>
+        <h1>Tree</h1>
         {props.invites.length > 0 &&
         <div>
           <div className="btn-container">
