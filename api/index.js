@@ -123,6 +123,7 @@ const Project = new mongoose.model('Project', projectSchema)
 
 const boardSchema = new mongoose.Schema({
   title: String,
+  description: String,
   project: String,
   owner: String,
   parent: String,
@@ -511,6 +512,7 @@ db.once('open', () => {
           _id: node._id,
           assignees: assignees,
           title: node.title,
+          description: node.description,
           project: node.project,
           owner: node.owner,
           parent: node.parent,
@@ -1164,11 +1166,13 @@ db.once('open', () => {
           groups: board.groups,
           _id: board._id,
           title: board.title,
+          description: board.description,
           owner: board.owner,
           order: board.order,
           group: boardRef[0].group,
           count: board.count,
           assignees: assignees,
+
         })
       }
     }
@@ -1267,6 +1271,7 @@ db.once('open', () => {
 
       const board = await Board.create({
         title: "",
+        description: "",
         owner: owner._id,
         order: order,
         project: project,

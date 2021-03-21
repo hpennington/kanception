@@ -120,6 +120,8 @@ const Group = props => {
                     onTeamChange={props.onTeamChange}
                     onUpdateCardTitle={onUpdateCardTitle}
                     title={column.title}
+                    description={column.description}
+                    setDescription={e => props.onUpdateCard(column._id, {description: e})}
                     column={props.index}
                     index={cardIndex}
                     onContextClick={onContextMenuCardClick}

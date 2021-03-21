@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import CommentBox from './comment-box'
 import CommentBoxSubmit from './comment-box-submit'
+import TextAreaAutoSize from 'react-textarea-autosize'
 import { setComments } from '../comments/commentsSlice'
 import { useAuth0 } from '../../react-auth0-spa'
 import './comments-view.css'
@@ -41,6 +42,26 @@ const CommentsView = props => {
           </button>
         <div className="comments-view-left">
           <h3>{props.title}</h3>
+          <TextAreaAutoSize
+            placeholder="Description..."
+            value={props.description}
+            style={{
+              color: "black",
+              background: "white",
+              border: "none",
+              textAlign: "start",
+              resize: "none",
+              borderRadius: "5px",
+              minHeight: "100px",
+              padding: "10px",
+            }}
+            wrap="hard"
+            onChange={e => {
+              if (e.target.value.length < 10000) {
+                props.setDescription(e.target.value)
+              }
+            }}>
+          </TextAreaAutoSize>
         </div>
         <div className="comments-view-right">
           <h3>Comments</h3>
