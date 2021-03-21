@@ -25,7 +25,7 @@
 
 .comments-view-left {
   width: 45%;
-  margin: 1.25%;
+  margin: 40px;
 }
 
 .comments-view-right {
@@ -33,7 +33,7 @@
   flex-direction: column;
   align-items: center;
   width: 45%;
-  margin: 1.25%;
+  margin: 40px;
 }
 
 .comments-view-right-bar {
@@ -92,6 +92,7 @@
   transform: rotate(90deg) scale(2.0);
   transition: 0.5s;
 }
+
 @media screen and (max-width: 1300px) {
   .comments-view {
     width: 100%;
@@ -115,7 +116,7 @@
   }
   
   .comments-view-left {
-    width: calc(100% - 20px);
+    width: calc(100% - 40px);
     margin: 10px;
   }
 
@@ -123,7 +124,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: calc(100% - 20px);
+    width: calc(100% - 40px);
     margin: 1.25%;
   }
 

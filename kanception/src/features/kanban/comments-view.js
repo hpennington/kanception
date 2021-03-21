@@ -55,6 +55,7 @@ const CommentsView = props => {
               minHeight: "100px",
               padding: "10px",
               width: "100%",
+              marginTop: "10px",
             }}
             wrap="hard"
             onChange={e => {
