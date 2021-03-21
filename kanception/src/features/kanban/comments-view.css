@@ -92,7 +92,14 @@
   transform: rotate(90deg) scale(2.0);
   transition: 0.5s;
 }
-
+@media screen and (max-width: 1200px) {
+  .comments-view {
+    width: 100%;
+    height: 100%;
+    max-width: 95vw;
+    max-height: 90vh;
+  }
+}
 @media screen and (max-width: 1200px) {
   .close-comments-btn > svg {
     transform: scale(1.0);
@@ -108,10 +115,6 @@
   }
 
   .comments-view {
-    width: 100%;
-    height: 100%;
-    max-width: 95vw;
-    max-height: 90vh;
     flex-direction: column;
   }
   
