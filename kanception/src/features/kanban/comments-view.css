@@ -65,10 +65,6 @@
   align-items: center;
 }
 
-.close-comments-btn-mobile {
-  display: none;
-}
-
 .close-comments-btn {
   color: #420E97!important;
   font-size: 1em!important;
@@ -83,6 +79,10 @@
   margin: 20px;
 }
 
+.close-comments-btn-mobile {
+  display: none;
+}
+
 .close-comments-btn > svg {
   transform: scale(2.0);
 }
@@ -93,6 +93,15 @@
 }
 
 @media screen and (max-width: 1200px) {
+  .close-comments-btn > svg {
+    transform: scale(1.0);
+  }
+
+  .close-comments-btn:hover svg {
+    transform: rotate(90deg) scale(1.0);
+    transition: 0.5s;
+  }
+
   .close-comments-btn-mobile {
     display: block;
   }
