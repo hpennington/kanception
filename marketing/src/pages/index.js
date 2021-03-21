@@ -31,7 +31,7 @@ const MainBlock = () => (
         <h1 className="title center-text mid-width">A Nested Kanban Board for Creative Teams</h1>
         <h2>Breakdown tasks in a natural way with nested cards. Organize your tasks and plan your day.
         </h2>
-        <p style={{whiteSpace: "nowrap"}}>In Beta</p>
+        <p style={{whiteSpace: "nowrap"}}>In Beta - Open Source</p>
         <a style={{whiteSpace: "nowrap"}} className="sign-up-btn" href="https://app.kanception.io">Sign In / Sign Up</a>
       </div>
     </div>
