@@ -25,7 +25,7 @@
 
 .comments-view-left {
   width: 45%;
-  margin: 40px;
+  margin: 40px 25px 40px 50px;
 }
 
 .comments-view-right {
@@ -33,7 +33,7 @@
   flex-direction: column;
   align-items: center;
   width: 45%;
-  margin: 40px;
+  margin: 40px 0px 40px 25px;
 }
 
 .comments-view-right-bar {
@@ -77,7 +77,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 30px;
-  margin: 20px;
+  margin: 10px;
 }
 
 .close-comments-btn-mobile {
