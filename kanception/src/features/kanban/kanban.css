@@ -23,7 +23,7 @@
 .column {
   width: 300px;
   min-height: 50px;
-  max-height: calc(100vh - 275px);
+  max-height: calc(100vh - 200px);
   background: var(--foreground-color);
   margin: 10px;
   border: solid var(--foreground-color) 10px;
@@ -98,4 +98,10 @@
 
 .rbd-droppable-context {
   min-height: 40px;
+}
+
+@media screen and (max-width: 768px) {
+  .column {
+    max-height: calc(100vh - 275px);  
+  }
 }
