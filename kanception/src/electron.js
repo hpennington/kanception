@@ -10,7 +10,7 @@ function createWindow () {
     protocol: 'file:',
     slashes: true,
   });
-  mainWindow = new BrowserWindow({ width: 1200, height: 800 });
+  mainWindow = new BrowserWindow({ width: 1280, height: 800 });
   mainWindow.loadURL('https://app.kanception.io/');
   mainWindow.on('closed', function () {
     mainWindow = null;
