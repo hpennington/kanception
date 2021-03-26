@@ -52,6 +52,7 @@ textarea::-webkit-scrollbar {
   display: flex;
   align-items: center;
   justify-content: center;
+  transform: rotate(-90deg);
 }
 
 .kanception-card:hover .go-into-btn > div {
