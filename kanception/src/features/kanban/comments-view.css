@@ -101,7 +101,7 @@
     max-height: 95vh;
   }
 }
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1024px) {
   .close-comments-btn:hover svg {
     transform: rotate(90deg) scale(1.0);
     transition: 0.5s;
