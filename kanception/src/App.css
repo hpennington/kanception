@@ -8,3 +8,11 @@
 .App .coming-soon {
   color: var(--text-color);
 }
+
+body {
+  scrollbar-width: none;  /* Firefox */
+}
+
+body::-webkit-scrollbar {
+  display: none;  /* Safari and Chrome */
+}
