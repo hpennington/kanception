@@ -733,15 +733,14 @@ const App = props => {
         <Toolbar
           darkMode={theme.variant === 'dark'}
           onDarkModeChange={onDarkModeChange}
-          onBack={onBack}
           onOpenKanban={onOpenKanban}
           onOpenGantt={onOpenGantt}
-          onOpen={onOpenMenu}
           kanbanOpen={kanbanOpen === true && ganttOpen === false}
         />
         { sideMenuOpen === true &&
           <SideMenu
             theme={theme}
+            onOpen={onOpenMenu}
             setSelectedBoard={onSetSelectedNode}
             selectedNode={props.selectedNode}
             spaces={props.spaces}
@@ -808,6 +807,10 @@ const App = props => {
         { nameOpen === false && kanbanReady === true && kanbanOpen === true &&
           props.selectedProject != null &&
           <KanbanContainer
+            theme={theme}
+            menuOpen={sideMenuOpen}
+            onBack={onBack}
+            onOpen={onOpenMenu}
             fetchAssignments={fetchAssignments}
             style={{marginLeft: sideMenuOpen === true ? "300px" : 0}}
             owner={user._id}

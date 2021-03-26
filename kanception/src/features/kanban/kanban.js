@@ -134,7 +134,7 @@ const Kanban = forwardRef((props, ref) => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-    <SubToolbar title={
+    <SubToolbar theme={props.theme} menuOpen={props.menuOpen} onOpen={props.onOpen} onBack={props.onBack} title={
       props.tree.length > 0 &&
       props.tree.find(node => node._id === props.selectedNode)?.title
     } 

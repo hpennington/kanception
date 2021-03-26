@@ -8,6 +8,7 @@ import TreeView from './tree-view'
 import { ToggleButtonGroup, ToggleButton } from 'react-bootstrap'
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { SPACES, ASSIGNMENTS } from './constants'
+import HamburgerMenu from 'react-hamburger-menu'
 import './side-menu.css'
 
 const SideMenu = props => {
@@ -65,6 +66,16 @@ const SideMenu = props => {
         {
         props.switcher === SPACES ?
         <>
+        <div style={{margin: "10px", marginTop: "25px", display: "flex", justifyContent: "flex-end"}}>
+          <HamburgerMenu
+            color={props.theme.text}
+            width={20}
+            height={15}
+            strokeWidth={3}
+            menuClicked={props.onOpen}
+            isOpen={false}
+          />
+        </div>
         <h1>Tree</h1>
         {props.invites.length > 0 &&
         <div>

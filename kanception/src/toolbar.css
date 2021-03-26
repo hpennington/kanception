@@ -5,11 +5,16 @@
   left: 0;
   right: 0;
   align-items: center;
-  justify-content: space-between;
-  background: black;
+  justify-content: flex-end;
+  background: var(--background-color);
   height: 50px;
   width: 100%;
   z-index: 2;
+  -webkit-app-region: drag;
+}
+
+.page-link {
+  transform: rotate(90deg);
 }
 
 .toolbar .btn-primary {

@@ -478,6 +478,10 @@ const KanbanContainer = props => {
         .sort((a, b) => b.order - a.order)
         }
         groups={props.groups}
+        onOpen={props.onOpen}
+        onBack={props.onBack}
+        menuOpen={props.menuOpen}
+        theme={props.theme}
         comments={props.comments}
         onSubmitComment={onSubmitComment}
         teams={props.teams}
