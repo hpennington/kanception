@@ -12,6 +12,6 @@ WORKDIR /home/ubuntu/api
 COPY package*.json ./
 RUN npm install
 
-COPY --chown=ubuntu:ubuntu . /home/ubuntu/api
+COPY --chown=ubuntu:ubuntu ./ /home/ubuntu/api
 
 CMD ["npm", "run", "dev"]

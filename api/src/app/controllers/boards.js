@@ -35,68 +35,11 @@ const createBoard = async (req, res) => {
     const project = req.query.project
     const group = req.query.group
     const parent = req.query.parent
+    const sub = req.user.sub
 
-    const owner = await User.findOne({sub: req.user.sub})
+    const boardService = new BoardService()
 
-    const boards = await Board.find({group: group})
-    const order = Math.max(...[-1, ...boards.map(board => board.order)]) + 1
-
-    const board = await Board.create({
-      title: "",
-      description: "",
-      owner: owner._id,
-      order: order,
-      project: project,
-      parent: parent,
-      group: group,
-      count: 0,
-      comments: false,
-    })
-
-    const groupBacklog = await Group.create({
-      title: "Backlog",
-      owner: owner._id,
-      order: 0,
-      board: board._id,
-    })
-
-    const groupTodo = await Group.create({
-      title: "To-do",
-      owner: owner._id,
-      order: 1,
-      board: board._id,
-    })
-
-    const groupInProgress = await Group.create({
-      title: "In progress",
-      owner: owner._id,
-      order: 2,
-      board: board._id,
-    })
-
-    const groupReview = await Group.create({
-      title: "Review",
-      owner: owner._id,
-      order: 3,
-      board: board._id,
-    })
-
-    const groupDone = await Group.create({
-      title: "Done",
-      owner: owner._id,
-      order: 4,
-      board: board._id,
-    })
-
-    const groups = [
-      groupBacklog,
-      groupTodo,
-      groupInProgress,
-      groupReview,
-      groupDone
-    ]
-
-    await recursiveUpdateCount(parent, 1)
+    const board = await boardService.createBoard(project, group, parent, sub)
 
     res.send(board)
 
@@ -132,36 +75,17 @@ const readTeamBoards = async (req, res) => {
 }
 
 const readBoards = async (req, res) => {
-  const ids = req.query.ids
+  try {
+    const ids = req.query.ids
+    const sub = req.user.sub
 
-  const boards = []
+    const boards = new BoardService().readBoards(sub, ids)
+    res.send(boards)
 
-  if (ids != null) {
-    const user = await User.find({sub: req.user.sub})
-    for (const id of ids) {
-      const boardRef = await BoardRef.find({board: id, owner: user[0]._id})
-      const board = await Board.findById(new ObjectId(id))
-
-      // Add assignees to board
-      const assigments = await Assignment.find({board: id})
-      const assignees = assignments.map(assignment => assignment.assignee)
-
-      boards.push({
-        groups: board.groups,
-        _id: board._id,
-        title: board.title,
-        description: board.description,
-        owner: board.owner,
-        order: board.order,
-        group: boardRef[0].group,
-        count: board.count,
-        assignees: assignees,
-
-      })
-    }
+  } catch(error) {
+    console.log(error)
+    res.sendStatus(500)
   }
-
-  res.send(boards)
 }
 
 const updateBoard = async (req, res) => {
