@@ -7,6 +7,7 @@ const Team = require('../models/team')
 const TeamInvite = require('../models/team-invite')
 const Assignment = require('../models/assignment')
 const Comment = require('../models/comment')
+const fetch = require('node-fetch')
 
 const createUser = async (req, res) => {
   console.log(req.user)

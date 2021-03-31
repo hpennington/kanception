@@ -7,6 +7,9 @@ const Team = require('../models/team')
 const TeamInvite = require('../models/team-invite')
 const Assignment = require('../models/assignment')
 const Comment = require('../models/comment')
+const BoardService = require('../services/board-service')
+const mongoose = require('mongoose')
+const ObjectId = mongoose.Types.ObjectId
 
 const createProject = async (req, res) => {
   try {
@@ -105,7 +108,7 @@ const deleteProject = async (req, res) => {
     const project = await Project.findOne({_id: id})
     if (owner._id == project.owner) {
       const boards = await Board.find({project: id})
-      await recursiveDelete(boards.map(board => board._id))
+      await new BoardService().recursiveDelete(boards.map(board => board._id))
       const deleteResult = await Project.deleteOne({_id: id})
       res.sendStatus(200)
     } else {

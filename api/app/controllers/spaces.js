@@ -5,6 +5,7 @@ const Group = require('../models/group')
 const User = require('../models/user')
 const Team = require('../models/team')
 const mongoose = require('mongoose')
+const BoardService = require('../services/board-service')
 const ObjectId = mongoose.Types.ObjectId
 
 const createSpace = async (req, res) => {
@@ -67,7 +68,7 @@ const deleteSpace = async (req, res) => {
 
       const boards = await Board.find({project: project._id})
 
-      await recursiveDelete(boards.map(board => board._id))
+      await new BoardService().recursiveDelete(boards.map(board => board._id))
 
       const result = await Project.deleteOne({_id: project._id})
     }
