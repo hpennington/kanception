@@ -6,11 +6,11 @@ const fetch = require('node-fetch')
 const jwt = require('express-jwt')
 const jwks = require('jwks-rsa')
 const { v4: uuidv4 } = require('uuid')
-const sendmail = require('sendmail')()
-const aws = require('aws-sdk')
 const { createComment, readComments } = require('./app/controllers/comments')
 const { createAssignment, readAssignments, deleteAssignment } = require('./app/controllers/assignments')
 const { createSpace, readSpaces, deleteSpace } = require('./app/controllers/spaces')
+const { createProject, readProjects, deleteProject } = require('./app/controllers/projects')
+const { readTree } = require('./app/controllers/tree')
 const Space = require('./app/models/space')
 const Project = require('./app/models/project')
 const Board = require('./app/models/board')
@@ -21,16 +21,9 @@ const TeamInvite = require('./app/models/team-invite')
 const Assignment = require('./app/models/assignment')
 const Comment = require('./app/models/comment')
 
-//aws.config.loadFromPath('./.aws-config.json')
-
 const ObjectId = mongoose.Types.ObjectId
+
 const port = 4000
-
-const app = express()
-
-app.use(cors())
-app.use(bodyParser())
-app.use(express.json())
 
 const authConfig = {
   domain: 'kanception.auth0.com',
@@ -50,69 +43,13 @@ const jwtCheck = jwt({
   scope: 'openid profile email',
 })
 
+const app = express()
+
+// Middleware
+app.use(cors())
+app.use(bodyParser())
+app.use(express.json())
 app.use(jwtCheck)
-
-const sendPasswordResetEmail = (recipient, url) => {
-  // Replace sender@example.com with your "From" address.
-  // This address must be verified with Amazon SES.
-  const sender = "Kanception.io <verify@kanception.io>"
-
-  // The subject line for the email.
-  const subject = "Kanception.io: Verify account and set password"
-
-  // The email body for recipients with non-HTML email clients.
-  const body_text = url
-
-  // The HTML body of the email.
-  const body_html = `<html>
-  <head></head>
-  <body>
-    <a href="${url}">Verify account</a>
-  </body>
-  </html>`;
-
-  // The character encoding for the email.
-  const charset = "UTF-8";
-
-  // Create a new SES object.
-  var ses = new aws.SES();
-
-  // Specify the parameters to pass to the API.
-  var params = {
-    Source: sender,
-    Destination: {
-      ToAddresses: [
-        recipient
-      ],
-    },
-    Message: {
-      Subject: {
-        Data: subject,
-        Charset: charset
-      },
-      Body: {
-        Text: {
-          Data: body_text,
-          Charset: charset
-        },
-        Html: {
-          Data: body_html,
-          Charset: charset
-        }
-      }
-    },
-  }
-
-  //Try to send the email.
-  ses.sendEmail(params, function(err, data) {
-    // If something goes wrong, print an error message.
-    if(err) {
-      console.log(err.message);
-    } else {
-      console.log("Email sent! Message ID: ", data.MessageId);
-    }
-  });
-}
 
 mongoose.connect('mongodb://mongo/kanception', {useNewUrlParser: true})
 const db = mongoose.connection
@@ -137,153 +74,13 @@ db.once('open', () => {
 
   app.post('/spaces/add', createSpace)
 
-  app.delete('/project', async (req, res) => {
-    try {
-      const id = req.query.id
-      const owner = await User.findOne({sub: req.user.sub})
-      const project = await Project.findOne({_id: id})
-      if (owner._id == project.owner) {
-        const boards = await Board.find({project: id})
-        await recursiveDelete(boards.map(board => board._id))
-        const deleteResult = await Project.deleteOne({_id: id})
-        res.sendStatus(200)
-      } else {
-        res.sendStatus(401)
-      }
+  app.delete('/project', deleteProject)
 
-    } catch(error) {
-      console.log(error)
-      res.send(500)
-    }
-  })
+  app.get('/projects', readProjects)
 
-  app.get('/projects', async (req, res) => {
-    try {
+  app.post('/projects/add', createProject)
 
-      const owner = await User.findOne({sub: req.user.sub})
-
-      const projects = []
-
-      for (const team of owner.spaces) {
-        console.log(team)
-        const space = await Space.findById(new ObjectId(team))
-        console.log(space)
-        const projectsResult = await Project.find({space: space._id})
-        projects.push(...projectsResult)
-      }
-
-      res.send(projects)
-
-    } catch(error) {
-      console.log(error)
-    }
-  })
-
-  app.post('/projects/add', async (req, res) => {
-    try {
-
-      const title = req.query.title
-      const space = req.query.space
-
-      const owner = await User.findOne({sub: req.user.sub})
-      const project = await Project.create({
-        title: title,
-        space: space,
-        owner: owner._id,
-      })
-
-      console.log({project})
-
-      const projectRoot = await Board.create({
-        title: title,
-        owner: owner._id,
-        order: 0,
-        parent: null,
-        project: project._id,
-        group: null,
-        count: 0,
-        comments: false,
-      })
-
-      const groupBacklog = await Group.create({
-        title: "Backlog",
-        owner: owner._id,
-        order: 0,
-        board: projectRoot._id,
-      })
-
-      const groupTodo = await Group.create({
-        title: "To-do",
-        owner: owner._id,
-        order: 1,
-        board: projectRoot._id,
-      })
-
-      const groupInProgress = await Group.create({
-        title: "In progress",
-        owner: owner._id,
-        order: 2,
-        board: projectRoot._id,
-      })
-
-      const groupReview = await Group.create({
-        title: "Review",
-        owner: owner._id,
-        order: 3,
-        board: projectRoot._id,
-      })
-
-      const groupDone = await Group.create({
-        title: "Done",
-        owner: owner._id,
-        order: 4,
-        board: projectRoot._id,
-      })
-
-      res.send(project)
-
-    } catch(error) {
-      console.log(error)
-    }
-  })
-
-  app.get('/tree', async (req, res) => {
-    try {
-
-      const project = req.query.project
-      const owner = await User.findOne({sub: req.user.sub})
-      const nodes = await Board.find({project: project})
-      const updatedNodes = []
-
-      for (var node of nodes) {
-        // Add assignees to board
-        const assignments = await Assignment.find({board: node._id})
-        const assignees = assignments.map(assignment => assignment.assignee)
-
-        updatedNodes.push({
-          _id: node._id,
-          assignees: assignees,
-          title: node.title,
-          description: node.description,
-          project: node.project,
-          owner: node.owner,
-          parent: node.parent,
-          group: node.group,
-          order: node.order,
-          start: node.start,
-          end: node.end,
-          count: node.count,
-          comments: node.comments,
-        })
-      }
-
-      res.send(updatedNodes)
-
-    } catch(error) {
-      console.log(error)
-      res.sendStatus(500)
-    }
-  })
+  app.get('/tree', readTree)
 
   app.get('/user', async (req, res) => {
     try {
