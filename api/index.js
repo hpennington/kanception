@@ -8,6 +8,16 @@ const jwks = require('jwks-rsa')
 const { v4: uuidv4 } = require('uuid')
 const sendmail = require('sendmail')()
 const aws = require('aws-sdk')
+const { createComment, readComments } = require('./app/controllers/comments')
+const Space = require('./app/models/space')
+const Project = require('./app/models/project')
+const Board = require('./app/models/board')
+const Group = require('./app/models/group')
+const User = require('./app/models/user')
+const Team = require('./app/models/team')
+const TeamInvite = require('./app/models/team-invite')
+const Assignment = require('./app/models/assignment')
+const Comment = require('./app/models/comment')
 
 //aws.config.loadFromPath('./.aws-config.json')
 
@@ -105,143 +115,13 @@ const sendPasswordResetEmail = (recipient, url) => {
 mongoose.connect('mongodb://mongo/kanception', {useNewUrlParser: true})
 const db = mongoose.connection
 
-const spaceSchema = new mongoose.Schema({
-  title: String,
-  team: String,
-  owner: String,
-})
-
-const Space = new mongoose.model('Space', spaceSchema)
-
-const projectSchema = mongoose.Schema({
-  title: String,
-  space: String,
-  owner: String,
-})
-
-const Project = new mongoose.model('Project', projectSchema)
-
-const boardSchema = new mongoose.Schema({
-  title: String,
-  description: String,
-  project: String,
-  owner: String,
-  parent: String,
-  group: String,
-  order: Number,
-  start: Number,
-  end: Number,
-  count: Number,
-  comments: Boolean,
-})
-
-const Board = new mongoose.model('Board', boardSchema)
-
-const groupSchema = new mongoose.Schema({
-  title: String,
-  board: String,
-  owner: String,
-  order: Number,
-})
-
-const Group = new mongoose.model('Group', groupSchema)
-
-const userSchema = new mongoose.Schema({
-  email: String,
-  sub: String,
-  name: {
-    first: String,
-    last: String,
-  },
-  spaces: [String],
-  active: Boolean,
-})
-
-const User = new mongoose.model('User', userSchema)
-
-const teamSchema = new mongoose.Schema({
-  members: [String],
-})
-
-const Team = new mongoose.model('Team', teamSchema)
-
-const teamInviteSchema = new mongoose.Schema({
-  team: String,
-  invitee: String,
-})
-
-const TeamInvite = new mongoose.model('TeamInvite', teamInviteSchema)
-
-const assignmentSchema = new mongoose.Schema({
-  assignee: String,
-  assigner: String,
-  board: String,
-})
-
-const Assignment = new mongoose.model('Assignment', assignmentSchema)
-
-const commentSchema = new mongoose.Schema({
-  owner: String,
-  board: String,
-  text: String,
-  timestamp: String,
-})
-
-const Comment = new mongoose.model('Comment', commentSchema)
-
 db.on('error', console.error.bind(console, 'connection error:'))
 
 db.once('open', () => {
 
-  app.get('/comments', async (req, res) => {
-    try {
-      const boardId = req.query.board
+  app.get('/comments', readComments)
 
-      const user = await User.findOne({sub: req.user.sub})
-      const board = await Board.findById(new ObjectId(boardId))
-      const project = await Project.findById(new ObjectId(board.project))
-      const space = await Space.findById(new ObjectId(project.space))
-      const team = await Team.findById(new ObjectId(space.team))
-
-      if (team.members.includes(user._id)) {
-        const comments = await Comment.find({board: boardId})
-        res.send(comments.sort((a, b) => a.timestamp < b.timestamp))
-      }
-    } catch(error) {
-      console.log(error)
-      res.sendStatus(500)
-    }
-  })
-
-  app.post('/comments', async (req, res) => {
-    try {
-      const text = req.query.text
-      console.log({text})
-      const boardId = req.query.board
-      const timestamp = new Date().getTime()
-
-      const user = await User.findOne({sub: req.user.sub})
-
-      const comment = await Comment.create({
-        text: text,
-        owner: user._id,
-        board: boardId,
-        timestamp: timestamp,
-      })
-
-      const board = await Board.findById(new ObjectId(boardId))
-      if (board.comments === false || board.comments === undefined) {
-        board.comments = true
-        board.save()
-      }
-
-      res.send(comment)
-
-    } catch(error) {
-      console.log(error)
-      res.sendStatus(500)
-    }
-  })
+  app.post('/comments', createComment)
 
   app.get('/assignments', async (req, res) => {
     try {
