@@ -5,12 +5,13 @@ const Group = require('../models/group')
 const User = require('../models/user')
 const Team = require('../models/team')
 const Assignment = require('../models/assignment')
+const Comment = require('../models/comment')
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
 class BoardService {
-  constructor(boardRepository) {
-    this.boardRepository = boardRepository
+  constructor() {
+    this.boardRepository = new MongoBoardRepository()
   }
 
   async recursiveDelete(ids) {
@@ -127,11 +128,11 @@ class BoardService {
       if (ids != null) {
         const user = await User.find({sub: sub})
         for (const id of ids) {
-          const boardRef = await BoardRef.find({board: id, owner: user[0]._id})
-          const board = await Board.findById(new ObjectId(id))
+          const board = this.boardRepository.find(id)
+          console.log('here biteches')
 
           // Add assignees to board
-          const assigments = await Assignment.find({board: id})
+          const assignments = await Assignment.find({board: id})
           const assignees = assignments.map(assignment => assignment.assignee)
 
           boards.push({
@@ -141,7 +142,7 @@ class BoardService {
             description: board.description,
             owner: board.owner,
             order: board.order,
-            group: boardRef[0].group,
+            group: board.group,
             count: board.count,
             assignees: assignees,
           })
