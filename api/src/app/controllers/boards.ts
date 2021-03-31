@@ -56,7 +56,7 @@ const readTeamBoards = async (req, res) => {
 
   if (ids != null) {
     for (const id of ids) {
-      const boardRef = await BoardRef.find({board: id})
+      // const boardRef = await BoardRef.find({board: id})
       const board = await Board.findById(new ObjectId(id))
 
       boards.push({
@@ -65,27 +65,13 @@ const readTeamBoards = async (req, res) => {
         title: board.title,
         owner: board.owner,
         order: board.order,
-        group: boardRef[0].group,
+        group: board.group,
         count: board.count,
       })
     }
   }
 
   res.send(boards)
-}
-
-const readBoards = async (req, res) => {
-  try {
-    const ids = req.query.ids
-    const sub = req.user.sub
-
-    const boards = new BoardService().readBoards(sub, ids)
-    res.send(boards)
-
-  } catch(error) {
-    console.log(error)
-    res.sendStatus(500)
-  }
 }
 
 const updateBoard = async (req, res) => {
@@ -95,23 +81,6 @@ const updateBoard = async (req, res) => {
     const board = await Board.findById(new ObjectId(boardId))
     const updatedBoard = Object.assign(board, req.body)
     console.log('updatedboard: ' + board)
-    updatedBoard.save()
-    res.sendStatus(201)
-
-  } catch(error) {
-    console.log(error)
-    res.sendStatus(500)
-  }
-
-}
-
-const updateBoardRefs = async (req, res) => {
-
-  try {
-    const boardId = req.query.id
-    const user = await User.find({sub: req.user.sub})
-    const board = await BoardRef.find({board: boardId, owner: user[0]._id})
-    const updatedBoard = Object.assign(board[0], req.body)
     updatedBoard.save()
     res.sendStatus(201)
 
@@ -150,4 +119,4 @@ const deleteBoard = async (req, res) => {
   }
 }
 
-module.exports = { createBoard, readTeamBoards, readBoards, updateBoard, updateBoardRefs, deleteBoard }
+module.exports = { createBoard, readTeamBoards, updateBoard, deleteBoard }

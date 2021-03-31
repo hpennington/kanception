@@ -110,13 +110,9 @@ db.once('open', () => {
 
   app.get('/team/boards', readTeamBoards)
 
-  app.get('/boards', readBoards)
-
   app.delete('/boards', deleteBoard)
 
   app.post('/board/update', updateBoard)
-
-  app.post('/boardrefs/update', updateBoardRefs)
 
   app.post('/boards/add', createBoard)
 

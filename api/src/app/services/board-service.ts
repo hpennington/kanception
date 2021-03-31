@@ -1,6 +1,6 @@
 const Space = require('../models/space')
 const Project = require('../models/project')
-const Board = require('../models/board')
+import Board = require('../models/board')
 const Group = require('../models/group')
 const User = require('../models/user')
 const Team = require('../models/team')
@@ -8,8 +8,12 @@ const Assignment = require('../models/assignment')
 const Comment = require('../models/comment')
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+import BoardRepositoryInterface from '../repositories/board-repository-interface'
+import MongoBoardRepository from '../repositories/mongo-board-repository'
 
 class BoardService {
+  boardRepository: BoardRepositoryInterface
+
   constructor() {
     this.boardRepository = new MongoBoardRepository()
   }
@@ -120,42 +124,35 @@ class BoardService {
     }
   }
 
-  async readBoards(sub, ids) {
-    try {
+  async readTree(sub, project) {
+    const owner = await User.findOne({sub: sub})
+    const nodes = await Board.find({project: project})
+    const updatedNodes = []
 
-      const boards = []
+    for (var node of nodes) {
+      // Add assignees to board
+      const assignments = await Assignment.find({board: node._id})
+      const assignees = assignments.map(assignment => assignment.assignee)
 
-      if (ids != null) {
-        const user = await User.find({sub: sub})
-        for (const id of ids) {
-          const board = this.boardRepository.find(id)
-          console.log('here biteches')
-
-          // Add assignees to board
-          const assignments = await Assignment.find({board: id})
-          const assignees = assignments.map(assignment => assignment.assignee)
-
-          boards.push({
-            groups: board.groups,
-            _id: board._id,
-            title: board.title,
-            description: board.description,
-            owner: board.owner,
-            order: board.order,
-            group: board.group,
-            count: board.count,
-            assignees: assignees,
-          })
-        }
-      }
-
-      return boards
-
-    } catch(error) {
-      throw error
+      updatedNodes.push({
+        _id: node._id,
+        assignees: assignees,
+        title: node.title,
+        description: node.description,
+        project: node.project,
+        owner: node.owner,
+        parent: node.parent,
+        group: node.group,
+        order: node.order,
+        start: node.start,
+        end: node.end,
+        count: node.count,
+        comments: node.comments,
+      })
     }
-  }
 
+    return updatedNodes
+  }
 }
 
 module.exports = BoardService

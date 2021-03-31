@@ -1,4 +1,7 @@
+import Board = require('../models/board')
 
 interface BoardRepositoryInterface {
-  function find(id: string): [Board];
+  async find(id: string): Promise<Board>;
 }
+
+export default BoardRepositoryInterface
