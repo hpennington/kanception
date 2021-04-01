@@ -144,7 +144,6 @@ const PricingBlock = () => (
     <h1 style={{fontSize: '4em', margin: '40px auto', textAlign: 'center'}}>Pricing</h1>
     <h1 style={{fontsize: '4em', margin: '60px auto', textalign: 'center'}}>It's free!</h1>
     <a className="sign-up-btn sign-up-btn-bottom" href="https://app.kanception.io">Sign In / Sign Up</a>
-    <p>We will offer paid features in the future.</p>
   </div>
 )
 
