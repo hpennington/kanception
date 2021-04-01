@@ -1,13 +1,13 @@
 const BoardService = require('../src/app/services/board-service')
-import MongoBoardRepository from '../src/app/repositories/mongo-board-repository'
+import TestBoardRepository from '../src/app/repositories/test-board-repository'
 import TestUserRepository from '../src/app/repositories/test-user-repository'
-import MongoGroupRepository from '../src/app/repositories/mongo-group-repository'
+import TestGroupRepository from '../src/app/repositories/test-group-repository'
 import MongoAssignmentRepository from '../src/app/repositories/mongo-assignment-repository'
 
 test('createBoard', async () => {
-  const boardRepository = new MongoBoardRepository()
+  const boardRepository = new TestBoardRepository()
   const userRepository = new TestUserRepository()
-  const groupRepository = new MongoGroupRepository()
+  const groupRepository = new TestGroupRepository()
   const assignmentRepository = new MongoAssignmentRepository()
   const boardService = new BoardService(boardRepository, userRepository, groupRepository, assignmentRepository)
 
@@ -21,4 +21,4 @@ test('createBoard', async () => {
   expect(board.project).toBe(project)
   expect(board.group).toBe(group)
   expect(board.parent).toBe(parent)
-});
+})

@@ -55,8 +55,6 @@ class BoardService {
         const board = await this.boardRepository.find(currentId)
         await this.boardRepository.incrementCount(board, amount)
 
-        console.log({board})
-
         currentId = board.parent
 
        } while(currentId !== null)
