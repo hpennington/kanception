@@ -1,6 +1,6 @@
 import AssignmentRepositoryInterface from './assignment-repository-interface'
 import Board = require('../models/user')
-import Assignment = require('../models/user')
+import Assignment = require('../models/assignment')
 import mongoose = require('mongoose')
 
 const ObjectId = mongoose.Types.ObjectId

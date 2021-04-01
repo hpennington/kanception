@@ -10,7 +10,7 @@ class MongoBoardRepository implements BoardRepositoryInterface {
     return board
   }
 
-  async findAll(criteria: Object): Promise<Array<Board>> {
+  async findAll(criteria): Promise<Array<Board>> {
   	const boards = await Board.find(criteria)
   	return boards
   }
