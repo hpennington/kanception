@@ -7,7 +7,7 @@ class TestBoardRepository implements BoardRepositoryInterface {
       _id: '0f0d514cf6a4dbf1f5d74b7152f440d0',
       title: '',
       description: '',
-      owner: '0f0d514cf6a4dbf1f5d74b7152f440d4',
+      owner: '0f0d514cf6a4dbf1f5d74b7152f440d0',
       order: '',
       project: '',
       parent: null,
@@ -21,7 +21,21 @@ class TestBoardRepository implements BoardRepositoryInterface {
   }
 
   async findByParent(id: string): Promise<Array<Board>> {
-    return null
+    const boards = [{
+      _id: '0f0d514cf6a4dbf1f5d74b7152f440d0',
+      title: '',
+      description: '',
+      owner: '0f0d514cf6a4dbf1f5d74b7152f440d0',
+      order: '',
+      project: '',
+      parent: id,
+      group: '',
+      count: 0,
+      comments: false,
+    }
+    ]
+
+    return boards
   }
 
   async findAll(criteria: Object): Promise<Array<Board>> {
@@ -29,7 +43,7 @@ class TestBoardRepository implements BoardRepositoryInterface {
       _id: '0f0d514cf6a4dbf1f5d74b7152f440d0',
       title: '',
       description: '',
-      owner: '0f0d514cf6a4dbf1f5d74b7152f440d4',
+      owner: '0f0d514cf6a4dbf1f5d74b7152f440d0',
       order: '',
       project: '',
       parent: null,

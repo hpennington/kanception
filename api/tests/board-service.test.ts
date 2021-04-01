@@ -10,14 +10,14 @@ const group = '0f0d514cf6a4dbf1f5d74b7152f440d2'
 const parent = '0f0d514cf6a4dbf1f5d74b7152f440d3'
 const sub = '0f0d514cf6a4dbf1f5d74b7152f440d4'
 
-test('createBoard', async () => {
-  const boardRepository = new TestBoardRepository()
-  const userRepository = new TestUserRepository()
-  const groupRepository = new TestGroupRepository()
-  const assignmentRepository = new TestAssignmentRepository()
-  const commentRepository = new TestCommentRepository()
-  const boardService = new BoardService(boardRepository, userRepository, groupRepository, assignmentRepository, commentRepository)
+const boardRepository = new TestBoardRepository()
+const userRepository = new TestUserRepository()
+const groupRepository = new TestGroupRepository()
+const assignmentRepository = new TestAssignmentRepository()
+const commentRepository = new TestCommentRepository()
+const boardService = new BoardService(boardRepository, userRepository, groupRepository, assignmentRepository, commentRepository)
 
+test('createBoard', async () => {
   const board = await boardService.createBoard(project, group, parent, sub)
 
   expect(board.project).toBe(project)
@@ -26,25 +26,11 @@ test('createBoard', async () => {
 })
 
 test('readTree', async () => {
-  const boardRepository = new TestBoardRepository()
-  const userRepository = new TestUserRepository()
-  const groupRepository = new TestGroupRepository()
-  const assignmentRepository = new TestAssignmentRepository()
-  const commentRepository = new TestCommentRepository()
-  const boardService = new BoardService(boardRepository, userRepository, groupRepository, assignmentRepository, commentRepository)
-
   const tree = await boardService.readTree(sub, project)
   expect(tree[0]._id).toBe('0f0d514cf6a4dbf1f5d74b7152f440d0')
 })
 
 test('updateBoard', async () => {
-  const boardRepository = new TestBoardRepository()
-  const userRepository = new TestUserRepository()
-  const groupRepository = new TestGroupRepository()
-  const assignmentRepository = new TestAssignmentRepository()
-  const commentRepository = new TestCommentRepository()
-  const boardService = new BoardService(boardRepository, userRepository, groupRepository, assignmentRepository, commentRepository)
-
   const board = await boardService.createBoard(project, group, parent, sub)
 
   expect(board.project).toBe(project)
