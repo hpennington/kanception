@@ -12,6 +12,7 @@ const boardSchema = new mongoose.Schema({
   end: Number,
   count: Number,
   comments: Boolean,
+  assignees: [String],
 })
 
 const Board = new mongoose.model('Board', boardSchema)
