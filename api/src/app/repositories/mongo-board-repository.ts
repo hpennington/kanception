@@ -35,6 +35,11 @@ class MongoBoardRepository implements BoardRepositoryInterface {
     await board.update({$inc: {count: amount}})
     board.save()
   }
+
+  async merge(board, body) {
+    const updatedBoard = Object.assign(board, body)
+    updatedBoard.save()
+  }
 }
 
 export default MongoBoardRepository

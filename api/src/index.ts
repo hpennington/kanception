@@ -5,16 +5,15 @@ import bodyParser = require('body-parser')
 import jwt = require('express-jwt')
 import jwks = require('jwks-rsa')
 
+import BoardController from './app/controllers/boards'
 const { createComment, readComments } = require('./app/controllers/comments')
 const { createAssignment, readAssignments, deleteAssignment } = require('./app/controllers/assignments')
 const { createSpace, readSpaces, deleteSpace } = require('./app/controllers/spaces')
 const { createProject, readProjects, deleteProject } = require('./app/controllers/projects')
-const { readTree } = require('./app/controllers/tree')
 const { createUser, readUser, updateName } = require('./app/controllers/user')
 const { createTeamInvite, readTeamInvites, updateTeamInviteAccept, deleteInvite } = require('./app/controllers/team-invites')
 const { createTeam, readTeam, readTeamRootsChildren, updateTeamBoardAccept } = require('./app/controllers/team')
 const { readProfiles } = require('./app/controllers/profiles')
-const { createBoard, readTeamBoards, readBoards, updateBoard, updateBoardRefs, deleteBoard } = require('./app/controllers/boards')
 const { createGroup, readGroups, updateGroup, deleteGroup } = require('./app/controllers/groups')
 
 const ObjectId = mongoose.Types.ObjectId
@@ -47,6 +46,8 @@ app.use(bodyParser())
 app.use(express.json())
 app.use(jwtCheck)
 
+const boardController = new BoardController()
+
 mongoose.connect('mongodb://mongo/kanception', {useNewUrlParser: true})
 const db = mongoose.connection
 
@@ -76,7 +77,7 @@ db.once('open', () => {
 
   app.post('/projects/add', createProject)
 
-  app.get('/tree', readTree)
+  app.get('/tree', boardController.readTree)
 
   app.get('/user', readUser)
 
@@ -108,13 +109,11 @@ db.once('open', () => {
 
   app.delete('/groups', deleteGroup)
 
-  app.get('/team/boards', readTeamBoards)
+  app.delete('/boards', boardController.deleteBoard)
 
-  app.delete('/boards', deleteBoard)
+  app.post('/board/update', boardController.updateBoard)
 
-  app.post('/board/update', updateBoard)
-
-  app.post('/boards/add', createBoard)
+  app.post('/boards/add', boardController.createBoard)
 
   app.post('/team/board/accept', updateTeamBoardAccept)
 

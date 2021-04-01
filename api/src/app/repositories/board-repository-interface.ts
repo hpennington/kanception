@@ -5,6 +5,7 @@ interface BoardRepositoryInterface {
   async findAll(criteria): Promise<Array<Board>>;
   async create(title, description, owner, order, project, parent, group, count, comments): Promise<Board>;
   async incrementCount(board, amount);
+  async merge(board, body);
 }
 
 export default BoardRepositoryInterface

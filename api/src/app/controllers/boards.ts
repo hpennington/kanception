@@ -5,126 +5,100 @@ const Group = require('../models/group')
 const User = require('../models/user')
 const Team = require('../models/team')
 const mongoose = require('mongoose')
-const BoardService = require('../services/board-service')
-const ObjectId = mongoose.Types.ObjectId
+import BoardService from '../services/board-service'
 import MongoBoardRepository from '../repositories/mongo-board-repository'
 import MongoUserRepository from '../repositories/mongo-user-repository'
 import MongoGroupRepository from '../repositories/mongo-group-repository'
 import MongoAssignmentRepository from '../repositories/mongo-assignment-repository'
+const ObjectId = mongoose.Types.ObjectId
 
-const recursiveUpdateCount = async (id, amount) => {
-  try {
+class BoardController {
+  private boardService: BoardService
 
-    let currentId = id
-    do {
-
-      const board = await Board.findById(new ObjectId(currentId))
-      await board.update({$inc: {count: amount}})
-      board.save()
-      console.log({board})
-
-      currentId = board.parent
-
-     } while(currentId !== null)
-
-  } catch(error) {
-    console.log(error)
-    throw error
-  }
-}
-
-const createBoard = async (req, res) => {
-  try {
-
-    const project = req.query.project
-    const group = req.query.group
-    const parent = req.query.parent
-    const sub = req.user.sub
-
+  constructor() {
     const boardRepository = new MongoBoardRepository()
     const userRepository = new MongoUserRepository()
     const groupRepository = new MongoGroupRepository()
     const assignmentRepository = new MongoAssignmentRepository()
     const boardService = new BoardService(boardRepository, userRepository, groupRepository, assignmentRepository)
+    this.boardService = boardService
 
-    const board = await boardService.createBoard(project, group, parent, sub)
-
-    res.send(board)
-
-  } catch(error) {
-    console.log(error)
-    res.sendStatus(500)
+    this.createBoard = this.createBoard.bind(this)
+    this.readTree = this.readTree.bind(this)
+    this.updateBoard = this.updateBoard.bind(this)
+    this.deleteBoard = this.deleteBoard.bind(this)
   }
-}
 
-const readTeamBoards = async (req, res) => {
-  const ids = req.query.ids
+  public async createBoard(req, res) {
+    try {
 
-  const boards = []
+      const project = req.query.project
+      const group = req.query.group
+      const parent = req.query.parent
+      const sub = req.user.sub
 
-  if (ids != null) {
-    for (const id of ids) {
-      // const boardRef = await BoardRef.find({board: id})
-      const board = await Board.findById(new ObjectId(id))
+      const board = await this.boardService.createBoard(project, group, parent, sub)
 
-      boards.push({
-        groups: board.groups,
-        _id: board._id,
-        title: board.title,
-        owner: board.owner,
-        order: board.order,
-        group: board.group,
-        count: board.count,
-      })
+      res.send(board)
+
+    } catch(error) {
+      console.log(error)
+      res.sendStatus(500)
     }
   }
 
-  res.send(boards)
-}
+  public async readTree(req, res) {
+    try {
 
-const updateBoard = async (req, res) => {
+      const project = req.query.project
+      const sub = req.user.sub
 
-  try {
-    const boardId = req.query.id
-    const board = await Board.findById(new ObjectId(boardId))
-    const updatedBoard = Object.assign(board, req.body)
-    console.log('updatedboard: ' + board)
-    updatedBoard.save()
-    res.sendStatus(201)
+      const nodes = await this.boardService.readTree(sub, project)
 
-  } catch(error) {
-    console.log(error)
-    res.sendStatus(500)
+      res.send(nodes)
+
+    } catch(error) {
+      console.log(error)
+      res.sendStatus(500)
+    }
   }
 
-}
+  public async updateBoard(req, res) {
 
-const deleteBoard = async (req, res) => {
-  const id = req.query.id
+    try {
+      const boardId = req.query.id
+      const body = req.body
 
-  try {
-
-    const user = await User.findOne({sub: req.user.sub})
-    const board = await Board.findById(new ObjectId(id))
-
-    console.log(board.owner)
-    console.log(user._id)
-    if (board.owner == user._id) {
-      if (board.parent !== null) {
-        await recursiveUpdateCount(board.parent, -1)
-      }
-
-      await new BoardService().recursiveDelete([id])
+      await this.boardService.updateBoard(boardId, body)
 
       res.sendStatus(201)
-    } else {
-      res.sendStatus(403)
+
+    } catch(error) {
+      console.log(error)
+      res.sendStatus(500)
     }
 
-  } catch(error) {
-    console.log(error)
-    res.sendStatus(500)
+  }
+
+  public async deleteBoard(req, res) {
+    const id = req.query.id
+    const sub = req.user.sub
+
+    try {
+
+      const success = await this.boardService.deleteBoard(id, sub)
+
+      if (success === true) {
+        res.sendStatus(201)
+      } else {
+        res.sendStatus(403)
+      }
+
+    } catch(error) {
+      console.log(error)
+      res.sendStatus(500)
+    }
   }
 }
 
-module.exports = { createBoard, readTeamBoards, updateBoard, deleteBoard }
+export default BoardController

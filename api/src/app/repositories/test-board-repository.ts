@@ -56,6 +56,10 @@ class TestBoardRepository implements BoardRepositoryInterface {
 
   async incrementCount(board, amount) {
   }
+
+  async merge(board, body) {
+    
+  }
 }
 
 export default TestBoardRepository

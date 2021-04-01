@@ -14,10 +14,10 @@ import GroupRepositoryInterface from '../repositories/group-repository-interface
 import AssignmentRepositoryInterface from '../repositories/assignment-repository-interface'
 
 class BoardService {
-  boardRepository: BoardRepositoryInterface
-  userRepository: UserRepositoryInterface
-  groupRepository: GroupRepositoryInterface
-  assignmentRepository: AssignmentRepositoryInterface
+  private boardRepository: BoardRepositoryInterface
+  private userRepository: UserRepositoryInterface
+  private groupRepository: GroupRepositoryInterface
+  private assignmentRepository: AssignmentRepositoryInterface
 
   constructor(
     boardRepository: BoardRepositoryInterface,
@@ -31,7 +31,7 @@ class BoardService {
     this.assignmentRepository = assignmentRepository
   }
 
-  async recursiveDelete(ids) {
+  private async recursiveDelete(ids) {
     for (const id of ids) {
       const deleteAssignementsResult = await Assignment.deleteMany({board: id})
       const deleteCommentsResult = await Comment.deleteMany({board: id})
@@ -46,7 +46,7 @@ class BoardService {
     }
   }
 
-  async recursiveUpdateCount(id, amount) {
+  private async recursiveUpdateCount(id, amount) {
     try {
 
       let currentId = id
@@ -64,7 +64,7 @@ class BoardService {
     }
   }
 
-  async createBoard(project, group, parent, sub) {
+  public async createBoard(project, group, parent, sub) {
     try {
 
       const owner = await this.userRepository.findBySub(sub)
@@ -96,7 +96,7 @@ class BoardService {
     }
   }
 
-  async readTree(sub, project) {
+  public async readTree(sub, project) {
     const owner = await this.userRepository.findBySub(sub)
     const nodes = await this.boardRepository.findAll({project: project})
 
@@ -113,6 +113,28 @@ class BoardService {
 
     return updatedNodes
   }
+
+  public async updateBoard(id, body) {
+    const board = await this.boardRepository.find(id)
+    await this.boardRepository.merge(board, body)
+  }
+
+  public async deleteBoard(id, sub) {
+    const user = await this.userRepository.findBySub(sub)
+    const board = await this.boardRepository.find(id)
+
+    if (board.owner == user._id) {
+      if (board.parent !== null) {
+        await this.recursiveUpdateCount(board.parent, -1)
+      }
+
+      await this.recursiveDelete([id])
+
+      return true
+    } else {
+      return false
+    }
+  }
 }
 
-module.exports = BoardService
+export default BoardService
