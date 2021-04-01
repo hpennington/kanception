@@ -11,20 +11,24 @@ const ObjectId = mongoose.Types.ObjectId
 import BoardRepositoryInterface from '../repositories/board-repository-interface'
 import UserRepositoryInterface from '../repositories/user-repository-interface'
 import GroupRepositoryInterface from '../repositories/group-repository-interface'
+import AssignmentRepositoryInterface from '../repositories/assignment-repository-interface'
 
 class BoardService {
   boardRepository: BoardRepositoryInterface
   userRepository: UserRepositoryInterface
   groupRepository: GroupRepositoryInterface
+  assignmentRepository: AssignmentRepositoryInterface
 
   constructor(
     boardRepository: BoardRepositoryInterface,
     userRepository: UserRepositoryInterface,
     groupRepository: GroupRepositoryInterface,
+    assignmentRepository: AssignmentRepositoryInterface,
   ) {
     this.boardRepository = boardRepository
     this.userRepository = userRepository
     this.groupRepository = groupRepository
+    this.assignmentRepository = assignmentRepository
   }
 
   async recursiveDelete(ids) {
@@ -95,30 +99,18 @@ class BoardService {
   }
 
   async readTree(sub, project) {
-    const owner = await User.findOne({sub: sub})
-    const nodes = await Board.find({project: project})
+    const owner = await this.userRepository.findBySub(sub)
+    const nodes = await this.boardRepository.findAll({project: project})
+
     const updatedNodes = []
 
     for (var node of nodes) {
       // Add assignees to board
-      const assignments = await Assignment.find({board: node._id})
+      const assignments = await this.assignmentRepository.findAllByBoard(node)
       const assignees = assignments.map(assignment => assignment.assignee)
 
-      updatedNodes.push({
-        _id: node._id,
-        assignees: assignees,
-        title: node.title,
-        description: node.description,
-        project: node.project,
-        owner: node.owner,
-        parent: node.parent,
-        group: node.group,
-        order: node.order,
-        start: node.start,
-        end: node.end,
-        count: node.count,
-        comments: node.comments,
-      })
+      node.assignees = assignees
+      updatedNodes.push(node)
     }
 
     return updatedNodes

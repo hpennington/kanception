@@ -22,10 +22,12 @@
     "mongoose": "^5.9.14",
     "node-fetch": "^2.6.0",
     "sendmail": "^1.6.1",
+    "ts-jest": "^26.5.4",
     "uuid": "^8.1.0",
     "uuidv4": "^6.1.0"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.22",
     "jest": "^26.6.3",
     "nodemon": "^2.0.4"
   }

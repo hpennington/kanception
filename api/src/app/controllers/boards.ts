@@ -10,6 +10,7 @@ const ObjectId = mongoose.Types.ObjectId
 import MongoBoardRepository from '../repositories/mongo-board-repository'
 import MongoUserRepository from '../repositories/mongo-user-repository'
 import MongoGroupRepository from '../repositories/mongo-group-repository'
+import MongoAssignmentRepository from '../repositories/mongo-assignment-repository'
 
 const recursiveUpdateCount = async (id, amount) => {
   try {
@@ -43,7 +44,8 @@ const createBoard = async (req, res) => {
     const boardRepository = new MongoBoardRepository()
     const userRepository = new MongoUserRepository()
     const groupRepository = new MongoGroupRepository()
-    const boardService = new BoardService(boardRepository, userRepository, groupRepository)
+    const assignmentRepository = new MongoAssignmentRepository()
+    const boardService = new BoardService(boardRepository, userRepository, groupRepository, assignmentRepository)
 
     const board = await boardService.createBoard(project, group, parent, sub)
 
