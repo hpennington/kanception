@@ -35,9 +35,7 @@ const readSpaces = async (req, res) => {
 	  const spaces = []
 
 	  for (const spaceId of owner.spaces) {
-	    console.log('spaceid: ' + spaceId)
 	    const space = await Space.findById(new ObjectId(spaceId))
-	    console.log(space)
 	    spaces.push(space)
 	  }
 
