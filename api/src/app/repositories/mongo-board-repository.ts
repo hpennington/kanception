@@ -15,6 +15,11 @@ class MongoBoardRepository implements BoardRepositoryInterface {
   	return boards
   }
 
+  async findByParent(id: string): Promise<Array<Board>> {
+    const children = await Board.find({parent: id})
+    return children
+  }
+
   async create(title, description, owner, order, project, parent, group, count, comments): Promise<Board> {
   	const board = await Board.create({
       title: title,
@@ -39,6 +44,11 @@ class MongoBoardRepository implements BoardRepositoryInterface {
   async merge(board, body) {
     const updatedBoard = Object.assign(board, body)
     updatedBoard.save()
+    return updatedBoard
+  }
+
+  async delete(id: string) {
+    const deleteResult = await Board.deleteOne({_id: new ObjectId(id)})
   }
 }
 

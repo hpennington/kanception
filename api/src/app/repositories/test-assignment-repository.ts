@@ -16,6 +16,10 @@ class TestAssignmentRepository implements AssignmentRepositoryInterface {
   async findAllByBoard(board: Board): Promise<Array<Assignment>> {
   	return []
   }
+
+  async deleteMany(criteria) {
+    
+  }
 }
 
 export default TestAssignmentRepository

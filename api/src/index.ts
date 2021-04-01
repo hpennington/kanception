@@ -16,8 +16,6 @@ const { createTeam, readTeam, readTeamRootsChildren, updateTeamBoardAccept } = r
 const { readProfiles } = require('./app/controllers/profiles')
 const { createGroup, readGroups, updateGroup, deleteGroup } = require('./app/controllers/groups')
 
-const ObjectId = mongoose.Types.ObjectId
-
 const port = 4000
 
 const authConfig = {

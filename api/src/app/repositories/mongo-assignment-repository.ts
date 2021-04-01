@@ -1,5 +1,5 @@
 import AssignmentRepositoryInterface from './assignment-repository-interface'
-import Board = require('../models/user')
+import Board = require('../models/board')
 import Assignment = require('../models/assignment')
 import mongoose = require('mongoose')
 
@@ -12,6 +12,10 @@ class MongoAssignmentRepository implements AssignmentRepositoryInterface {
   }
 
   async create(assignee, assigner, board): Promise<Assignment> {
+  }
+
+  async deleteMany(criteria) {
+  	await Assignment.deleteMany(criteria)
   }
 }
 

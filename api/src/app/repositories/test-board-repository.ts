@@ -4,7 +4,7 @@ import Board from '../models/user'
 class TestBoardRepository implements BoardRepositoryInterface {
   async find(id: string): Promise<Board> {
     const board = {
-      _id: 'TEST_ID',
+      _id: '0f0d514cf6a4dbf1f5d74b7152f440d0',
       title: '',
       description: '',
       owner: '0f0d514cf6a4dbf1f5d74b7152f440d4',
@@ -20,9 +20,13 @@ class TestBoardRepository implements BoardRepositoryInterface {
 
   }
 
+  async findByParent(id: string): Promise<Array<Board>> {
+    return null
+  }
+
   async findAll(criteria: Object): Promise<Array<Board>> {
     const boards = [{
-      _id: 'TEST_ID',
+      _id: '0f0d514cf6a4dbf1f5d74b7152f440d0',
       title: '',
       description: '',
       owner: '0f0d514cf6a4dbf1f5d74b7152f440d4',
@@ -39,7 +43,7 @@ class TestBoardRepository implements BoardRepositoryInterface {
 
   async create(title, description, owner, order, project, parent, group, count, comments): Promise<Board> {
     const board = {
-      _id: 'TEST_ID',
+      _id: '0f0d514cf6a4dbf1f5d74b7152f440d0',
       title: title,
       description: description,
       owner: owner._id,
@@ -58,7 +62,12 @@ class TestBoardRepository implements BoardRepositoryInterface {
   }
 
   async merge(board, body) {
-    
+    const updatedBoard = Object.assign(board, body)
+    return updatedBoard
+  }
+
+  async delete(id: string) {
+    return true
   }
 }
 

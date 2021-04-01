@@ -1,42 +1,37 @@
-const Space = require('../models/space')
-const Project = require('../models/project')
-import Board = require('../models/board')
-const Group = require('../models/group')
-const User = require('../models/user')
-const Team = require('../models/team')
-const Assignment = require('../models/assignment')
-const Comment = require('../models/comment')
-const mongoose = require('mongoose')
-const ObjectId = mongoose.Types.ObjectId
 import BoardRepositoryInterface from '../repositories/board-repository-interface'
 import UserRepositoryInterface from '../repositories/user-repository-interface'
 import GroupRepositoryInterface from '../repositories/group-repository-interface'
 import AssignmentRepositoryInterface from '../repositories/assignment-repository-interface'
+import CommentRepositoryInterface from '../repositories/comment-repository-interface'
 
 class BoardService {
   private boardRepository: BoardRepositoryInterface
   private userRepository: UserRepositoryInterface
   private groupRepository: GroupRepositoryInterface
   private assignmentRepository: AssignmentRepositoryInterface
+  private commentRepository: CommentRepositoryInterface
 
   constructor(
     boardRepository: BoardRepositoryInterface,
     userRepository: UserRepositoryInterface,
     groupRepository: GroupRepositoryInterface,
     assignmentRepository: AssignmentRepositoryInterface,
+    commentRepository: CommentRepositoryInterface,
   ) {
     this.boardRepository = boardRepository
     this.userRepository = userRepository
     this.groupRepository = groupRepository
     this.assignmentRepository = assignmentRepository
+    this.commentRepository = commentRepository
   }
 
   private async recursiveDelete(ids) {
     for (const id of ids) {
-      const deleteAssignementsResult = await Assignment.deleteMany({board: id})
-      const deleteCommentsResult = await Comment.deleteMany({board: id})
-      const deleteResult = await Board.deleteOne({_id: new ObjectId(id)})
-      const children = await Board.find({parent: id})
+      await this.assignmentRepository.deleteMany({board: id})
+      await this.commentRepository.deleteMany({board: id})
+      await this.boardRepository.delete(id)
+      const children = await this.boardRepository.findByParent(id)
+      
       const childrenIds = children.map(child => child._id)
       if (childrenIds.length > 0) {
         this.recursiveDelete(childrenIds)
@@ -116,7 +111,8 @@ class BoardService {
 
   public async updateBoard(id, body) {
     const board = await this.boardRepository.find(id)
-    await this.boardRepository.merge(board, body)
+    const result = await this.boardRepository.merge(board, body)
+    return result
   }
 
   public async deleteBoard(id, sub) {
