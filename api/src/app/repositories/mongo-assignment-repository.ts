@@ -10,6 +10,9 @@ class MongoAssignmentRepository implements AssignmentRepositoryInterface {
     const assignments = await Assignment.find({board: board._id})
     return assignments
   }
+
+  async create(assignee, assigner, board): Promise<Assignment> {
+  }
 }
 
 export default MongoAssignmentRepository

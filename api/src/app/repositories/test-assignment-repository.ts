@@ -1,0 +1,21 @@
+import AssignmentRepositoryInterface from './assignment-repository-interface'
+import Assignment = require('../models/assignment')
+import Board = require('../models/board')
+
+class TestAssignmentRepository implements AssignmentRepositoryInterface {
+  async create(assignee, assigner, board): Promise<Assignment> {
+    const group = {
+      assigner: assigner,
+      assignee: assignee,
+      board: board._id,
+    }
+
+    return group
+  }
+
+  async findAllByBoard(board: Board): Promise<Array<Assignment>> {
+  	return []
+  }
+}
+
+export default TestAssignmentRepository
