@@ -9,13 +9,22 @@ const Comment = require('../models/comment')
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 import BoardRepositoryInterface from '../repositories/board-repository-interface'
-import MongoBoardRepository from '../repositories/mongo-board-repository'
+import UserRepositoryInterface from '../repositories/user-repository-interface'
+import GroupRepositoryInterface from '../repositories/group-repository-interface'
 
 class BoardService {
   boardRepository: BoardRepositoryInterface
+  userRepository: UserRepositoryInterface
+  groupRepository: GroupRepositoryInterface
 
-  constructor() {
-    this.boardRepository = new MongoBoardRepository()
+  constructor(
+    boardRepository: BoardRepositoryInterface,
+    userRepository: UserRepositoryInterface,
+    groupRepository: GroupRepositoryInterface,
+  ) {
+    this.boardRepository = boardRepository
+    this.userRepository = userRepository
+    this.groupRepository = groupRepository
   }
 
   async recursiveDelete(ids) {
@@ -39,9 +48,9 @@ class BoardService {
       let currentId = id
       do {
 
-        const board = await Board.findById(new ObjectId(currentId))
-        await board.update({$inc: {count: amount}})
-        board.save()
+        const board = await this.boardRepository.find(currentId)
+        await this.boardRepository.incrementCount(board, amount)
+
         console.log({board})
 
         currentId = board.parent
@@ -56,56 +65,17 @@ class BoardService {
   async createBoard(project, group, parent, sub) {
     try {
 
-      const owner = await User.findOne({sub: sub})
-      const boards = await Board.find({group: group})
+      const owner = await this.userRepository.findBySub(sub)
+      const boards = await this.boardRepository.findAll({group: group})
       const order = Math.max(...[-1, ...boards.map(board => board.order)]) + 1
 
-      const board = await Board.create({
-        title: "",
-        description: "",
-        owner: owner._id,
-        order: order,
-        project: project,
-        parent: parent,
-        group: group,
-        count: 0,
-        comments: false,
-      })
+      const board = await this.boardRepository.create("", "", owner, order, project, parent, group, 0, false)
 
-      const groupBacklog = await Group.create({
-        title: "Backlog",
-        owner: owner._id,
-        order: 0,
-        board: board._id,
-      })
-
-      const groupTodo = await Group.create({
-        title: "To-do",
-        owner: owner._id,
-        order: 1,
-        board: board._id,
-      })
-
-      const groupInProgress = await Group.create({
-        title: "In progress",
-        owner: owner._id,
-        order: 2,
-        board: board._id,
-      })
-
-      const groupReview = await Group.create({
-        title: "Review",
-        owner: owner._id,
-        order: 3,
-        board: board._id,
-      })
-
-      const groupDone = await Group.create({
-        title: "Done",
-        owner: owner._id,
-        order: 4,
-        board: board._id,
-      })
+      const groupBacklog = await this.groupRepository.create("Backlog", owner, 0, board)
+      const groupTodo = await this.groupRepository.create("To-do", owner, 1, board)
+      const groupInProgress = await this.groupRepository.create("In progress", owner, 2, board)
+      const groupReview = await this.groupRepository.create("Review", owner, 3, board)
+      const groupDone = await this.groupRepository.create("Done", owner, 4, board)
 
       const groups = [
         groupBacklog,
