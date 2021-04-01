@@ -18,8 +18,6 @@ const readTree = async (req, res) => {
 
     const nodes = await boardService.readTree(sub, project)
 
-    console.log({nodes})
-
     res.send(nodes)
 
   } catch(error) {

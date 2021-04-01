@@ -82,7 +82,6 @@ const readTeam = async (req, res) => {
     }
 
     const space = await Space.findById({_id: req.query.team})
-    console.log(space)
 
     if (owner.spaces.includes(space._id) === false) {
       res.sendStatus(501)

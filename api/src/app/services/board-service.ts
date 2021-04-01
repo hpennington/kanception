@@ -108,7 +108,6 @@ class BoardService {
       const assignees = assignments.map(assignment => assignment.assignee)
 
       node.assignees = assignees
-      console.log({assignees})
       updatedNodes.push(node)
     }
 
