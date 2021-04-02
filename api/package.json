@@ -4,6 +4,7 @@
   "description": "",
   "main": "./src/index.ts",
   "scripts": {
+    "build": "webpack .",
     "start": "npx ts-node ./src/index.ts",
     "dev": "nodemon ./src/index.ts",
     "test": "jest"
@@ -22,18 +23,28 @@
     "express-jwt": "^5.3.3",
     "jwks-rsa": "^1.8.0",
     "mongoose": "^5.9.14",
+    "net": "^1.0.2",
     "node-fetch": "^2.6.0",
+    "path": "^0.12.7",
     "sendmail": "^1.6.1",
+    "stream": "^0.0.2",
+    "stream-http": "^3.1.1",
+    "tls": "^0.0.1",
     "ts-jest": "^26.5.4",
     "ts-node": "^9.1.1",
-    "typescript": "^4.2.3",
+    "util": "^0.12.3",
     "uuid": "^8.1.0",
     "uuidv4": "^6.1.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.10",
     "@types/jest": "^26.0.22",
+    "fs": "^0.0.1-security",
     "jest": "^26.6.3",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "ts-loader": "^8.1.0",
+    "typescript": "^4.2.3",
+    "webpack": "^5.30.0",
+    "webpack-cli": "^4.6.0"
   }
 }
