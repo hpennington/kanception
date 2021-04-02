@@ -6,15 +6,14 @@ import jwt = require('express-jwt')
 import jwks = require('jwks-rsa')
 
 import BoardController from './app/controllers/boards'
-const { createComment, readComments } = require('./app/controllers/comments')
-const { createAssignment, readAssignments, deleteAssignment } = require('./app/controllers/assignments')
-const { createSpace, readSpaces, deleteSpace } = require('./app/controllers/spaces')
-const { createProject, readProjects, deleteProject } = require('./app/controllers/projects')
-const { createUser, readUser, updateName } = require('./app/controllers/user')
-const { createTeamInvite, readTeamInvites, updateTeamInviteAccept, deleteInvite } = require('./app/controllers/team-invites')
-const { createTeam, readTeam, readTeamRootsChildren, updateTeamBoardAccept } = require('./app/controllers/team')
-const { readProfiles } = require('./app/controllers/profiles')
-const { createGroup, readGroups, updateGroup, deleteGroup } = require('./app/controllers/groups')
+import AssignmentController from './app/controllers/assignments'
+import CommentController from './app/controllers/comments'
+import GroupController from './app/controllers/groups'
+import ProjectController from './app/controllers/projects'
+import SpaceController from './app/controllers/spaces'
+import UserController from './app/controllers/user'
+import TeamController from './app/controllers/team'
+import TeamInviteController from './app/controllers/team-invites'
 
 const port = 4000
 
@@ -45,6 +44,14 @@ app.use(express.json())
 app.use(jwtCheck)
 
 const boardController = new BoardController()
+const assignmentController = new AssignmentController()
+const commentController = new CommentController()
+const groupController = new GroupController()
+const projectController = new ProjectController()
+const spaceController = new SpaceController()
+const userController = new UserController()
+const teamController = new TeamController()
+const teamInviteController = new TeamInviteController()
 
 mongoose.connect('mongodb://mongo/kanception', {useNewUrlParser: true})
 const db = mongoose.connection
@@ -53,67 +60,65 @@ db.on('error', console.error.bind(console, 'connection error:'))
 
 db.once('open', () => {
 
-  app.get('/comments', readComments)
+  app.get('/comments', commentController.readComments)
 
-  app.post('/comments', createComment)
+  app.post('/comments', commentController.createComment)
 
-  app.get('/assignments', readAssignments)
+  app.get('/assignments', assignmentController.readAssignments)
 
-  app.post('/assignment', createAssignment)
+  app.post('/assignment', assignmentController.createAssignment)
 
-  app.delete('/assignment', deleteAssignment)
+  app.delete('/assignment', assignmentController.deleteAssignment)
 
-  app.get('/spaces', readSpaces)
+  app.get('/spaces', spaceController.readSpaces)
 
-  app.delete('/space', deleteSpace)
+  app.delete('/space', spaceController.deleteSpace)
 
-  app.post('/spaces/add', createSpace)
+  app.post('/spaces/add', spaceController.createSpace)
 
-  app.delete('/project', deleteProject)
+  app.delete('/project', projectController.deleteProject)
 
-  app.get('/projects', readProjects)
+  app.get('/projects', projectController.readProjects)
 
-  app.post('/projects/add', createProject)
+  app.post('/projects/add', projectController.createProject)
 
   app.get('/tree', boardController.readTree)
 
-  app.get('/user', readUser)
+  app.get('/user', userController.readUser)
 
-  app.post('/user', createUser)
+  app.post('/user', userController.createUser)
 
-  app.post('/team/invite/accept', updateTeamInviteAccept)
+  app.post('/team/invite/accept', teamInviteController.updateTeamInviteAccept)
 
-  app.post('/name', updateName)
+  app.post('/name', userController.updateName)
 
-  app.post('/team/invite', createTeamInvite)
+  app.post('/team/invite', teamInviteController.createTeamInvite)
 
-  app.get('/team/root/children', readTeamRootsChildren)
+  app.get('/team/root/children', teamController.readTeamRootsChildren)
 
-  app.get('/teaminvites', readTeamInvites)
+  app.get('/teaminvites', teamInviteController.readTeamInvites)
 
-  app.delete('/teaminvites', deleteInvite)
+  app.delete('/teaminvites', teamInviteController.deleteInvite)
 
-  app.get('/profiles', readProfiles)
+  app.get('/profiles', userController.readProfiles)
 
-  app.get('/team', readTeam)
+  app.get('/team', teamController.readTeam)
 
-  app.post('/team', createTeam)
+  app.post('/team', teamController.createTeam)
 
-  app.get('/groups', readGroups)
+  app.get('/groups', groupController.readGroups)
 
-  app.post('/groups/add', createGroup)
+  app.post('/groups/add', groupController.createGroup)
 
-  app.post('/groups/update', updateGroup)
+  app.post('/groups/update', groupController.updateGroup)
 
-  app.delete('/groups', deleteGroup)
+  app.delete('/groups', groupController.deleteGroup)
 
   app.delete('/boards', boardController.deleteBoard)
 
   app.post('/board/update', boardController.updateBoard)
 
   app.post('/boards/add', boardController.createBoard)
-
-  app.post('/team/board/accept', updateTeamBoardAccept)
 
   app.listen(port, () => console.log(`API listening at http://localhost:${port}`))
 })
