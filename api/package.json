@@ -5,7 +5,7 @@
   "main": "./src/index.ts",
   "scripts": {
     "build": "webpack .",
-    "start": "npx ts-node ./src/index.ts",
+    "start": "node ./dist/bundle.js",
     "dev": "nodemon ./src/index.ts",
     "test": "jest"
   },
