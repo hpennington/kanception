@@ -5,6 +5,11 @@ class UserController {
 
   constructor() {
     this.userService = new UserService()
+
+    this.createUser = this.createUser.bind(this)
+    this.readUser = this.readUser.bind(this)
+    this.readProfiles = this.readProfiles.bind(this)
+    this.updateName = this.updateName.bind(this)
   }
 
   public async createUser(req, res) {
