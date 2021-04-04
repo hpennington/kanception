@@ -3,12 +3,10 @@ import MongoUserRepository from '../repositories/mongo/user-repository'
 import MongoGroupRepository from '../repositories/mongo/group-repository'
 import MongoAssignmentRepository from '../repositories/mongo/assignment-repository'
 import MongoCommentRepository from '../repositories/mongo/comment-repository'
-import BoardService from '../services/board-service'
 import GroupService from '../services/group-service'
 
 class GroupController {
   private groupService: GroupService
-  private boardService: BoardService
   
   constructor() {
     this.groupService = new GroupService()
@@ -18,15 +16,6 @@ class GroupController {
     const groupRepository = new MongoGroupRepository()
     const assignmentRepository = new MongoAssignmentRepository()
     const commentRepository = new MongoCommentRepository()
-    const boardService = new BoardService(
-      boardRepository, 
-      userRepository, 
-      groupRepository, 
-      assignmentRepository, 
-      commentRepository
-    )
-
-    this.boardService = boardService
 
     this.createGroup = this.createGroup.bind(this)
     this.readGroups = this.readGroups.bind(this)
