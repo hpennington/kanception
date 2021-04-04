@@ -6,30 +6,25 @@ const Team = require('../models/team')
 const Comment = require('../models/comment')
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+import CommentService from '../services/comment-service'
 
 class CommentController {
+  private commentService: CommentService
+
+  constructor() {
+    this.commentService = new CommentService()
+
+    this.createComment = this.createComment.bind(this)
+    this.readComments = this.readComments.bind(this)
+  }
+
   public async createComment(req, res) {
     try {
       const text = req.query.text
-      console.log({text})
       const boardId = req.query.board
-      const timestamp = new Date().getTime()
-
-      const user = await User.findOne({sub: req.user.sub})
-
-      const comment = await Comment.create({
-        text: text,
-        owner: user._id,
-        board: boardId,
-        timestamp: timestamp,
-      })
-
-      const board = await Board.findById(new ObjectId(boardId))
-      if (board.comments === false || board.comments === undefined) {
-        board.comments = true
-        board.save()
-      }
-
+      const sub = req.user.sub
+      
+      const comment = await this.commentService.createComment(text, boardId, sub)
       res.send(comment)
 
     } catch(error) {
@@ -41,17 +36,11 @@ class CommentController {
   public async readComments(req, res) {
   	try {
       const boardId = req.query.board
+      const sub = req.user.sub
 
-      const user = await User.findOne({sub: req.user.sub})
-      const board = await Board.findById(new ObjectId(boardId))
-      const project = await Project.findById(new ObjectId(board.project))
-      const space = await Space.findById(new ObjectId(project.space))
-      const team = await Team.findById(new ObjectId(space.team))
+      const comments = await this.commentService.readComments(sub, boardId)
+      res.send(comments)
 
-      if (team.members.includes(user._id)) {
-        const comments = await Comment.find({board: boardId})
-        res.send(comments.sort((a, b) => a.timestamp < b.timestamp))
-      }
     } catch(error) {
       console.log(error)
       res.sendStatus(500)

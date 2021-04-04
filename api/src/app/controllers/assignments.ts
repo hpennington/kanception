@@ -1,4 +1,3 @@
-const User = require('../models/user')
 import Assignment from '../models/assignment'
 import AssignmentService from '../services/assignment-service'
 
