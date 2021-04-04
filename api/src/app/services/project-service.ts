@@ -7,11 +7,35 @@ const Team = require('../models/team')
 const TeamInvite = require('../models/team-invite')
 const Assignment = require('../models/assignment')
 const Comment = require('../models/comment')
-const BoardService = require('../services/board-service')
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+import BoardService from '../services/board-service'
+import MongoBoardRepository from '../repositories/mongo/board-repository'
+import MongoUserRepository from '../repositories/mongo/user-repository'
+import MongoGroupRepository from '../repositories/mongo/group-repository'
+import MongoAssignmentRepository from '../repositories/mongo/assignment-repository'
+import MongoCommentRepository from '../repositories/mongo/comment-repository'
 
 class ProjectService {
+  private boardService: BoardService
+
+  constructor() {
+    const boardRepository = new MongoBoardRepository()
+    const userRepository = new MongoUserRepository()
+    const groupRepository = new MongoGroupRepository()
+    const assignmentRepository = new MongoAssignmentRepository()
+    const commentRepository = new MongoCommentRepository()
+    const boardService = new BoardService(
+      boardRepository, 
+      userRepository, 
+      groupRepository, 
+      assignmentRepository, 
+      commentRepository
+    )
+
+    this.boardService = boardService
+  }
+
   public async createProject(sub, title, space) {
     try {
       const owner = await User.findOne({sub: sub})
@@ -103,7 +127,7 @@ class ProjectService {
       const project = await Project.findOne({_id: id})
       if (owner._id == project.owner) {
         const boards = await Board.find({project: id})
-        await new BoardService().recursiveDelete(boards.map(board => board._id))
+        await this.boardService.recursiveDelete(boards.map(board => board._id))
         const deleteResult = await Project.deleteOne({_id: id})
         return true
       } else {
