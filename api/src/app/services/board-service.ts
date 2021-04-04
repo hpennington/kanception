@@ -25,7 +25,7 @@ class BoardService {
     this.commentRepository = commentRepository
   }
 
-  private async recursiveDelete(ids) {
+  public async recursiveDelete(ids) {
     for (const id of ids) {
       await this.assignmentRepository.deleteMany({board: id})
       await this.commentRepository.deleteMany({board: id})
