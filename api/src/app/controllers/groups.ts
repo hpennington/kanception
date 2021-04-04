@@ -1,10 +1,3 @@
-const Space = require('../models/space')
-const Project = require('../models/project')
-const Board = require('../models/board')
-const Group = require('../models/group')
-const User = require('../models/user')
-const Team = require('../models/team')
-const mongoose = require('mongoose')
 import MongoBoardRepository from '../repositories/mongo/board-repository'
 import MongoUserRepository from '../repositories/mongo/user-repository'
 import MongoGroupRepository from '../repositories/mongo/group-repository'
@@ -12,7 +5,6 @@ import MongoAssignmentRepository from '../repositories/mongo/assignment-reposito
 import MongoCommentRepository from '../repositories/mongo/comment-repository'
 import BoardService from '../services/board-service'
 import GroupService from '../services/group-service'
-const ObjectId = mongoose.Types.ObjectId
 
 class GroupController {
   private groupService: GroupService

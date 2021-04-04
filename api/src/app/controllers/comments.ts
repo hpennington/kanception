@@ -1,11 +1,3 @@
-const Space = require('../models/space')
-const Project = require('../models/project')
-const Board = require('../models/board')
-const User = require('../models/user')
-const Team = require('../models/team')
-const Comment = require('../models/comment')
-const mongoose = require('mongoose')
-const ObjectId = mongoose.Types.ObjectId
 import CommentService from '../services/comment-service'
 
 class CommentController {
