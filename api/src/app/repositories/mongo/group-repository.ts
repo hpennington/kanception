@@ -4,7 +4,7 @@ import mongoose = require('mongoose')
 
 const ObjectId = mongoose.Types.ObjectId
 
-class MongoGroupRepository implements GroupRepositoryInterface {
+class GroupRepository implements GroupRepositoryInterface {
   async create(title, owner, order, board): Promise<Group> {
     const group = await Group.create({
       title: title,
@@ -17,4 +17,4 @@ class MongoGroupRepository implements GroupRepositoryInterface {
   }
 }
 
-export default MongoGroupRepository
+export default GroupRepository

@@ -5,7 +5,7 @@ import mongoose = require('mongoose')
 
 const ObjectId = mongoose.Types.ObjectId
 
-class MongoAssignmentRepository implements AssignmentRepositoryInterface {
+class AssignmentRepository implements AssignmentRepositoryInterface {
   async findAllByBoard(board: Board): Promise<Array<Assignment>> {
     const assignments = await Assignment.find({board: board._id})
     return assignments
@@ -19,4 +19,4 @@ class MongoAssignmentRepository implements AssignmentRepositoryInterface {
   }
 }
 
-export default MongoAssignmentRepository
+export default AssignmentRepository

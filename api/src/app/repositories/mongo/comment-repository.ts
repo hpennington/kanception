@@ -5,11 +5,11 @@ import mongoose = require('mongoose')
 
 const ObjectId = mongoose.Types.ObjectId
 
-class MongoCommentRepository implements CommentRepositoryInterface {
+class CommentRepository implements CommentRepositoryInterface {
 
   async deleteMany(criteria) {
   	await Comment.deleteMany(criteria)
   }
 }
 
-export default MongoCommentRepository
+export default CommentRepository

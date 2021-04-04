@@ -4,11 +4,11 @@ import mongoose = require('mongoose')
 
 const ObjectId = mongoose.Types.ObjectId
 
-class MongoUserRepository implements UserRepositoryInterface {
+class UserRepository implements UserRepositoryInterface {
   async findBySub(sub: string): Promise<User> {
     const user = await User.findOne({sub: sub})
     return user
   }
 }
 
-export default MongoUserRepository
+export default UserRepository

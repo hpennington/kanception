@@ -4,7 +4,7 @@ import mongoose = require('mongoose')
 
 const ObjectId = mongoose.Types.ObjectId
 
-class MongoBoardRepository implements BoardRepositoryInterface {
+class BoardRepository implements BoardRepositoryInterface {
   async find(id: string): Promise<Board> {
     const board = await Board.findById(new ObjectId(id))
     return board
@@ -52,4 +52,4 @@ class MongoBoardRepository implements BoardRepositoryInterface {
   }
 }
 
-export default MongoBoardRepository
+export default BoardRepository
