@@ -5,21 +5,48 @@ const Group = require('../models/group')
 const User = require('../models/user')
 const Team = require('../models/team')
 const mongoose = require('mongoose')
-const BoardService = require('../services/board-service')
 const ObjectId = mongoose.Types.ObjectId
+import MongoBoardRepository from '../repositories/mongo/board-repository'
+import MongoUserRepository from '../repositories/mongo/user-repository'
+import MongoGroupRepository from '../repositories/mongo/group-repository'
+import MongoAssignmentRepository from '../repositories/mongo/assignment-repository'
+import MongoCommentRepository from '../repositories/mongo/comment-repository'
+import BoardService from '../services/board-service'
+import SpaceService from '../services/space-service'
 
 class SpaceController {
+  private boardService: BoardService
+  private spaceService: SpaceService
+
+  constructor() {
+    const boardRepository = new MongoBoardRepository()
+    const userRepository = new MongoUserRepository()
+    const groupRepository = new MongoGroupRepository()
+    const assignmentRepository = new MongoAssignmentRepository()
+    const commentRepository = new MongoCommentRepository()
+    const boardService = new BoardService(
+      boardRepository, 
+      userRepository, 
+      groupRepository, 
+      assignmentRepository, 
+      commentRepository
+    )
+
+    this.boardService = boardService
+    this.spaceService = new SpaceService()
+
+    this.createSpace = this.createSpace.bind(this)
+    this.readSpaces = this.readSpaces.bind(this)
+    this.deleteSpace = this.deleteSpace.bind(this)
+  }
+
   public async createSpace(req, res) {
     try {
 
       const title = req.query.title
-      const owner = await User.findOne({sub: req.user.sub})
-      const team = await Team.create({members: [owner._id]})
-      const space = await Space.create({title: title, team: team._id, owner: owner._id})
+      const sub = req.user.sub
 
-      owner.spaces.push(space._id)
-      owner.save()
-
+      const space = await this.spaceService.createSpace(sub, title)
       res.send(space)
 
     } catch(error) {
@@ -30,15 +57,8 @@ class SpaceController {
 
   public async readSpaces(req, res) {
   	try {
-
-  	  const owner = await User.findOne({sub: req.user.sub})
-
-  	  const spaces = []
-
-  	  for (const spaceId of owner.spaces) {
-  	    const space = await Space.findById(new ObjectId(spaceId))
-  	    spaces.push(space)
-  	  }
+      const sub = req.user.sub
+      const spaces = await this.spaceService.readSpaces(sub)
 
   	  res.send(spaces)
 
@@ -50,37 +70,19 @@ class SpaceController {
 
   public async deleteSpace(req, res) {
     const id = req.query.id
+    const sub = req.user.sub
     try {
 
-      const user = await User.findOne({sub: req.user.sub})
-      const space = await Space.findById(new ObjectId(id))
-      const team = await Team.findById(new ObjectId(space.team))
+      const result = await this.spaceService.deleteSpace(sub, id)
 
-      if (user._id != space.owner) {
+      
+      if (result === false) {
         res.sendStatus(401)
         return
       }
 
-      const projects = await Project.find({space: id})
-
-      for (const project of projects) {
-
-        const boards = await Board.find({project: project._id})
-
-        await new BoardService().recursiveDelete(boards.map(board => board._id))
-
-        const result = await Project.deleteOne({_id: project._id})
-      }
-
-      for (const member of team.members) {
-        const teamMember = await User.findById(new ObjectId(member))
-        teamMember.spaces = teamMember.spaces.filter(s => s !== id)
-        teamMember.save()
-      }
-
-      const result = await Space.deleteOne({_id: id})
-      const result2 = await Team.deleteOne({_id: space.team})
-
+      // res.sendState('201')
+      
     } catch(error) {
       console.log(error)
       res.sendStatus(500)
