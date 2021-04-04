@@ -1,6 +1,6 @@
-import AssignmentRepositoryInterface from './assignment-repository-interface'
-import Assignment = require('../models/assignment')
-import Board = require('../models/board')
+import AssignmentRepositoryInterface from '../assignment-repository-interface'
+import Assignment = require('../../models/assignment')
+import Board = require('../../models/board')
 
 class TestAssignmentRepository implements AssignmentRepositoryInterface {
   async create(assignee, assigner, board): Promise<Assignment> {

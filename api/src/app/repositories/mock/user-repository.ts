@@ -1,5 +1,5 @@
-import UserRepositoryInterface from './user-repository-interface'
-import User from '../models/user'
+import UserRepositoryInterface from '../user-repository-interface'
+import User from '../../models/user'
 
 class TestUserRepository implements UserRepositoryInterface {
   async findBySub(sub: string): Promise<User> {

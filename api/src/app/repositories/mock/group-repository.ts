@@ -1,5 +1,5 @@
-import GroupRepositoryInterface from './group-repository-interface'
-import Group = require('../models/group')
+import GroupRepositoryInterface from '../group-repository-interface'
+import Group = require('../../models/group')
 
 class TestGroupRepository implements GroupRepositoryInterface {
   async create(title, owner, order, board): Promise<Group> {

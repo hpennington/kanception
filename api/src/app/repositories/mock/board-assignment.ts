@@ -1,5 +1,5 @@
-import BoardRepositoryInterface from './board-repository-interface'
-import Board from '../models/user'
+import BoardRepositoryInterface from '../board-repository-interface'
+import Board from '../../models/user'
 
 class TestBoardRepository implements BoardRepositoryInterface {
   async find(id: string): Promise<Board> {

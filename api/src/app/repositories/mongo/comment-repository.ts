@@ -1,6 +1,6 @@
-import CommentRepositoryInterface from './comment-repository-interface'
-import Board = require('../models/board')
-import Comment = require('../models/comment')
+import CommentRepositoryInterface from '../comment-repository-interface'
+import Board = require('../../models/board')
+import Comment = require('../../models/comment')
 import mongoose = require('mongoose')
 
 const ObjectId = mongoose.Types.ObjectId

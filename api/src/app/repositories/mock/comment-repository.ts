@@ -1,4 +1,4 @@
-import CommentRepositoryInterface from './comment-repository-interface'
+import CommentRepositoryInterface from '../comment-repository-interface'
 
 class TestCommentRepository implements CommentRepositoryInterface {
 

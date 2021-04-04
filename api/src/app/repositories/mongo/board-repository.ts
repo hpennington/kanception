@@ -1,5 +1,5 @@
-import BoardRepositoryInterface from './board-repository-interface'
-import Board = require('../models/board')
+import BoardRepositoryInterface from '../board-repository-interface'
+import Board = require('../../models/board')
 import mongoose = require('mongoose')
 
 const ObjectId = mongoose.Types.ObjectId

@@ -1,5 +1,5 @@
-import UserRepositoryInterface from './user-repository-interface'
-import User = require('../models/user')
+import UserRepositoryInterface from '../user-repository-interface'
+import User = require('../../models/user')
 import mongoose = require('mongoose')
 
 const ObjectId = mongoose.Types.ObjectId
