@@ -1,9 +1,9 @@
 import CommentRepositoryInterface from '../comment-repository-interface'
 
-class TestCommentRepository implements CommentRepositoryInterface {
+class CommentRepository implements CommentRepositoryInterface {
 
   async deleteMany(criteria) {
   }
 }
 
-export default TestCommentRepository
+export default CommentRepository

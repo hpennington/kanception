@@ -1,7 +1,7 @@
 import UserRepositoryInterface from '../user-repository-interface'
 import User from '../../models/user'
 
-class TestUserRepository implements UserRepositoryInterface {
+class UserRepository implements UserRepositoryInterface {
   async findBySub(sub: string): Promise<User> {
     return {
       sub: sub,
@@ -17,4 +17,4 @@ class TestUserRepository implements UserRepositoryInterface {
   }
 }
 
-export default TestUserRepository
+export default UserRepository

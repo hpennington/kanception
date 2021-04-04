@@ -1,7 +1,7 @@
 import GroupRepositoryInterface from '../group-repository-interface'
 import Group = require('../../models/group')
 
-class TestGroupRepository implements GroupRepositoryInterface {
+class GroupRepository implements GroupRepositoryInterface {
   async create(title, owner, order, board): Promise<Group> {
     const group = {
       title: title,
@@ -14,4 +14,4 @@ class TestGroupRepository implements GroupRepositoryInterface {
   }
 }
 
-export default TestGroupRepository
+export default GroupRepository

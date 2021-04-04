@@ -1,7 +1,7 @@
 import BoardRepositoryInterface from '../board-repository-interface'
 import Board from '../../models/user'
 
-class TestBoardRepository implements BoardRepositoryInterface {
+class BoardRepository implements BoardRepositoryInterface {
   async find(id: string): Promise<Board> {
     const board = {
       _id: '0f0d514cf6a4dbf1f5d74b7152f440d0',
@@ -85,4 +85,4 @@ class TestBoardRepository implements BoardRepositoryInterface {
   }
 }
 
-export default TestBoardRepository
+export default BoardRepository

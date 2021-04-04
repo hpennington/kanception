@@ -1,20 +1,20 @@
 import BoardService from '../src/app/services/board-service'
-import TestBoardRepository from '../src/app/repositories/mock/board-repository'
-import TestUserRepository from '../src/app/repositories/mock/user-repository'
-import TestGroupRepository from '../src/app/repositories/mock/group-repository'
-import TestAssignmentRepository from '../src/app/repositories/mock/assignment-repository'
-import TestCommentRepository from '../src/app/repositories/mock/comment-repository'
+import BoardRepository from '../src/app/repositories/mock/board-repository'
+import UserRepository from '../src/app/repositories/mock/user-repository'
+import GroupRepository from '../src/app/repositories/mock/group-repository'
+import AssignmentRepository from '../src/app/repositories/mock/assignment-repository'
+import CommentRepository from '../src/app/repositories/mock/comment-repository'
 
 const project = '0f0d514cf6a4dbf1f5d74b7152f440d1'
 const group = '0f0d514cf6a4dbf1f5d74b7152f440d2'
 const parent = '0f0d514cf6a4dbf1f5d74b7152f440d3'
 const sub = '0f0d514cf6a4dbf1f5d74b7152f440d4'
 
-const boardRepository = new TestBoardRepository()
-const userRepository = new TestUserRepository()
-const groupRepository = new TestGroupRepository()
-const assignmentRepository = new TestAssignmentRepository()
-const commentRepository = new TestCommentRepository()
+const boardRepository = new BoardRepository()
+const userRepository = new UserRepository()
+const groupRepository = new GroupRepository()
+const assignmentRepository = new AssignmentRepository()
+const commentRepository = new CommentRepository()
 const boardService = new BoardService(boardRepository, userRepository, groupRepository, assignmentRepository, commentRepository)
 
 test('createBoard', async () => {

@@ -2,7 +2,7 @@ import AssignmentRepositoryInterface from '../assignment-repository-interface'
 import Assignment = require('../../models/assignment')
 import Board = require('../../models/board')
 
-class TestAssignmentRepository implements AssignmentRepositoryInterface {
+class AssignmentRepository implements AssignmentRepositoryInterface {
   async create(assignee, assigner, board): Promise<Assignment> {
     const group = {
       assigner: assigner,
@@ -22,4 +22,4 @@ class TestAssignmentRepository implements AssignmentRepositoryInterface {
   }
 }
 
-export default TestAssignmentRepository
+export default AssignmentRepository
