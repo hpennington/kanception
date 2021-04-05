@@ -15,6 +15,7 @@ The tech stack is React, NodeJS, MongoDB (Migrating to Postgres) MERN -> PERN.
 
   - Move all client_ids, and secrets to a .env file
   - Migrate to a repository layer
+  - Add tests
   - Migrate to Sequelize
   - Migrate to Heroku & Netlify
   - Create CI/CD pipeline
