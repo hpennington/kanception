@@ -5,6 +5,10 @@ class TeamController {
 
   constructor() {
     this.teamService = new TeamService()
+
+    this.createTeam = this.createTeam.bind(this)
+    this.readTeamRootsChildren = this.readTeamRootsChildren.bind(this)
+    this.readTeam = this.readTeam.bind(this)
   }
 
   public async createTeam(req, res) {
