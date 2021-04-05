@@ -22,6 +22,7 @@ The tech stack is React, NodeJS, MongoDB (Migrating to Postgres) MERN -> PERN.
 ### Getting started
 
  - git clone https://github.com/hpennington/kanception.git
+ - cd kanception
  - cp kanception/sample.env kanception/.env
  - docker-compose up
  - goto localhost:3000
