@@ -1,25 +1,34 @@
-const User = require('../models/user')
+import User from '../models/user'
 import Assignment from '../models/assignment'
+import UserRepositoryInterface from '../repositories/user-repository-interface'
+import AssignmentRepositoryInterface from '../repositories/assignment-repository-interface'
 
 class AssignmentService {
+  private userRepository: UserRepositoryInterface
+  private assignmentRepository: AssignmentRepositoryInterface
+
+  constructor(
+    userRepository: UserRepositoryInterface,
+    assignmentRepository: AssignmentRepositoryInterface,
+  ) {
+    this.userRepository = userRepository
+    this.assignmentRepository = assignmentRepository
+  }
+
   public async createAssignment(sub, assignee, board) {
     try {
-      const user = await User.findOne({sub: sub})
+      const user = await this.userRepository.findBySub(sub)
       const assigner = user._id
-      const currentAssignment = await Assignment.findOne({
+      const currentAssignment = await this.assignmentRepository.findOne({
         board: board,
         assignee: assignee,
       })
-
+      
       if (currentAssignment != null) {
         return currentAssignment
       }
 
-      const assignment = await Assignment.create({
-        assignee: assignee,
-        assigner: assigner,
-        board: board,
-      })
+      const assignment = await this.assignmentRepository.create(assignee, assigner, board)
 
       return assignment
 
@@ -30,8 +39,8 @@ class AssignmentService {
 
   public async readAssignments(sub) {
     try {
-      const user = await User.findOne({sub: sub})
-      const assignments = await Assignment.find({assignee: user._id})
+      const user = await this.userRepository.findBySub(sub)
+      const assignments = await this.assignmentRepository.findAll({assignee: user._id})
       return assignments
     } catch(error) {
       throw error
@@ -41,7 +50,7 @@ class AssignmentService {
   public async deleteAssignment(board, assignee) {
     try {
 
-      const result = await Assignment.deleteOne({
+      const result = await this.assignmentRepository.deleteOne({
         board: board,
         assignee: assignee
       })

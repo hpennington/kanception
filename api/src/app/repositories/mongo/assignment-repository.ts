@@ -11,11 +11,25 @@ class AssignmentRepository implements AssignmentRepositoryInterface {
     return assignments
   }
 
+  async findAll(criteria): Promise<Array<Assignment>> {
+   	const assignments = await Assignment.find(criteria)
+  	return assignments
+  }
+
+  async findOne(criteria): Promise<Assignment> {
+  	const assignment = await Assignment.findOne(criteria)
+  	return assignment
+  }
+
   async create(assignee, assigner, board): Promise<Assignment> {
   }
 
   async deleteMany(criteria) {
   	await Assignment.deleteMany(criteria)
+  }
+
+  async deleteOne(criteria) {
+  	await Assignment.deleteOne(criteria)	
   }
 }
 
