@@ -13,12 +13,20 @@ class AssignmentRepository implements AssignmentRepositoryInterface {
     return group
   }
 
-  async findAllByBoard(board: Board): Promise<Array<Assignment>> {
-  	return []
+  async findAll(criteria): Promise<Array<Assignment>> {
+    return []
+  }
+
+  async findOne(criteria): Promise<Assignment> {
+    return null
   }
 
   async deleteMany(criteria) {
-    
+   
+  }
+
+  async deleteOne(criteria) {
+   
   }
 }
 

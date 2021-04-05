@@ -1,5 +1,3 @@
-import User from '../models/user'
-import Assignment from '../models/assignment'
 import UserRepositoryInterface from '../repositories/user-repository-interface'
 import AssignmentRepositoryInterface from '../repositories/assignment-repository-interface'
 
@@ -17,7 +15,7 @@ class AssignmentService {
 
   public async createAssignment(sub, assignee, board) {
     try {
-      const user = await this.userRepository.findBySub(sub)
+      const user = await this.userRepository.findOne({sub: sub})
       const assigner = user._id
       const currentAssignment = await this.assignmentRepository.findOne({
         board: board,
@@ -39,7 +37,7 @@ class AssignmentService {
 
   public async readAssignments(sub) {
     try {
-      const user = await this.userRepository.findBySub(sub)
+      const user = await this.userRepository.findOne({sub: sub})
       const assignments = await this.assignmentRepository.findAll({assignee: user._id})
       return assignments
     } catch(error) {

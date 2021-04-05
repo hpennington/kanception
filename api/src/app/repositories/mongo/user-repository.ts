@@ -5,9 +5,9 @@ import mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
 class UserRepository implements UserRepositoryInterface {
-  async findBySub(sub: string): Promise<User> {
-    const user = await User.findOne({sub: sub})
-    return user
+  async findOne(criteria): Promise<User> {
+  	const user = await User.findOne(criteria)
+  	return user
   }
 }
 

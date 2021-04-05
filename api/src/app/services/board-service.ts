@@ -62,7 +62,7 @@ class BoardService {
   public async createBoard(project, group, parent, sub) {
     try {
 
-      const owner = await this.userRepository.findBySub(sub)
+      const owner = await this.userRepository.findOne({sub: sub})
       const boards = await this.boardRepository.findAll({group: group})
       const order = Math.max(...[-1, ...boards.map(board => board.order)]) + 1
 
@@ -92,14 +92,14 @@ class BoardService {
   }
 
   public async readTree(sub, project) {
-    const owner = await this.userRepository.findBySub(sub)
+    const owner = await this.userRepository.findOne({sub: sub})
     const nodes = await this.boardRepository.findAll({project: project})
 
     const updatedNodes = []
 
     for (var node of nodes) {
       // Add assignees to board
-      const assignments = await this.assignmentRepository.findAllByBoard(node)
+      const assignments = await this.assignmentRepository.findAll({board: node._id})
       const assignees = assignments.map(assignment => assignment.assignee)
 
       node.assignees = assignees
@@ -116,7 +116,7 @@ class BoardService {
   }
 
   public async deleteBoard(id, sub) {
-    const user = await this.userRepository.findBySub(sub)
+    const user = await this.userRepository.findOne({sub: sub})
     const board = await this.boardRepository.find(id)
 
     if (board.owner == user._id) {

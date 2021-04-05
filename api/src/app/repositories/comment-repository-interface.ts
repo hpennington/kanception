@@ -1,7 +1,8 @@
 import Comment = require('../models/comment')
-import Board = require('../models/board')
 
 interface CommentRepositoryInterface {
+  create(owner, board, timestamp, text): Promise<Comment>;
+  findAll(criteria): Promise<Array<Comment>>;
   deleteMany(criteria);
 }
 

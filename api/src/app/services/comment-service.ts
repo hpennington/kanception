@@ -1,27 +1,43 @@
-const Space = require('../models/space')
-const Project = require('../models/project')
-const Board = require('../models/board')
-const User = require('../models/user')
-const Team = require('../models/team')
-const Comment = require('../models/comment')
-const mongoose = require('mongoose')
-const ObjectId = mongoose.Types.ObjectId
+import UserRepositoryInterface from '../repositories/user-repository-interface'
+import CommentRepositoryInterface from '../repositories/comment-repository-interface'
+import BoardRepositoryInterface from '../repositories/board-repository-interface'
+import ProjectRepositoryInterface from '../repositories/project-repository-interface'
+import SpaceRepositoryInterface from '../repositories/space-repository-interface'
+import TeamRepositoryInterface from '../repositories/team-repository-interface'
 
 class CommentService {
+  private userRepository: UserRepositoryInterface
+  private commentRepository: CommentRepositoryInterface
+  private boardRepository: BoardRepositoryInterface
+  private projectRepository: ProjectRepositoryInterface
+  private spaceRepository: SpaceRepositoryInterface
+  private teamRepository: TeamRepositoryInterface
+
+  constructor(
+    userRepository: UserRepositoryInterface,
+    commentRepository: CommentRepositoryInterface,
+    boardRepository: BoardRepositoryInterface,
+    projectRepository: ProjectRepositoryInterface,
+    spaceRepository: SpaceRepositoryInterface,
+    teamRepository: TeamRepositoryInterface,
+  ) {
+    this.userRepository = userRepository
+    this.commentRepository = commentRepository
+    this.boardRepository = boardRepository
+    this.projectRepository = projectRepository
+    this.spaceRepository = spaceRepository
+    this.teamRepository = teamRepository
+  }
+
   public async createComment(text, boardId, sub) {
     try {
       const timestamp = new Date().getTime()
 
-      const user = await User.findOne({sub: sub})
+      const user = await this.userRepository.findOne({sub: sub})
 
-      const comment = await Comment.create({
-        text: text,
-        owner: user._id,
-        board: boardId,
-        timestamp: timestamp,
-      })
+      const comment = await this.commentRepository.create(user._id, boardId, timestamp ,text)
 
-      const board = await Board.findById(new ObjectId(boardId))
+      const board = await this.boardRepository.find(boardId)
       if (board.comments === false || board.comments === undefined) {
         board.comments = true
         board.save()
@@ -35,15 +51,16 @@ class CommentService {
 
   public async readComments(sub, boardId) {
     try {
-      const user = await User.findOne({sub: sub})
-      const board = await Board.findById(new ObjectId(boardId))
-      const project = await Project.findById(new ObjectId(board.project))
-      const space = await Space.findById(new ObjectId(project.space))
-      const team = await Team.findById(new ObjectId(space.team))
+      const user = await this.userRepository.findOne({sub: sub})
+      const board = await this.boardRepository.find(boardId)
+      const project = await this.projectRepository.find(board.project)
+      const space = await this.spaceRepository.find(project.space)
+      const team = await this.teamRepository.find(space.team)
 
       if (team.members.includes(user._id)) {
-        const comments = await Comment.find({board: boardId})
-        return comments.sort((a, b) => a.timestamp < b.timestamp)
+        const comments = await this.commentRepository.findAll({board: boardId})
+        console.log(comments)
+        return comments.sort((a, b) => +(parseInt(a.timestamp) < parseInt(b.timestamp)))
       }
 
       return null

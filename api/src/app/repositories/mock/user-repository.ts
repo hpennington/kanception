@@ -15,6 +15,9 @@ class UserRepository implements UserRepositoryInterface {
   	  active: true,
     }
   }
+    async findOne(criteria): Promise<User> {
+    return criteria
+  }
 }
 
 export default UserRepository
