@@ -10,21 +10,21 @@ const Comment = require('../models/comment')
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 import BoardService from '../services/board-service'
-import MongoBoardRepository from '../repositories/mongo/board-repository'
-import MongoUserRepository from '../repositories/mongo/user-repository'
-import MongoGroupRepository from '../repositories/mongo/group-repository'
-import MongoAssignmentRepository from '../repositories/mongo/assignment-repository'
-import MongoCommentRepository from '../repositories/mongo/comment-repository'
+import BoardRepository from '../repositories/mongo/board-repository'
+import UserRepository from '../repositories/mongo/user-repository'
+import GroupRepository from '../repositories/mongo/group-repository'
+import AssignmentRepository from '../repositories/mongo/assignment-repository'
+import CommentRepository from '../repositories/mongo/comment-repository'
 
 class ProjectService {
   private boardService: BoardService
 
   constructor() {
-    const boardRepository = new MongoBoardRepository()
-    const userRepository = new MongoUserRepository()
-    const groupRepository = new MongoGroupRepository()
-    const assignmentRepository = new MongoAssignmentRepository()
-    const commentRepository = new MongoCommentRepository()
+    const boardRepository = new BoardRepository()
+    const userRepository = new UserRepository()
+    const groupRepository = new GroupRepository()
+    const assignmentRepository = new AssignmentRepository()
+    const commentRepository = new CommentRepository()
     const boardService = new BoardService(
       boardRepository, 
       userRepository, 
