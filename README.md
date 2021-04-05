@@ -7,7 +7,7 @@ www.kanception.io
 
 ## Contributing
 
-Come work on this projects with us! It needs security hardening, performance optimizations, and lots of features added. Don't hesitate to make a PR!
+Come work on this project with us! It needs security hardening, performance optimizations, and lots of features added. Don't hesitate to make a PR!
 
 The tech stack is React, NodeJS, MongoDB (Migrating to Postgres) MERN -> PERN.
 
