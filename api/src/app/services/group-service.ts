@@ -1,47 +1,42 @@
-const Space = require('../models/space')
-const Project = require('../models/project')
-const Board = require('../models/board')
-const Group = require('../models/group')
-const User = require('../models/user')
-const Team = require('../models/team')
-const mongoose = require('mongoose')
 import BoardService from '../services/board-service'
-import BoardRepository from '../repositories/mongo/board-repository'
-import UserRepository from '../repositories/mongo/user-repository'
-import GroupRepository from '../repositories/mongo/group-repository'
-import AssignmentRepository from '../repositories/mongo/assignment-repository'
-import CommentRepository from '../repositories/mongo/comment-repository'
-const ObjectId = mongoose.Types.ObjectId
+import BoardRepositoryInterface from '../repositories/board-repository-interface'
+import UserRepositoryInterface from '../repositories/user-repository-interface'
+import GroupRepositoryInterface from '../repositories/group-repository-interface'
+import AssignmentRepositoryInterface from '../repositories/assignment-repository-interface'
+import CommentRepositoryInterface from '../repositories/comment-repository-interface'
 
 class GroupService {
+  private boardRepository: BoardRepositoryInterface
+  private userRepository: UserRepositoryInterface
+  private groupRepository: GroupRepositoryInterface
+  private assignmentRepository: AssignmentRepositoryInterface
+  private commentRepository: CommentRepositoryInterface
   private boardService: BoardService
 
-  constructor() {
-    const boardRepository = new BoardRepository()
-    const userRepository = new UserRepository()
-    const groupRepository = new GroupRepository()
-    const assignmentRepository = new AssignmentRepository()
-    const commentRepository = new CommentRepository()
-    const boardService = new BoardService(
-      boardRepository, 
-      userRepository, 
-      groupRepository, 
-      assignmentRepository, 
-      commentRepository
-    )
-
+  constructor(
+    boardRepository: BoardRepositoryInterface,
+    userRepository: UserRepositoryInterface,
+    groupRepository: GroupRepositoryInterface,
+    assignmentRepository: AssignmentRepositoryInterface,
+    commentRepository: CommentRepositoryInterface,
+    boardService: BoardService,
+  ) {
+    this.boardRepository = boardRepository
+    this.userRepository = userRepository
+    this.groupRepository = groupRepository
+    this.assignmentRepository = assignmentRepository
+    this.commentRepository = commentRepository
     this.boardService = boardService
-
   }
 
   public async createGroup(sub, boardId) {
     try {
-      const ownerObject = await User.findOne({sub: sub})
+      const ownerObject = await this.userRepository.findOne({sub: sub})
       const owner = ownerObject._id
-      const board = await Board.findById(new ObjectId(boardId))
-      const currentGroups = await Group.find({board: boardId})
+      const board = await this.boardRepository.find(boardId)
+      const currentGroups = await this.groupRepository.findAll({board: boardId})
       const order = Math.max(...[-1, ...currentGroups.map(group => group.order)]) + 1
-      const group = await Group.create({owner: owner, title: '', order: order, board: boardId})
+      const group = await this.groupRepository.create('', owner, order, boardId)
       return group
 
     } catch(error) {
@@ -51,7 +46,7 @@ class GroupService {
 
   public async readGroups(boardId) {
     try {
-      const groups = await Group.find({board: boardId})
+      const groups = await this.groupRepository.findAll({board: boardId})
       return groups
     } catch(error) {
       throw error
@@ -60,7 +55,7 @@ class GroupService {
 
   public async updateGroup(groupId, body) {
     try {
-      const group = await Group.findById(new ObjectId(groupId))
+      const group = await this.groupRepository.find(groupId)
       const updatedGroup = Object.assign(group, body)
       updatedGroup.save()
       return updatedGroup
@@ -74,12 +69,12 @@ class GroupService {
   public async deleteGroup(sub, id) {
     try {
 
-      const user = await User.findOne({sub: sub})
-      const group = await Group.findById(new ObjectId(id))
+      const user = await this.userRepository.findOne({sub: sub})
+      const group = await this.groupRepository.find(id)
 
       if (group.owner == user._id) {
-        const deleteResult = await Group.deleteOne({_id: id})
-        const boards = await Board.find({group: id})
+        const deleteResult = await this.groupRepository.delete(id)
+        const boards = await this.boardRepository.findAll({group: id})
         if (boards.length > 0) {
           await this.boardService.recursiveDelete(boards.map(board => board._id))
         }
