@@ -67,7 +67,7 @@ class UserService {
         return null
       }
 
-      const spaceResult = await this.userRepository.find(team)
+      const spaceResult = await this.spaceRepository.find(team)
       const teamResult = await this.teamRepository.find(spaceResult.team)
       if (teamResult === undefined || teamResult === null) {
         // res.sendStatus(502)
