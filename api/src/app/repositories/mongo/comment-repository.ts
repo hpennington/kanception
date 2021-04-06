@@ -7,14 +7,14 @@ const ObjectId = mongoose.Types.ObjectId
 
 class CommentRepository implements CommentRepositoryInterface {
   async create(owner, board, timestamp, text): Promise<Comment> {
-      const comment = await Comment.create({
-        text: text,
-        owner: owner,
-        board: board,
-        timestamp: timestamp,
-      })
+    const comment = await Comment.create({
+      text: text,
+      owner: owner,
+      board: board,
+      timestamp: timestamp,
+    })
 
-      return comment
+    return comment
   }
 
   async findAll(criteria): Promise<Array<Comment>> {

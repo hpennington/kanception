@@ -6,8 +6,8 @@ const ObjectId = mongoose.Types.ObjectId
 
 class TeamRepository implements TeamRepositoryInterface {
   async create(members): Promise<Team> {
-	const team = await Team.create({members: members})
-	return team
+	  const team = await Team.create({members: members})
+	  return team
   }
 
   async find(id: string): Promise<Team> {
