@@ -5,9 +5,21 @@ import mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
 class TeamRepository implements TeamRepositoryInterface {
-  async create(members): Promise<Team> {
-	  const team = await Team.create({members: members})
-	  return team
+  async create(members, owner, title): Promise<Team> {
+    if (owner === null && title === null) {
+      const team = await Team.create({
+        members: members
+      })
+      return team
+    } else {
+      const team = await Team.create({
+        members: members,
+        owner: owner,
+        title: title,
+      })
+      return team  
+    }
+    
   }
 
   async find(id: string): Promise<Team> {

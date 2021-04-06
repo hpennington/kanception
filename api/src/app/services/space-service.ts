@@ -44,7 +44,7 @@ class SpaceService {
   public async createSpace(sub, title) {
     try {
       const owner = await this.userRepository.findOne({sub: sub})
-      const team = await this.teamRepository.create([owner._id])
+      const team = await this.teamRepository.create([owner._id], null, null)
       const space = await this.spaceRepository.create(title, team._id, owner._id)
 
       owner.spaces.push(space._id)

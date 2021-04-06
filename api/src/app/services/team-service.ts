@@ -1,39 +1,51 @@
-const Space = require('../models/space')
-const Project = require('../models/project')
-const Board = require('../models/board')
-const Group = require('../models/group')
-const User = require('../models/user')
-const Team = require('../models/team')
-const mongoose = require('mongoose')
-const ObjectId = mongoose.Types.ObjectId
+import BoardRepositoryInterface from '../repositories/board-repository-interface'
+import UserRepositoryInterface from '../repositories/user-repository-interface'
+import GroupRepositoryInterface from '../repositories/group-repository-interface'
+import SpaceRepositoryInterface from '../repositories/space-repository-interface'
+import TeamRepositoryInterface from '../repositories/team-repository-interface'
 
 class TeamService {
+  private boardRepository: BoardRepositoryInterface
+  private userRepository: UserRepositoryInterface
+  private groupRepository: GroupRepositoryInterface
+  private spaceRepository: SpaceRepositoryInterface
+  private teamRepository: TeamRepositoryInterface
+
+  constructor(
+    boardRepository: BoardRepositoryInterface,
+    userRepository: UserRepositoryInterface,
+    groupRepository: GroupRepositoryInterface,
+    spaceRepository: SpaceRepositoryInterface,
+    teamRepository: TeamRepositoryInterface
+  ) {
+    this.boardRepository = boardRepository
+    this.userRepository = userRepository
+    this.groupRepository = groupRepository
+    this.spaceRepository = spaceRepository
+    this.teamRepository = teamRepository
+  }
 
   public async createTeam(sub, title) {
     try {
-      const owner = await User.findOne({sub: sub})
+      const owner = await this.userRepository.findOne({sub: sub})
       if (owner === null) {
         throw new Error("User is null")
       }
 
-      const team = await Team.create({
-        owner: owner._id,
-        title: title,
-        members: [owner._id]
-      })
+      const team = await this.teamRepository.create([owner._id], owner._id, title)
 
       owner.spaces.push(team._id)
       owner.save()
 
-      const groupBacklog = await Group.create({title: "Backlog", owner: team._id, order: 0})
-      const groupTodo = await Group.create({title: "To-do", owner: team._id, order: 1})
-      const groupInProgress = await Group.create({title: "In progress", owner: team._id, order: 2})
-      const groupReview = await Group.create({title: "Review", owner: team._id, order: 3})
-      const groupDone = await Group.create({title: "Done", owner: team._id, order: 4})
+      const groupBacklog = await this.groupRepository.create("Backlog", team._id, 0, undefined)
+      const groupTodo = await this.groupRepository.create("To-do", team._id, 1, undefined)
+      const groupInProgress = await this.groupRepository.create("In progress", team._id, 2, undefined)
+      const groupReview = await this.groupRepository.create("Review", team._id, 3, undefined)
+      const groupDone = await this.groupRepository.create("Done", team._id, 4, undefined)
 
       const groups = [groupBacklog, groupTodo, groupInProgress, groupReview, groupDone]
 
-      const teamRoot = await Board.create({
+      const teamRoot = await this.boardRepository.create({
         title: title,
         owner: team._id,
         groups: groups.map(group => group._id),
@@ -57,7 +69,7 @@ class TeamService {
   public async readTeamRootsChildren(team) {
     try {
 
-      const root = await Board.find({team: team, group: null})
+      const root = await this.boardRepository.findAll({team: team, group: null})
 
       if (root.length === 0) {
         return null
@@ -72,18 +84,18 @@ class TeamService {
 
   public async readTeam(sub, teamId) {
     try {
-      const owner = await User.findOne({sub: sub})
+      const owner = await this.userRepository.findOne({sub: sub})
       if (owner === null) {
         return null
       }
 
-      const space = await Space.findById({_id: teamId})
+      const space = await this.spaceRepository.find(teamId)
 
       if (owner.spaces.includes(space._id) === false) {
         return null
       }
 
-      const team = await Team.findById(new ObjectId(space.team))
+      const team = await this.teamRepository.find(space.team)
 
       if (team === null) {
         return null

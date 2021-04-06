@@ -65,9 +65,17 @@ class BoardService {
       const owner = await this.userRepository.findOne({sub: sub})
       const boards = await this.boardRepository.findAll({group: group})
       const order = Math.max(...[-1, ...boards.map(board => board.order)]) + 1
-
-      const board = await this.boardRepository.create("", "", owner, order, project, parent, group, 0, false)
-
+      const board = await this.boardRepository.create({
+        title: "",
+        description: "",
+        owner: owner._id,
+        order: order,
+        project: project,
+        parent: parent,
+        group: group,
+        count: 0,
+        comments: false,
+      })
       const groupBacklog = await this.groupRepository.create("Backlog", owner, 0, board)
       const groupTodo = await this.groupRepository.create("To-do", owner, 1, board)
       const groupInProgress = await this.groupRepository.create("In progress", owner, 2, board)

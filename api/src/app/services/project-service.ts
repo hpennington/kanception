@@ -41,7 +41,17 @@ class ProjectService {
     try {
       const owner = await this.userRepository.findOne({sub: sub})
       const project = await this.projectRepository.create(title, space, owner._id)
-      const projectRoot = await this.boardRepository.create(title, '', owner._id, 0, project._id, null, null, 0, false)
+      const projectRoot = await this.boardRepository.create({
+        title: title,
+        description: "",
+        owner: owner._id,
+        order: 0,
+        project: project._id,
+        parent: null,
+        group: null,
+        count: 0,
+        comments: false,
+      })
 
       const groupBacklog = await this.groupRepository.create("backlog", owner._id, 0, projectRoot._id)
       const groupTodo = await this.groupRepository.create("To-do", owner._id, 1, projectRoot._id)
