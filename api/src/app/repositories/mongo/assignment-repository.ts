@@ -17,6 +17,8 @@ class AssignmentRepository implements AssignmentRepositoryInterface {
   }
 
   async create(assignee, assigner, board): Promise<Assignment> {
+    const assignment = await Assignment.create({assignee, assigner, board})
+    return assignment
   }
 
   async deleteMany(criteria) {
