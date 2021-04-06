@@ -9,6 +9,10 @@ class UserRepository implements UserRepositoryInterface {
   	const user = await User.findOne(criteria)
   	return user
   }
+  async find(id: string): Promise<User> {
+    const user = await User.findById(new ObjectId(id))
+  	return user	
+  }
 }
 
 export default UserRepository

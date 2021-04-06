@@ -1,43 +1,51 @@
-const Space = require('../models/space')
-const Project = require('../models/project')
-const Board = require('../models/board')
-const Group = require('../models/group')
-const User = require('../models/user')
-const Team = require('../models/team')
-const mongoose = require('mongoose')
-import MongoBoardRepository from '../repositories/mongo/board-repository'
-import MongoUserRepository from '../repositories/mongo/user-repository'
-import MongoGroupRepository from '../repositories/mongo/group-repository'
-import MongoAssignmentRepository from '../repositories/mongo/assignment-repository'
-import MongoCommentRepository from '../repositories/mongo/comment-repository'
 import BoardService from '../services/board-service'
-const ObjectId = mongoose.Types.ObjectId
+import BoardRepositoryInterface from '../repositories/board-repository-interface'
+import UserRepositoryInterface from '../repositories/user-repository-interface'
+import GroupRepositoryInterface from '../repositories/group-repository-interface'
+import AssignmentRepositoryInterface from '../repositories/assignment-repository-interface'
+import CommentRepositoryInterface from '../repositories/comment-repository-interface'
+import TeamRepositoryInterface from '../repositories/team-repository-interface'
+import SpaceRepositoryInterface from '../repositories/space-repository-interface'
+import ProjectRepositoryInterface from '../repositories/project-repository-interface'
 
 class SpaceService {
   private boardService: BoardService
+  private boardRepository: BoardRepositoryInterface
+  private userRepository: UserRepositoryInterface
+  private groupRepository: GroupRepositoryInterface
+  private assignmentRepository: AssignmentRepositoryInterface
+  private commentRepository: CommentRepositoryInterface
+  private teamRepository: TeamRepositoryInterface
+  private spaceRepository: SpaceRepositoryInterface
+  private projectRepository: ProjectRepositoryInterface
 
-  constructor() {
-    const boardRepository = new MongoBoardRepository()
-    const userRepository = new MongoUserRepository()
-    const groupRepository = new MongoGroupRepository()
-    const assignmentRepository = new MongoAssignmentRepository()
-    const commentRepository = new MongoCommentRepository()
-    const boardService = new BoardService(
-      boardRepository, 
-      userRepository, 
-      groupRepository, 
-      assignmentRepository, 
-      commentRepository
-    )
-
+  constructor(
+    boardRepository: BoardRepositoryInterface,
+    userRepository: UserRepositoryInterface,
+    groupRepository: GroupRepositoryInterface,
+    assignmentRepository: AssignmentRepositoryInterface,
+    commentRepository: CommentRepositoryInterface,
+    teamRepository: TeamRepositoryInterface,
+    spaceRepository: SpaceRepositoryInterface,
+    projectRepository: ProjectRepositoryInterface,
+    boardService: BoardService
+  ) {
+    this.boardRepository = boardRepository
+    this.userRepository = userRepository
+    this.groupRepository = groupRepository
+    this.assignmentRepository = assignmentRepository
+    this.commentRepository = commentRepository
+    this.teamRepository = teamRepository
+    this.spaceRepository = spaceRepository
+    this.projectRepository = projectRepository
     this.boardService = boardService
   }
 
   public async createSpace(sub, title) {
     try {
-      const owner = await User.findOne({sub: sub})
-      const team = await Team.create({members: [owner._id]})
-      const space = await Space.create({title: title, team: team._id, owner: owner._id})
+      const owner = await this.userRepository.findOne({sub: sub})
+      const team = await this.teamRepository.create([owner._id])
+      const space = await this.spaceRepository.create(title, team._id, owner._id)
 
       owner.spaces.push(space._id)
       owner.save()
@@ -52,12 +60,12 @@ class SpaceService {
   public async readSpaces(sub) {
   	try {
 
-  	  const owner = await User.findOne({sub: sub})
+  	  const owner = await this.userRepository.findOne({sub: sub})
 
   	  const spaces = []
 
   	  for (const spaceId of owner.spaces) {
-  	    const space = await Space.findById(new ObjectId(spaceId))
+  	    const space = await this.spaceRepository.find(spaceId)
   	    spaces.push(space)
   	  }
 
@@ -71,34 +79,34 @@ class SpaceService {
   public async deleteSpace(sub, id) { 
     try {
 
-      const user = await User.findOne({sub: sub})
-      const space = await Space.findById(new ObjectId(id))
-      const team = await Team.findById(new ObjectId(space.team))
+      const user = await this.userRepository.findOne({sub: sub})
+      const space = await this.spaceRepository.find(id)
+      const team = await this.teamRepository.find(space.team)
 
       if (user._id != space.owner) {
         
         return false
       }
 
-      const projects = await Project.find({space: id})
+      const projects = await this.projectRepository.findAll({space: id})
 
       for (const project of projects) {
 
-        const boards = await Board.find({project: project._id})
+        const boards = await this.boardRepository.findAll({project: project._id})
 
         await this.boardService.recursiveDelete(boards.map(board => board._id))
 
-        const result = await Project.deleteOne({_id: project._id})
+        const result = await this.projectRepository.delete(project._id)
       }
 
       for (const member of team.members) {
-        const teamMember = await User.findById(new ObjectId(member))
+        const teamMember = await this.userRepository.find(member)
         teamMember.spaces = teamMember.spaces.filter(s => s !== id)
         teamMember.save()
       }
 
-      const result = await Space.deleteOne({_id: id})
-      const result2 = await Team.deleteOne({_id: space.team})
+      const result = await this.spaceRepository.delete(id)
+      const result2 = await this.teamRepository.delete(space.team)
 
       return true
     } catch(error) {
