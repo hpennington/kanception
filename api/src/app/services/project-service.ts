@@ -1,95 +1,53 @@
-const Space = require('../models/space')
-const Project = require('../models/project')
-const Board = require('../models/board')
-const Group = require('../models/group')
-const User = require('../models/user')
-const Team = require('../models/team')
-const TeamInvite = require('../models/team-invite')
-const Assignment = require('../models/assignment')
-const Comment = require('../models/comment')
-const mongoose = require('mongoose')
-const ObjectId = mongoose.Types.ObjectId
 import BoardService from '../services/board-service'
-import BoardRepository from '../repositories/mongo/board-repository'
-import UserRepository from '../repositories/mongo/user-repository'
-import GroupRepository from '../repositories/mongo/group-repository'
-import AssignmentRepository from '../repositories/mongo/assignment-repository'
-import CommentRepository from '../repositories/mongo/comment-repository'
+import BoardRepositoryInterface from '../repositories/board-repository-interface'
+import UserRepositoryInterface from '../repositories/user-repository-interface'
+import GroupRepositoryInterface from '../repositories/group-repository-interface'
+import AssignmentRepositoryInterface from '../repositories/assignment-repository-interface'
+import CommentRepositoryInterface from '../repositories/comment-repository-interface'
+import ProjectRepositoryInterface from '../repositories/project-repository-interface'
+import SpaceRepositoryInterface from '../repositories/space-repository-interface'
 
 class ProjectService {
+  private boardRepository: BoardRepositoryInterface
+  private userRepository: UserRepositoryInterface
+  private groupRepository: GroupRepositoryInterface
+  private assignmentRepository: AssignmentRepositoryInterface
+  private commentRepository: CommentRepositoryInterface
+  private projectRepository: ProjectRepositoryInterface
+  private spaceRepository: SpaceRepositoryInterface
   private boardService: BoardService
 
-  constructor() {
-    const boardRepository = new BoardRepository()
-    const userRepository = new UserRepository()
-    const groupRepository = new GroupRepository()
-    const assignmentRepository = new AssignmentRepository()
-    const commentRepository = new CommentRepository()
-    const boardService = new BoardService(
-      boardRepository, 
-      userRepository, 
-      groupRepository, 
-      assignmentRepository, 
-      commentRepository
-    )
-
+  constructor(
+    boardRepository: BoardRepositoryInterface,
+    userRepository: UserRepositoryInterface,
+    groupRepository: GroupRepositoryInterface,
+    assignmentRepository: AssignmentRepositoryInterface,
+    commentRepository: CommentRepositoryInterface,
+    projectRepository: ProjectRepositoryInterface,
+    spaceRepository: SpaceRepositoryInterface,
+    boardService: BoardService
+  ) {
+    this.boardRepository = boardRepository
+    this.userRepository = userRepository
+    this.groupRepository = groupRepository
+    this.assignmentRepository = assignmentRepository
+    this.commentRepository = commentRepository
+    this.projectRepository = projectRepository
+    this.spaceRepository = spaceRepository
     this.boardService = boardService
   }
 
   public async createProject(sub, title, space) {
     try {
-      const owner = await User.findOne({sub: sub})
-      const project = await Project.create({
-        title: title,
-        space: space,
-        owner: owner._id,
-      })
+      const owner = await this.userRepository.findOne({sub: sub})
+      const project = await this.projectRepository.create(title, space, owner._id)
+      const projectRoot = await this.boardRepository.create(title, '', owner._id, 0, project._id, null, null, 0, false)
 
-      const projectRoot = await Board.create({
-        title: title,
-        owner: owner._id,
-        order: 0,
-        parent: null,
-        project: project._id,
-        group: null,
-        count: 0,
-        comments: false,
-      })
-
-      const groupBacklog = await Group.create({
-        title: "Backlog",
-        owner: owner._id,
-        order: 0,
-        board: projectRoot._id,
-      })
-
-      const groupTodo = await Group.create({
-        title: "To-do",
-        owner: owner._id,
-        order: 1,
-        board: projectRoot._id,
-      })
-
-      const groupInProgress = await Group.create({
-        title: "In progress",
-        owner: owner._id,
-        order: 2,
-        board: projectRoot._id,
-      })
-
-      const groupReview = await Group.create({
-        title: "Review",
-        owner: owner._id,
-        order: 3,
-        board: projectRoot._id,
-      })
-
-      const groupDone = await Group.create({
-        title: "Done",
-        owner: owner._id,
-        order: 4,
-        board: projectRoot._id,
-      })
+      const groupBacklog = await this.groupRepository.create("backlog", owner._id, 0, projectRoot._id)
+      const groupTodo = await this.groupRepository.create("To-do", owner._id, 1, projectRoot._id)
+      const groupInProgress = await this.groupRepository.create("In progress", owner._id, 2, projectRoot._id)
+      const groupReview = await this.groupRepository.create("Review", owner._id, 3, projectRoot._id)
+      const groupDone = await this.groupRepository.create("Done", owner._id, 4, projectRoot._id)
 
       return project
 
@@ -101,15 +59,13 @@ class ProjectService {
   public async readProjects(sub) {
     try {
 
-      const owner = await User.findOne({sub: sub})
+      const owner = await this.userRepository.findOne({sub: sub})
 
       const projects = []
 
       for (const team of owner.spaces) {
-        console.log(team)
-        const space = await Space.findById(new ObjectId(team))
-        console.log(space)
-        const projectsResult = await Project.find({space: space._id})
+        const space = await this.spaceRepository.find(team)
+        const projectsResult = await this.projectRepository.findAll({space: space._id})
         projects.push(...projectsResult)
       }
 
@@ -123,12 +79,12 @@ class ProjectService {
   public async deleteProject(sub, id) {
     try {
     
-      const owner = await User.findOne({sub: sub})
-      const project = await Project.findOne({_id: id})
+      const owner = await this.userRepository.findOne({sub: sub})
+      const project = await this.projectRepository.find(id)
       if (owner._id == project.owner) {
-        const boards = await Board.find({project: id})
+        const boards = await this.boardRepository.findAll({project: id})
         await this.boardService.recursiveDelete(boards.map(board => board._id))
-        const deleteResult = await Project.deleteOne({_id: id})
+        const deleteResult = await this.projectRepository.delete(id)
         return true
       } else {
         return false
