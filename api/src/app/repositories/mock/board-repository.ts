@@ -55,21 +55,9 @@ class BoardRepository implements BoardRepositoryInterface {
     return boards
   }
 
-  async create(title, description, owner, order, project, parent, group, count, comments): Promise<Board> {
-    const board = {
-      _id: '0f0d514cf6a4dbf1f5d74b7152f440d0',
-      title: title,
-      description: description,
-      owner: owner._id,
-      order: order,
-      project: project,
-      parent: parent,
-      group: group,
-      count: count,
-      comments: comments,
-    }
-
-    return board
+  async create(properties): Promise<Board> {
+    properties._id = '0f0d514cf6a4dbf1f5d74b7152f440d0'
+    return properties
   }
 
   async incrementCount(board, amount) {
