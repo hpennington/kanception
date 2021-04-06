@@ -23,6 +23,10 @@ class TeamRepository implements TeamRepositoryInterface {
   async delete(id: string) {
   	await Team.deleteOne({_id: id})
   }
+
+  async deleteOne(criteria) {
+    await Team.deleteOne(criteria)
+  }
 }
 
 export default TeamRepository

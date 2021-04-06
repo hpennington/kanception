@@ -15,6 +15,11 @@ class SpaceRepository implements SpaceRepositoryInterface {
     return space
   }
 
+  async findOne(criteria): Promise<Space> {
+    const space = await Space.findOne(criteria)
+    return space
+  }
+
   async findAll(criteria): Promise<Array<Space>> {
   	const spaces = await Space.find(criteria)
   	return spaces

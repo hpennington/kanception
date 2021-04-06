@@ -1,12 +1,25 @@
 import TeamInviteService from '../services/team-invite-service'
 import { resetPassword, sendPasswordResetEmail } from '../util/reset-password'
 import { createAuth0User } from '../util/create-auth0-user'
+import TeamInviteRepository from '../repositories/mongo/team-invite-repository'
+import TeamRepository from '../repositories/mongo/team-repository'
+import SpaceRepository from '../repositories/mongo/space-repository'
+import UserRepository from '../repositories/mongo/user-repository'
 
 class TeamInviteController {
   private teamInviteService: TeamInviteService
 
   constructor() {
-    this.teamInviteService = new TeamInviteService()
+    const teamInviteRepository = new TeamInviteRepository()
+    const teamRepository = new TeamRepository()
+    const spaceRepository = new SpaceRepository()
+    const userRepository = new UserRepository()
+    this.teamInviteService = new TeamInviteService(
+      teamInviteRepository,
+      teamRepository,
+      spaceRepository,
+      userRepository
+    )
 
     this.readTeamInvites = this.readTeamInvites.bind(this)
     this.createTeamInvite = this.createTeamInvite.bind(this)
