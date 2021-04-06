@@ -1,45 +1,10 @@
 import SpaceService from '../services/space-service'
-import BoardService from '../services/board-service'
-import BoardRepository from '../repositories/mongo/board-repository'
-import UserRepository from '../repositories/mongo/user-repository'
-import GroupRepository from '../repositories/mongo/group-repository'
-import AssignmentRepository from '../repositories/mongo/assignment-repository'
-import CommentRepository from '../repositories/mongo/comment-repository'
-import TeamRepository from '../repositories/mongo/team-repository'
-import SpaceRepository from '../repositories/mongo/space-repository'
-import ProjectRepository from '../repositories/mongo/project-repository'
 
 class SpaceController {
   private spaceService: SpaceService
 
-  constructor() {
-    const boardRepository = new BoardRepository()
-    const userRepository = new UserRepository()
-    const groupRepository = new GroupRepository()
-    const assignmentRepository = new AssignmentRepository()
-    const commentRepository = new CommentRepository()
-    const teamRepository = new TeamRepository()
-    const spaceRepository = new SpaceRepository()
-    const projectRepository = new ProjectRepository()
-    const boardService = new BoardService(
-      boardRepository, 
-      userRepository, 
-      groupRepository, 
-      assignmentRepository, 
-      commentRepository
-    )
-
-    this.spaceService = new SpaceService(
-      boardRepository,
-      userRepository,
-      groupRepository,
-      assignmentRepository,
-      commentRepository,
-      teamRepository,
-      spaceRepository,
-      projectRepository,
-      boardService
-    )
+  constructor(spaceService: SpaceService) {
+    this.spaceService = spaceService
 
     this.createSpace = this.createSpace.bind(this)
     this.readSpaces = this.readSpaces.bind(this)

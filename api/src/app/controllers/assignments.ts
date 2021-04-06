@@ -1,15 +1,10 @@
-import Assignment from '../models/assignment'
 import AssignmentService from '../services/assignment-service'
-import UserRepository from '../repositories/mongo/user-repository'
-import AssignmentRepository from '../repositories/mongo/assignment-repository'
 
 class AssignmentController {
   private assignmentService: AssignmentService
 
-  constructor() {
-    const userRepository = new UserRepository()
-    const assignmentRepository = new AssignmentRepository()
-    this.assignmentService = new AssignmentService(userRepository, assignmentRepository)
+  constructor(assignmentService: AssignmentService) {
+    this.assignmentService = assignmentService
 
     this.createAssignment = this.createAssignment.bind(this)
     this.readAssignments = this.readAssignments.bind(this)

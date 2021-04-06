@@ -1,20 +1,10 @@
 import UserService from '../services/user-service'
-import UserRepository from '../repositories/mongo/user-repository'
-import SpaceRepository from '../repositories/mongo/space-repository'
-import TeamRepository from '../repositories/mongo/team-repository'
 
 class UserController {
   private userService: UserService
 
-  constructor() {
-    const userRepository = new UserRepository()
-    const spaceRepository = new SpaceRepository()
-    const teamRepository = new TeamRepository()
-    this.userService = new UserService(
-      userRepository,
-      spaceRepository,
-      teamRepository
-    )
+  constructor(userService: UserService) {
+    this.userService = userService
 
     this.createUser = this.createUser.bind(this)
     this.readUser = this.readUser.bind(this)

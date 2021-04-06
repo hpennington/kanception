@@ -5,6 +5,29 @@ import bodyParser = require('body-parser')
 import jwt = require('express-jwt')
 import jwks = require('jwks-rsa')
 
+// Repos
+import UserRepository from './app/repositories/mongo/user-repository'
+import AssignmentRepository from './app/repositories/mongo/assignment-repository'
+import BoardRepository from './app/repositories/mongo/board-repository'
+import GroupRepository from './app/repositories/mongo/group-repository'
+import CommentRepository from './app/repositories/mongo/comment-repository'
+import ProjectRepository from './app/repositories/mongo/project-repository'
+import SpaceRepository from './app/repositories/mongo/space-repository'
+import TeamRepository from './app/repositories/mongo/team-repository'
+import TeamInviteRepository from './app/repositories/mongo/team-invite-repository'
+
+// Services
+import BoardService from './app/services/board-service'
+import AssignmentService from './app/services/assignment-service'
+import CommentService from './app/services/comment-service'
+import GroupService from './app/services/group-service'
+import ProjectService from './app/services/project-service'
+import SpaceService from './app/services/space-service'
+import TeamInviteService from './app/services/team-invite-service'
+import TeamService from './app/services/team-service'
+import UserService from './app/services/user-service'
+
+// Controllers
 import BoardController from './app/controllers/boards'
 import AssignmentController from './app/controllers/assignments'
 import CommentController from './app/controllers/comments'
@@ -14,6 +37,104 @@ import SpaceController from './app/controllers/spaces'
 import UserController from './app/controllers/user'
 import TeamController from './app/controllers/team'
 import TeamInviteController from './app/controllers/team-invites'
+
+// Init repos 
+const userRepository = new UserRepository()
+const assignmentRepository = new AssignmentRepository()
+const boardRepository = new BoardRepository()
+const groupRepository = new GroupRepository()
+const commentRepository = new CommentRepository()
+const projectRepository = new ProjectRepository()
+const spaceRepository = new SpaceRepository()
+const teamRepository = new TeamRepository()
+const teamInviteRepository = new TeamInviteRepository()
+
+// Init services
+const assignmentService = new AssignmentService(
+  userRepository,
+  assignmentRepository
+)
+
+const boardService = new BoardService(
+  boardRepository, 
+  userRepository, 
+  groupRepository, 
+  assignmentRepository, 
+  commentRepository
+)
+
+const commentService = new CommentService(
+  userRepository,
+  commentRepository,
+  boardRepository,
+  projectRepository,
+  spaceRepository,
+  teamRepository,
+)
+
+const groupService = new GroupService(
+  boardRepository,
+  userRepository,
+  groupRepository,
+  assignmentRepository,
+  commentRepository,
+  boardService
+)
+
+const projectService = new ProjectService(
+  boardRepository,
+  userRepository,
+  groupRepository,
+  assignmentRepository,
+  commentRepository,
+  projectRepository,
+  spaceRepository,
+  boardService
+)
+
+const spaceService = new SpaceService(
+  boardRepository,
+  userRepository,
+  groupRepository,
+  assignmentRepository,
+  commentRepository,
+  teamRepository,
+  spaceRepository,
+  projectRepository,
+  boardService
+)
+
+ const teamInviteService = new TeamInviteService(
+  teamInviteRepository,
+  teamRepository,
+  spaceRepository,
+  userRepository
+)
+
+const teamService = new TeamService(
+  boardRepository,
+  userRepository,
+  groupRepository,
+  spaceRepository,
+  teamRepository
+)
+
+const userService = new UserService(
+  userRepository,
+  spaceRepository,
+  teamRepository
+)
+
+// Init controllers
+const boardController = new BoardController(boardService)
+const assignmentController = new AssignmentController(assignmentService)
+const commentController = new CommentController(commentService)
+const groupController = new GroupController(groupService)
+const projectController = new ProjectController(projectService) 
+const spaceController = new SpaceController(spaceService)
+const teamInviteController = new TeamInviteController(teamInviteService)
+const teamController = new TeamController(teamService)
+const userController = new UserController(userService)
 
 const port = 4000
 
@@ -42,16 +163,6 @@ app.use(cors())
 app.use(bodyParser())
 app.use(express.json())
 app.use(jwtCheck)
-
-const boardController = new BoardController()
-const assignmentController = new AssignmentController()
-const commentController = new CommentController()
-const groupController = new GroupController()
-const projectController = new ProjectController()
-const spaceController = new SpaceController()
-const userController = new UserController()
-const teamController = new TeamController()
-const teamInviteController = new TeamInviteController()
 
 mongoose.connect('mongodb://mongo/kanception', {useNewUrlParser: true})
 const db = mongoose.connection

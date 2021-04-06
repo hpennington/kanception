@@ -1,44 +1,10 @@
-import BoardService from '../services/board-service'
 import ProjectService from '../services/project-service'
-import BoardRepository from '../repositories/mongo/board-repository'
-import UserRepository from '../repositories/mongo/user-repository'
-import GroupRepository from '../repositories/mongo/group-repository'
-import AssignmentRepository from '../repositories/mongo/assignment-repository'
-import CommentRepository from '../repositories/mongo/comment-repository'
-import ProjectRepository from '../repositories/mongo/project-repository'
-import SpaceRepository from '../repositories/mongo/space-repository'
 
 class ProjectController {
   private projectService: ProjectService
-  private boardService: BoardService
 
-  constructor() {
-    const boardRepository = new BoardRepository()
-    const userRepository = new UserRepository()
-    const groupRepository = new GroupRepository()
-    const assignmentRepository = new AssignmentRepository()
-    const commentRepository = new CommentRepository()
-    const boardService = new BoardService(
-      boardRepository, 
-      userRepository, 
-      groupRepository, 
-      assignmentRepository, 
-      commentRepository
-    )
-
-    const projectRepository = new ProjectRepository()
-    const spaceRepository = new SpaceRepository()
-
-    this.projectService = new ProjectService(
-      boardRepository,
-      userRepository,
-      groupRepository,
-      assignmentRepository,
-      commentRepository,
-      projectRepository,
-      spaceRepository,
-      boardService
-    )
+  constructor(projectService: ProjectService) {
+    this.projectService = projectService
 
     this.createProject = this.createProject.bind(this)
     this.readProjects = this.readProjects.bind(this)

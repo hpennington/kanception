@@ -1,36 +1,10 @@
 import GroupService from '../services/group-service'
-import BoardService from '../services/board-service'
-import BoardRepository from '../repositories/mongo/board-repository'
-import UserRepository from '../repositories/mongo/user-repository'
-import GroupRepository from '../repositories/mongo/group-repository'
-import AssignmentRepository from '../repositories/mongo/assignment-repository'
-import CommentRepository from '../repositories/mongo/comment-repository'
 
 class GroupController {
   private groupService: GroupService
   
-  constructor() {
-    const boardRepository = new BoardRepository()
-    const userRepository = new UserRepository()
-    const groupRepository = new GroupRepository()
-    const assignmentRepository = new AssignmentRepository()
-    const commentRepository = new CommentRepository()
-    const boardService = new BoardService(
-      boardRepository, 
-      userRepository, 
-      groupRepository, 
-      assignmentRepository, 
-      commentRepository
-    )
-
-    this.groupService = new GroupService(
-      boardRepository,
-      userRepository,
-      groupRepository,
-      assignmentRepository,
-      commentRepository,
-      boardService
-    )
+  constructor(groupService: GroupService) {
+    this.groupService = groupService
 
     this.createGroup = this.createGroup.bind(this)
     this.readGroups = this.readGroups.bind(this)

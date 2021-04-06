@@ -1,28 +1,10 @@
 import TeamService from '../services/team-service'
-import BoardRepository from '../repositories/mongo/board-repository'
-import UserRepository from '../repositories/mongo/user-repository'
-import GroupRepository from '../repositories/mongo/group-repository'
-import SpaceRepository from '../repositories/mongo/space-repository'
-import TeamRepository from '../repositories/mongo/team-repository'
 
 class TeamController {
   private teamService: TeamService
 
-  constructor() {
-    const boardRepository = new BoardRepository()
-    const userRepository = new UserRepository()
-    const groupRepository = new GroupRepository()
-    const spaceRepository = new SpaceRepository()
-    const teamRepository = new TeamRepository()
-
-
-    this.teamService = new TeamService(
-      boardRepository,
-      userRepository,
-      groupRepository,
-      spaceRepository,
-      teamRepository
-    )
+  constructor(teamService: TeamService) {
+    this.teamService = teamService
 
     this.createTeam = this.createTeam.bind(this)
     this.readTeamRootsChildren = this.readTeamRootsChildren.bind(this)
