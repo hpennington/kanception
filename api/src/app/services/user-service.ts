@@ -1,19 +1,25 @@
-const Space = require('../models/space')
-const Project = require('../models/project')
-const Board = require('../models/board')
-const Group = require('../models/group')
-const User = require('../models/user')
-const Team = require('../models/team')
-const TeamInvite = require('../models/team-invite')
-const Assignment = require('../models/assignment')
-const Comment = require('../models/comment')
 const fetch = require('node-fetch')
-const mongoose = require('mongoose')
-const ObjectId = mongoose.Types.ObjectId
+import UserRepositoryInterface from '../repositories/user-repository-interface'
+import SpaceRepositoryInterface from '../repositories/space-repository-interface'
+import TeamRepositoryInterface from '../repositories/team-repository-interface'
 
 class UserService {
+  private userRepository: UserRepositoryInterface
+  private spaceRepository: SpaceRepositoryInterface
+  private teamRepository: TeamRepositoryInterface
+  
+  constructor(
+    userRepository: UserRepositoryInterface,
+    spaceRepository: SpaceRepositoryInterface,
+    teamRepository: TeamRepositoryInterface
+  ) {
+    this.userRepository = userRepository
+    this.spaceRepository = spaceRepository
+    this.teamRepository = teamRepository
+  }
+
   public async createUser(sub, token) {
-    const user = await User.find({sub: sub})
+    const user = await this.userRepository.findAll({sub: sub})
 
     const userEmail = await fetch('https://kanception.auth0.com/userinfo', {
       headers: {
@@ -22,11 +28,11 @@ class UserService {
     })
     const email = await userEmail.json()
 
-    const userFromEmail = await User.find({email: email.email})
+    const userFromEmail = await this.userRepository.findAll({email: email.email})
 
     if (user.length === 0 && userFromEmail.length === 0) {
 
-      const user = await User.create({sub: sub, spaces: [], active: true})
+      const user = await this.userRepository.create({sub: sub, spaces: [], active: true})
 
       return user
 
@@ -45,7 +51,7 @@ class UserService {
 
   public async readUser(sub) {
     try {
-      const user = await User.findOne({sub: sub})
+      const user = await this.userRepository.findOne({sub: sub})
       return user.spaces
     } catch (error) {
       throw error
@@ -55,14 +61,14 @@ class UserService {
   public async readProfiles(sub, team) {
     try {
 
-      const user = await User.find({sub: sub})
+      const user = await this.userRepository.findAll({sub: sub})
       if (user.length === 0) {
         // res.sendStatus(503)
         return null
       }
 
-      const spaceResult = await Space.findById(new ObjectId(team))
-      const teamResult = await Team.findById(new ObjectId(spaceResult.team))
+      const spaceResult = await this.userRepository.find(team)
+      const teamResult = await this.teamRepository.find(spaceResult.team)
       if (teamResult === undefined || teamResult === null) {
         // res.sendStatus(502)
         return null
@@ -76,7 +82,7 @@ class UserService {
       const profiles = []
 
       for (const member of teamResult.members) {
-        const userObject = await User.findById(new ObjectId(member))
+        const userObject = await this.userRepository.find(member)
 
         if (userObject === null || userObject === undefined) {
           // res.sendStatus(500)
@@ -101,7 +107,7 @@ class UserService {
   public async updateName(sub, first, last, token) {
     try {
 
-      const users = await User.find({sub: sub})
+      const users = await this.userRepository.findAll({sub: sub})
       const user = users[0]
 
       const userEmail = await fetch('https://kanception.auth0.com/userinfo', {

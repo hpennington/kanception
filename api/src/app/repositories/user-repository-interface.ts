@@ -1,8 +1,9 @@
 import User = require('../models/user')
 
 interface UserRepositoryInterface {
-  create(first, last, email, active, spaces): Promise<User>;
+  create(properties): Promise<User>;
   findOne(criteria): Promise<User>;
+  findAll(criteria): Promise<Array<User>>;
   find(id: string): Promise<User>;
 }
 

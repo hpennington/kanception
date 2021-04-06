@@ -5,15 +5,8 @@ import mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
 class UserRepository implements UserRepositoryInterface {
-  async create(first, last, email, active, spaces): Promise<User> {
-  	const user = await User.create(
-      {name: {
-        first: first,
-        last: last
-      }, email: email,
-        active: active,
-        spaces: spaces
-    })
+  async create(properties): Promise<User> {
+    const user = await User.create(properties)
     return user
   }
 
@@ -21,6 +14,12 @@ class UserRepository implements UserRepositoryInterface {
   	const user = await User.findOne(criteria)
   	return user
   }
+
+  async findAll(criteria): Promise<Array<User>> {
+    const users = await User.find(criteria)
+    return users
+  }
+
   async find(id: string): Promise<User> {
     const user = await User.findById(new ObjectId(id))
   	return user	

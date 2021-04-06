@@ -110,7 +110,15 @@ class TeamInviteService {
       // Else the user does not exist
       } else {
 
-        const invitedUser = await this.userRepository.create(first, last, email, false, [])
+        const invitedUser = await this.userRepository.create({
+          name: {
+            first: first,
+            last: last
+          }, email: email,
+            active: false,
+            spaces: []
+        })
+        
         const invite = await this.teamInviteRepository.create(team, invitedUser._id)
 
         const auth0User = await createAuth0User(email, first, last)
