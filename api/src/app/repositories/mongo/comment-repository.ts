@@ -1,9 +1,6 @@
 import CommentRepositoryInterface from '../comment-repository-interface'
 import Comment = require('../../models/comment')
 import Board = require('../../models/board')
-import mongoose = require('mongoose')
-
-const ObjectId = mongoose.Types.ObjectId
 
 class CommentRepository implements CommentRepositoryInterface {
   async create(owner, board, timestamp, text): Promise<Comment> {
