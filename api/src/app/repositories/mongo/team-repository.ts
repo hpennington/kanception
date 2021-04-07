@@ -1,5 +1,5 @@
 import TeamRepositoryInterface from '../team-repository-interface'
-import Team = require('../../models/team')
+import Team = require('../../models/mongo/team')
 import mongoose = require('mongoose')
 
 const ObjectId = mongoose.Types.ObjectId

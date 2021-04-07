@@ -1,4 +1,4 @@
-import TeamInvite = require('../models/team-invite')
+import TeamInvite = require('../models/mongo/team-invite')
 
 interface TeamInviteRepositoryInterface {
   create(team, invitee): Promise<TeamInvite>;

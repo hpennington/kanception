@@ -1,6 +1,6 @@
 import AssignmentRepositoryInterface from '../assignment-repository-interface'
-import Board = require('../../models/board')
-import Assignment = require('../../models/assignment')
+import Board = require('../../models/mongo/board')
+import Assignment = require('../../models/mongo/assignment')
 
 class AssignmentRepository implements AssignmentRepositoryInterface {
   async findAll(criteria): Promise<Array<Assignment>> {

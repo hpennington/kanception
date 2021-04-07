@@ -1,5 +1,5 @@
 import ProjectRepositoryInterface from '../project-repository-interface'
-import Project = require('../../models/project')
+import Project = require('../../models/mongo/project')
 import mongoose = require('mongoose')
 
 const ObjectId = mongoose.Types.ObjectId

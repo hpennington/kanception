@@ -1,4 +1,4 @@
-import User = require('../models/user')
+import User = require('../models/mongo/user')
 
 interface UserRepositoryInterface {
   create(properties): Promise<User>;

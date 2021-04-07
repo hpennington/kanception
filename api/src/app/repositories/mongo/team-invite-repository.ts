@@ -1,5 +1,5 @@
 import TeamInviteRepositoryInterface from '../team-invite-repository-interface'
-import TeamInvite = require('../../models/team-invite')
+import TeamInvite = require('../../models/mongo/team-invite')
 
 class TeamInviteRepository implements TeamInviteRepositoryInterface {
   async create(team, invitee): Promise<TeamInvite> {

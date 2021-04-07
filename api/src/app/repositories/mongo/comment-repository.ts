@@ -1,6 +1,6 @@
 import CommentRepositoryInterface from '../comment-repository-interface'
-import Comment = require('../../models/comment')
-import Board = require('../../models/board')
+import Comment = require('../../models/mongo/comment')
+import Board = require('../../models/mongo/board')
 
 class CommentRepository implements CommentRepositoryInterface {
   async create(owner, board, timestamp, text): Promise<Comment> {

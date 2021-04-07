@@ -1,5 +1,5 @@
 import GroupRepositoryInterface from '../group-repository-interface'
-import Group = require('../../models/group')
+import Group = require('../../models/mongo/group')
 import mongoose = require('mongoose')
 
 const ObjectId = mongoose.Types.ObjectId

@@ -1,5 +1,5 @@
 import SpaceRepositoryInterface from '../space-repository-interface'
-import Space = require('../../models/space')
+import Space = require('../../models/mongo/space')
 import mongoose = require('mongoose')
 
 const ObjectId = mongoose.Types.ObjectId

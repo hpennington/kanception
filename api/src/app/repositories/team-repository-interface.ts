@@ -1,4 +1,4 @@
-import Team = require('../models/team')
+import Team = require('../models/mongo/team')
 
 interface TeamRepositoryInterface {
   create(members, owner, title): Promise<Team>;

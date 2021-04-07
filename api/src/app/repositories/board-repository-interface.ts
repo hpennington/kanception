@@ -1,4 +1,4 @@
-import Board = require('../models/board')
+import Board = require('../models/mongo/board')
 
 interface BoardRepositoryInterface {
   find(id: string): Promise<Board>;

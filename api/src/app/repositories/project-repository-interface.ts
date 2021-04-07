@@ -1,4 +1,4 @@
-import Project = require('../models/project')
+import Project = require('../models/mongo/project')
 
 interface ProjectRepositoryInterface {
   create(title, space, owner);
