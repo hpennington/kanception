@@ -1,5 +1,5 @@
-import Assignment = require('../models/mongo/assignment')
-import Board = require('../models/mongo/board')
+import Assignment = require('../models/sequelize/assignment')
+import Board = require('../models/sequelize/board')
 
 interface AssignmentRepositoryInterface {
   findAll(criteria): Promise<Array<Assignment>>;

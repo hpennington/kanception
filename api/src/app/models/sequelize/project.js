@@ -1,28 +1,24 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
 const sequelize = new Sequelize('sqlite::memory');
 
-class Comment extends Model {}
+class Project extends Model {}
 
-Comment.init({
+Project.init({
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  space: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
   owner: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  board: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  text: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  timestamp: {
     type: DataTypes.STRING,
     allowNull: false
   },
 }, {
   sequelize,
-  modelName: 'Comment'
+  modelName: 'Project'
 })
 
-module.exports = Comment
+module.exports = Project

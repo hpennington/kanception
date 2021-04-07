@@ -1,24 +1,20 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
 const sequelize = new Sequelize('sqlite::memory');
 
-class Assignment extends Model {}
+class TeamInvite extends Model {}
 
-Assignment.init({
-  assignee: {
+TeamInvite.init({
+  team: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  assigner: {
+  invitee: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  board: {
-    type: DataTypes.STRING,
-    allowNull: false
-  }
 }, {
   sequelize,
-  modelName: 'Assignment'
+  modelName: 'TeamInvite'
 })
 
-module.exports = Assignment
+module.exports = TeamInvite

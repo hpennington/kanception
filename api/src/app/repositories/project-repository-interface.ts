@@ -1,4 +1,4 @@
-import Project = require('../models/mongo/project')
+import Project = require('../models/sequelize/project')
 
 interface ProjectRepositoryInterface {
   create(title, space, owner);

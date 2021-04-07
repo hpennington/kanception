@@ -1,4 +1,4 @@
-import Comment = require('../models/mongo/comment')
+import Comment = require('../models/sequelize/comment')
 
 interface CommentRepositoryInterface {
   create(owner, board, timestamp, text): Promise<Comment>;

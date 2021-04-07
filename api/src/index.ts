@@ -6,15 +6,15 @@ import jwt = require('express-jwt')
 import jwks = require('jwks-rsa')
 
 // Repos
-import UserRepository from './app/repositories/mongo/user-repository'
-import AssignmentRepository from './app/repositories/mongo/assignment-repository'
-import BoardRepository from './app/repositories/mongo/board-repository'
-import GroupRepository from './app/repositories/mongo/group-repository'
-import CommentRepository from './app/repositories/mongo/comment-repository'
-import ProjectRepository from './app/repositories/mongo/project-repository'
-import SpaceRepository from './app/repositories/mongo/space-repository'
-import TeamRepository from './app/repositories/mongo/team-repository'
-import TeamInviteRepository from './app/repositories/mongo/team-invite-repository'
+import UserRepository from './app/repositories/sequelize/user-repository'
+import AssignmentRepository from './app/repositories/sequelize/assignment-repository'
+import BoardRepository from './app/repositories/sequelize/board-repository'
+import GroupRepository from './app/repositories/sequelize/group-repository'
+import CommentRepository from './app/repositories/sequelize/comment-repository'
+import ProjectRepository from './app/repositories/sequelize/project-repository'
+import SpaceRepository from './app/repositories/sequelize/space-repository'
+import TeamRepository from './app/repositories/sequelize/team-repository'
+import TeamInviteRepository from './app/repositories/sequelize/team-invite-repository'
 
 // Services
 import BoardService from './app/services/board-service'
@@ -164,13 +164,10 @@ app.use(bodyParser())
 app.use(express.json())
 app.use(jwtCheck)
 
-mongoose.connect('mongodb://mongo/kanception', {useNewUrlParser: true})
-const db = mongoose.connection
-
-db.on('error', console.error.bind(console, 'connection error:'))
-
-db.once('open', () => {
-
+const { Sequelize, Model, DataTypes } = require('sequelize');
+const sequelize = new Sequelize('sqlite::memory:');
+(async () => {
+  await sequelize.sync();
   app.get('/comments', commentController.readComments)
 
   app.post('/comments', commentController.createComment)
@@ -232,4 +229,4 @@ db.once('open', () => {
   app.post('/boards/add', boardController.createBoard)
 
   app.listen(port, () => console.log(`API listening at http://localhost:${port}`))
-})
+})()

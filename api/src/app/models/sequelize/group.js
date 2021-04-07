@@ -1,10 +1,10 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
 const sequelize = new Sequelize('sqlite::memory');
 
-class Comment extends Model {}
+class Group extends Model {}
 
-Comment.init({
-  owner: {
+Group.init({
+  title: {
     type: DataTypes.STRING,
     allowNull: false
   },
@@ -12,17 +12,17 @@ Comment.init({
     type: DataTypes.STRING,
     allowNull: false
   },
-  text: {
+  owner: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  timestamp: {
-    type: DataTypes.STRING,
+  order: {
+    type: DataTypes.INTEGER,
     allowNull: false
   },
 }, {
   sequelize,
-  modelName: 'Comment'
+  modelName: 'Group'
 })
 
-module.exports = Comment
+module.exports = Group

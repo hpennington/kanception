@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
 const sequelize = new Sequelize('sqlite::memory');
 
-export default class Board extends Model {}
+class Board extends Model {}
 
 Board.init({
   title: {
@@ -9,7 +9,7 @@ Board.init({
     allowNull: false
   },
   description: {
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
     allowNull: false
   },
   project: {
@@ -52,6 +52,8 @@ Board.init({
   sequelize,
 
   modelName: 'Board'
-});
+})
 
 Board.assignees = []
+
+module.exports = Board

@@ -1,4 +1,4 @@
-import Team = require('../models/mongo/team')
+import Team = require('../models/sequelize/team')
 
 interface TeamRepositoryInterface {
   create(members, owner, title): Promise<Team>;
