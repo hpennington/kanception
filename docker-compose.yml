@@ -1,8 +1,16 @@
 version: "3.3"
 services:
-  mongo:
-    container_name: 'mongo'
-    image: mongo
+  postgres:
+    container_name: 'postgres'
+    image: postgres
+    volumes:
+      - ./api/database/create_database.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+  # mongo:
+  #   container_name: 'mongo'
+  #   image: mongo
   kanception-api:
     container_name: 'kanception-api'
     build: ./api
@@ -14,7 +22,7 @@ services:
         target: /home/ubuntu/api
       - /home/ubuntu/api/node_modules/
     depends_on:
-      - mongo
+      - postgres
   kanception:
     container_name: 'kanception'
     build: ./kanception

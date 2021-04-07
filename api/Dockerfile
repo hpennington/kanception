@@ -1,7 +1,7 @@
 FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y npm nodejs python
+RUN apt-get update && apt-get install -y npm nodejs
 
 RUN groupadd -r ubuntu && useradd -r -g ubuntu ubuntu && \
     mkdir /home/ubuntu && chown ubuntu:ubuntu /home/ubuntu

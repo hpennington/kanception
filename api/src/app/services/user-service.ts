@@ -1,4 +1,5 @@
 const fetch = require('node-fetch')
+import { uuid } from 'uuidv4'
 import UserRepositoryInterface from '../repositories/user-repository-interface'
 import SpaceRepositoryInterface from '../repositories/space-repository-interface'
 import TeamRepositoryInterface from '../repositories/team-repository-interface'
@@ -32,7 +33,7 @@ class UserService {
 
     if (user.length === 0 && userFromEmail.length === 0) {
 
-      const user = await this.userRepository.create({sub: sub, spaces: [], active: true})
+      const user = await this.userRepository.create({_id: uuid(), sub: sub, spaces: [], active: true})
 
       return user
 

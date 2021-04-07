@@ -1,6 +1,8 @@
-'use strict';
-const { Sequelize, DataTypes, Model } = require('sequelize');
-const sequelize = new Sequelize('sqlite::memory');
+const env = process.env.NODE_ENV || 'development';
+const config = require(__dirname + '/../../config/config.json')[env];
+
+const { Sequelize, Model, DataTypes } = require('sequelize');
+const sequelize = new Sequelize(config.database, config.username, config.password, config);
 
 class User extends Model {
   /**
@@ -14,9 +16,22 @@ class User extends Model {
 }
 
 User.init({
-  firstName: DataTypes.STRING,
-  lastName: DataTypes.STRING,
-  email: DataTypes.STRING,
+  _id: {
+    type: DataTypes.STRING,
+    primaryKey: true
+  },
+  firstName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  lastName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   active: DataTypes.BOOLEAN,
   sub: DataTypes.STRING
 }, {
