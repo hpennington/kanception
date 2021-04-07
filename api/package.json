@@ -27,6 +27,8 @@
     "node-fetch": "^2.6.0",
     "path": "^0.12.7",
     "sendmail": "^1.6.1",
+    "sequelize": "^6.6.2",
+    "sqlite3": "^5.0.2",
     "stream": "^0.0.2",
     "stream-http": "^3.1.1",
     "tls": "^0.0.1",
@@ -42,8 +44,8 @@
     "fs": "^0.0.1-security",
     "jest": "^26.6.3",
     "nodemon": "^2.0.7",
-    "ts-loader": "^8.1.0",
     "ts-jest": "^26.5.4",
+    "ts-loader": "^8.1.0",
     "typescript": "^4.2.3",
     "webpack": "^5.30.0",
     "webpack-cli": "^4.6.0"
