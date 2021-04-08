@@ -28,11 +28,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     parent: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     group: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     order: {
       type: DataTypes.INTEGER,
@@ -40,11 +40,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     start: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     end: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     count: {
       type: DataTypes.INTEGER,

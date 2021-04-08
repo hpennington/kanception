@@ -15,16 +15,24 @@ module.exports = (sequelize, DataTypes) => {
     },
     board: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     owner: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     order: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.DATE
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.DATE
+    }
   }, {
     sequelize,
     modelName: 'Group'

@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Boards', {
+    await queryInterface.createTable('Groups', {
       _id: {
         allowNull: false,
         autoIncrement: false,
@@ -13,44 +13,16 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      description: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      project: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      owner: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      parent: {
+      board: {
         type: Sequelize.STRING,
         allowNull: true
       },
-      group: {
+      owner: {
         type: Sequelize.STRING,
         allowNull: true
       },
       order: {
         type: Sequelize.INTEGER,
-        allowNull: false
-      },
-      start: {
-        type: Sequelize.INTEGER,
-        allowNull: true
-      },
-      end: {
-        type: Sequelize.INTEGER,
-        allowNull: true
-      },
-      count: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-      },
-      comments: {
-        type: Sequelize.BOOLEAN,
         allowNull: false
       },
       createdAt: {
@@ -64,6 +36,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Boards');
+    await queryInterface.dropTable('Groups');
   }
 };

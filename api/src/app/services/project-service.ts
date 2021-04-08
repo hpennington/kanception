@@ -1,3 +1,4 @@
+import { uuid } from 'uuidv4'
 import BoardService from '../services/board-service'
 import BoardRepositoryInterface from '../repositories/board-repository-interface'
 import UserRepositoryInterface from '../repositories/user-repository-interface'
@@ -46,6 +47,7 @@ class ProjectService {
       const owner = await this.userRepository.findOne({sub: sub})
       const project = await this.projectRepository.create(title, space, owner._id)
       const projectRoot = await this.boardRepository.create({
+        _id: uuid(),
         title: title,
         description: "",
         owner: owner._id,
@@ -76,12 +78,12 @@ class ProjectService {
       const owner = await this.userRepository.findOne({sub: sub})
 
       const spaces = (await this.memberRepository.findAll({user: owner._id}))
-        .map(member => member.space)
+        .map(member => member.team)
 
       const projects = []
 
       for (const team of spaces) {
-        const space = await this.spaceRepository.find(team)
+        const space = await this.spaceRepository.findOne({team: team})
         const projectsResult = await this.projectRepository.findAll({space: space._id})
         projects.push(...projectsResult)
       }

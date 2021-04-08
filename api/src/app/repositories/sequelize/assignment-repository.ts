@@ -4,7 +4,7 @@ import { Assignment } from '../../models/sequelize'
 
 class AssignmentRepository implements AssignmentRepositoryInterface {
   async findAll(criteria): Promise<Array<Assignment>> {
-   	const assignments = await Assignment.find(criteria)
+   	const assignments = await Assignment.findAll({where: criteria})
   	return assignments
   }
 
