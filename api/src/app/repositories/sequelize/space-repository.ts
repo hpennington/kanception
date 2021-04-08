@@ -1,12 +1,10 @@
 import SpaceRepositoryInterface from '../space-repository-interface'
 import { Space } from '../../models/sequelize'
-import mongoose = require('mongoose')
-
-const ObjectId = mongoose.Types.ObjectId
+import { uuid } from 'uuidv4'
 
 class SpaceRepository implements SpaceRepositoryInterface {
   async create(title, team, owner) {
-  	const space = await Space.create({title: title, team: team, owner: owner})
+  	const space = await Space.create({_id: uuid(), title: title, team: team, owner: owner})
   	return space
   }
 

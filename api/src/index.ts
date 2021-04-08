@@ -126,7 +126,8 @@ const teamService = new TeamService(
 const userService = new UserService(
   userRepository,
   spaceRepository,
-  teamRepository
+  teamRepository,
+  memberRepository
 )
 
 // Init controllers

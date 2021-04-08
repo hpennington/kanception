@@ -51,9 +51,7 @@ class SpaceService {
       const owner = await this.userRepository.findOne({sub: sub})
       const team = await this.teamRepository.create(uuid(), [owner._id], null, null)
       const space = await this.spaceRepository.create(title, team._id, owner._id)
-
-      owner.spaces.push(space._id)
-      owner.save()
+      await this.memberRepository.create({_id: uuid(), team: team._id, user: owner._id})
 
       return space
 
@@ -67,12 +65,12 @@ class SpaceService {
 
   	  const owner = await this.userRepository.findOne({sub: sub})
       const spaceIds = (await this.memberRepository.findAll({user: owner._id}))
-        .map(member => member.space)
+        .map(member => member.team)
 
   	  const spaces = []
 
   	  for (const spaceId of spaceIds) {
-  	    const space = await this.spaceRepository.find(spaceId)
+  	    const space = await this.spaceRepository.findOne({team: spaceId})
   	    spaces.push(space)
   	  }
 

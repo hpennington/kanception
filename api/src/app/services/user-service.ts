@@ -3,20 +3,24 @@ import { uuid } from 'uuidv4'
 import UserRepositoryInterface from '../repositories/user-repository-interface'
 import SpaceRepositoryInterface from '../repositories/space-repository-interface'
 import TeamRepositoryInterface from '../repositories/team-repository-interface'
+import MemberRepositoryInterface from '../repositories/member-repository-interface'
 
 class UserService {
   private userRepository: UserRepositoryInterface
   private spaceRepository: SpaceRepositoryInterface
   private teamRepository: TeamRepositoryInterface
+  private memberRepository: MemberRepositoryInterface
   
   constructor(
     userRepository: UserRepositoryInterface,
     spaceRepository: SpaceRepositoryInterface,
-    teamRepository: TeamRepositoryInterface
+    teamRepository: TeamRepositoryInterface,
+    memberRepository: MemberRepositoryInterface
   ) {
     this.userRepository = userRepository
     this.spaceRepository = spaceRepository
     this.teamRepository = teamRepository
+    this.memberRepository = memberRepository
   }
 
   public async createUser(sub, token) {
@@ -53,7 +57,7 @@ class UserService {
   public async readUser(sub) {
     try {
       const user = await this.userRepository.findOne({sub: sub})
-      return user.spaces
+      return user
     } catch (error) {
       throw error
     }
@@ -75,14 +79,17 @@ class UserService {
         return null
       }
 
-      if (teamResult.members.includes(user[0]._id) === false) {
+      const members = (await this.memberRepository.findAll({team: teamResult._id}))
+        .map(member => member.user)
+
+      if (members.includes(user[0]._id) === false) {
         // res.sendStatus(501)
         return null
       }
 
       const profiles = []
 
-      for (const member of teamResult.members) {
+      for (const member of members) {
         const userObject = await this.userRepository.find(member)
 
         if (userObject === null || userObject === undefined) {
@@ -93,7 +100,8 @@ class UserService {
         profiles.push({
           _id: userObject._id,
           email: userObject.email,
-          name: userObject.name,
+          firstName: userObject.firstName,
+          lastName: userObject.lastName,
         })
       }
 

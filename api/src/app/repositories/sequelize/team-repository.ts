@@ -1,8 +1,5 @@
 import TeamRepositoryInterface from '../team-repository-interface'
 import { Team } from '../../models/sequelize'
-import mongoose = require('mongoose')
-
-const ObjectId = mongoose.Types.ObjectId
 
 class TeamRepository implements TeamRepositoryInterface {
   async create(id, members, owner, title): Promise<Team> {
@@ -25,21 +22,21 @@ class TeamRepository implements TeamRepositoryInterface {
   }
 
   async find(id: string): Promise<Team> {
-    const team = await Team.findById(new ObjectId(id))
+    const team = await Team.findOne({where: {_id: id}})
     return team
   }
 
   async findAll(criteria): Promise<Array<Team>> {
-  	const teams = await Team.find(criteria)
+  	const teams = await Team.findAll({where: criteria})
   	return teams
   }
 
   async delete(id: string) {
-  	await Team.deleteOne({_id: id})
+  	await Team.deleteOne({where: {_id: id}})
   }
 
   async deleteOne(criteria) {
-    await Team.deleteOne(criteria)
+    await Team.deleteOne({where: criteria})
   }
 }
 

@@ -36,7 +36,7 @@ const MembersView = props => {
         props.members.length > 0 &&
         <div className="members-container">
           {props.members.map(member =>
-            <MemberView email={member.email} name={member.name} />)}
+            <MemberView email={member.email} name={{first: member.firstName, last: member.lastName}} />)}
         </div>
       }
     </div>
