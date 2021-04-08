@@ -78,11 +78,11 @@ class BoardService {
         count: 0,
         comments: false,
       })
-      const groupBacklog = await this.groupRepository.create("Backlog", owner, 0, board)
-      const groupTodo = await this.groupRepository.create("To-do", owner, 1, board)
-      const groupInProgress = await this.groupRepository.create("In progress", owner, 2, board)
-      const groupReview = await this.groupRepository.create("Review", owner, 3, board)
-      const groupDone = await this.groupRepository.create("Done", owner, 4, board)
+      const groupBacklog = await this.groupRepository.create("Backlog", owner._id, 0, board._id)
+      const groupTodo = await this.groupRepository.create("To-do", owner._id, 1, board._id)
+      const groupInProgress = await this.groupRepository.create("In progress", owner._id, 2, board._id)
+      const groupReview = await this.groupRepository.create("Review", owner._id, 3, board._id)
+      const groupDone = await this.groupRepository.create("Done", owner._id, 4, board._id)
 
       const groups = [
         groupBacklog,
