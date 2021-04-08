@@ -376,7 +376,7 @@ const App = props => {
 
       const user = await userResult.json()
 
-      if (user.name === undefined) {
+      if (user.firstName === undefined || user.lastName === undefined) {
         setNameOpen(true)
       } else {
         setNameOpen(false)

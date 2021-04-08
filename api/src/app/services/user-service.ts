@@ -119,11 +119,8 @@ class UserService {
 
       const email = await userEmail.json()
 
-      user.name = {
-        first: first,
-        last: last,
-      }
-
+      user.firstName = first
+      user.lastName = last
       user.email = email.email
 
       user.save()

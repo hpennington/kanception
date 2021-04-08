@@ -4,6 +4,12 @@ module.exports = (sequelize, DataTypes) => {
   class Assignment extends Model {}
 
   Assignment.init({
+    _id: {
+      allowNull: false,
+      autoIncrement: false,
+      primaryKey: true,
+      type: DataTypes.STRING,
+    },
     assignee: {
       type: DataTypes.STRING,
       allowNull: false

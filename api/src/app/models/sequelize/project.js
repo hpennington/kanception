@@ -4,6 +4,12 @@ module.exports = (sequelize, DataTypes) => {
   class Project extends Model {}
 
   Project.init({
+    _id: {
+      allowNull: false,
+      autoIncrement: false,
+      primaryKey: true,
+      type: DataTypes.STRING,
+    },
     title: {
       type: DataTypes.STRING,
       allowNull: false

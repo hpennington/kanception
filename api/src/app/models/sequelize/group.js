@@ -3,6 +3,12 @@ module.exports = (sequelize, DataTypes) => {
   class Group extends Model {}
 
   Group.init({
+    _id: {
+      allowNull: false,
+      autoIncrement: false,
+      primaryKey: true,
+      type: DataTypes.STRING,
+    },
     title: {
       type: DataTypes.STRING,
       allowNull: false

@@ -11,17 +11,17 @@ class TeamInviteRepository implements TeamInviteRepositoryInterface {
   }
 
   async findAll(criteria): Promise<Array<TeamInvite>> {
-    const invites = await TeamInvite.find(criteria)
+    const invites = await TeamInvite.findAll({where: criteria})
     return invites
   }
 
   async findOne(criteria): Promise<TeamInvite> {
-    const invitation = await TeamInvite.findOne(criteria)
+    const invitation = await TeamInvite.findOne({where: criteria})
     return invitation
   }
 
   async deleteOne(criteria) {
-    await TeamInvite.deleteOne(criteria)
+    await TeamInvite.deleteOne({where: criteria})
   }
 }
 
