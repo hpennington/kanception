@@ -7,9 +7,9 @@ class GroupRepository implements GroupRepositoryInterface {
     const group = await Group.create({
       _id: uuid(),
       title: title,
-      owner: owner._id,
+      owner: owner,
       order: order,
-      board: board._id,
+      board: board,
     })
 
     return group

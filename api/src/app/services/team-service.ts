@@ -47,6 +47,7 @@ class TeamService {
       const groups = [groupBacklog, groupTodo, groupInProgress, groupReview, groupDone]
 
       const teamRoot = await this.boardRepository.create({
+        _id: uuid(),
         title: title,
         owner: team._id,
         groups: groups.map(group => group._id),

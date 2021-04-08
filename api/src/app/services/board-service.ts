@@ -1,3 +1,4 @@
+import { uuid }from 'uuidv4'
 import BoardRepositoryInterface from '../repositories/board-repository-interface'
 import UserRepositoryInterface from '../repositories/user-repository-interface'
 import GroupRepositoryInterface from '../repositories/group-repository-interface'
@@ -66,6 +67,7 @@ class BoardService {
       const boards = await this.boardRepository.findAll({group: group})
       const order = Math.max(...[-1, ...boards.map(board => board.order)]) + 1
       const board = await this.boardRepository.create({
+        _id: uuid(),
         title: "",
         description: "",
         owner: owner._id,
