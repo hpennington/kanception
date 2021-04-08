@@ -6,6 +6,7 @@ import AssignmentRepositoryInterface from '../repositories/assignment-repository
 import CommentRepositoryInterface from '../repositories/comment-repository-interface'
 import ProjectRepositoryInterface from '../repositories/project-repository-interface'
 import SpaceRepositoryInterface from '../repositories/space-repository-interface'
+import MemberRepositoryInterface from '../repositories/member-repository-interface'
 
 class ProjectService {
   private boardRepository: BoardRepositoryInterface
@@ -15,6 +16,7 @@ class ProjectService {
   private commentRepository: CommentRepositoryInterface
   private projectRepository: ProjectRepositoryInterface
   private spaceRepository: SpaceRepositoryInterface
+  private memberRepository: MemberRepositoryInterface
   private boardService: BoardService
 
   constructor(
@@ -25,6 +27,7 @@ class ProjectService {
     commentRepository: CommentRepositoryInterface,
     projectRepository: ProjectRepositoryInterface,
     spaceRepository: SpaceRepositoryInterface,
+    memberRepository: MemberRepositoryInterface,
     boardService: BoardService
   ) {
     this.boardRepository = boardRepository
@@ -34,6 +37,7 @@ class ProjectService {
     this.commentRepository = commentRepository
     this.projectRepository = projectRepository
     this.spaceRepository = spaceRepository
+    this.memberRepository = memberRepository
     this.boardService = boardService
   }
 
@@ -71,9 +75,12 @@ class ProjectService {
 
       const owner = await this.userRepository.findOne({sub: sub})
 
+      const spaces = (await this.memberRepository.findAll({user: owner._id}))
+        .map(member => member.space)
+
       const projects = []
 
-      for (const team of owner.spaces) {
+      for (const team of spaces) {
         const space = await this.spaceRepository.find(team)
         const projectsResult = await this.projectRepository.findAll({space: space._id})
         projects.push(...projectsResult)

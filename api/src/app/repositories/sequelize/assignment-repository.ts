@@ -1,6 +1,6 @@
 import AssignmentRepositoryInterface from '../assignment-repository-interface'
-import Board from '../../models/sequelize/board'
-import Assignment from '../../models/sequelize/assignment'
+import { Board } from '../../models/sequelize'
+import { Assignment } from '../../models/sequelize'
 
 class AssignmentRepository implements AssignmentRepositoryInterface {
   async findAll(criteria): Promise<Array<Assignment>> {

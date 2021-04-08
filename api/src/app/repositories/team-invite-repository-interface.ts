@@ -1,4 +1,4 @@
-import TeamInvite = require('../models/sequelize/team-invite')
+import { TeamInvite } = require('../models/sequelize')
 
 interface TeamInviteRepositoryInterface {
   create(team, invitee): Promise<TeamInvite>;

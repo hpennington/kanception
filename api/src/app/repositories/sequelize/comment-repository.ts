@@ -1,6 +1,6 @@
 import CommentRepositoryInterface from '../comment-repository-interface'
-import Comment from '../../models/sequelize/comment'
-import Board from '../../models/sequelize/board'
+import { Comment } from '../../models/sequelize'
+import { Board } from '../../models/sequelize'
 
 class CommentRepository implements CommentRepositoryInterface {
   async create(owner, board, timestamp, text): Promise<Comment> {

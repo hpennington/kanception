@@ -1,31 +1,27 @@
 const { Model } = require('sequelize')
 
 module.exports = (sequelize, DataTypes) => {
-  class Space extends Model {}
+  class Member extends Model {}
 
-  Space.init({
+  Member.init({
     _id: {
       allowNull: false,
+      type: DataTypes.STRING,
       autoIncrement: false,
       primaryKey: true,
-      type: DataTypes.STRING
     },
-    title: {
+    team:{
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: false,
     },
-    team: {
+    user:{
       type: DataTypes.STRING,
-      allowNull: false
-    },
-    owner: {
-      type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
   }, {
     sequelize,
-    modelName: 'Space'
+    modelName: 'Member',
   })
 
-  return Space
+  return Member
 }

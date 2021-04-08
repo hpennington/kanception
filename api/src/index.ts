@@ -15,6 +15,7 @@ import ProjectRepository from './app/repositories/sequelize/project-repository'
 import SpaceRepository from './app/repositories/sequelize/space-repository'
 import TeamRepository from './app/repositories/sequelize/team-repository'
 import TeamInviteRepository from './app/repositories/sequelize/team-invite-repository'
+import MemberRepository from './app/repositories/sequelize/member-repository'
 
 // Services
 import BoardService from './app/services/board-service'
@@ -48,6 +49,7 @@ const projectRepository = new ProjectRepository()
 const spaceRepository = new SpaceRepository()
 const teamRepository = new TeamRepository()
 const teamInviteRepository = new TeamInviteRepository()
+const memberRepository = new MemberRepository()
 
 // Init services
 const assignmentService = new AssignmentService(
@@ -89,6 +91,7 @@ const projectService = new ProjectService(
   commentRepository,
   projectRepository,
   spaceRepository,
+  memberRepository,
   boardService
 )
 
@@ -101,6 +104,7 @@ const spaceService = new SpaceService(
   teamRepository,
   spaceRepository,
   projectRepository,
+  memberRepository,
   boardService
 )
 
@@ -165,7 +169,7 @@ app.use(express.json())
 app.use(jwtCheck)
 
 const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/app/config/config.json')[env];
+const config = require(__dirname + '/../config/config.json')[env];
 
 const { Sequelize, Model, DataTypes } = require('sequelize');
 const sequelize = new Sequelize(config.database, config.username, config.password, config);

@@ -1,4 +1,4 @@
-import User = require('../models/sequelize/user')
+import { User } = require('../models/sequelize')
 
 interface UserRepositoryInterface {
   create(properties): Promise<User>;

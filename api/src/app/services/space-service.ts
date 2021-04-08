@@ -1,3 +1,4 @@
+import { uuid } from 'uuidv4'
 import BoardService from '../services/board-service'
 import BoardRepositoryInterface from '../repositories/board-repository-interface'
 import UserRepositoryInterface from '../repositories/user-repository-interface'
@@ -7,6 +8,7 @@ import CommentRepositoryInterface from '../repositories/comment-repository-inter
 import TeamRepositoryInterface from '../repositories/team-repository-interface'
 import SpaceRepositoryInterface from '../repositories/space-repository-interface'
 import ProjectRepositoryInterface from '../repositories/project-repository-interface'
+import MemberRepositoryInterface from '../repositories/member-repository-interface'
 
 class SpaceService {
   private boardService: BoardService
@@ -18,6 +20,7 @@ class SpaceService {
   private teamRepository: TeamRepositoryInterface
   private spaceRepository: SpaceRepositoryInterface
   private projectRepository: ProjectRepositoryInterface
+  private memberRepository: MemberRepositoryInterface
 
   constructor(
     boardRepository: BoardRepositoryInterface,
@@ -28,6 +31,7 @@ class SpaceService {
     teamRepository: TeamRepositoryInterface,
     spaceRepository: SpaceRepositoryInterface,
     projectRepository: ProjectRepositoryInterface,
+    memberRepository: MemberRepositoryInterface,
     boardService: BoardService
   ) {
     this.boardRepository = boardRepository
@@ -38,13 +42,14 @@ class SpaceService {
     this.teamRepository = teamRepository
     this.spaceRepository = spaceRepository
     this.projectRepository = projectRepository
+    this.memberRepository = memberRepository
     this.boardService = boardService
   }
 
   public async createSpace(sub, title) {
     try {
       const owner = await this.userRepository.findOne({sub: sub})
-      const team = await this.teamRepository.create([owner._id], null, null)
+      const team = await this.teamRepository.create(uuid(), [owner._id], null, null)
       const space = await this.spaceRepository.create(title, team._id, owner._id)
 
       owner.spaces.push(space._id)
@@ -61,10 +66,12 @@ class SpaceService {
   	try {
 
   	  const owner = await this.userRepository.findOne({sub: sub})
+      const spaceIds = (await this.memberRepository.findAll({user: owner._id}))
+        .map(member => member.space)
 
   	  const spaces = []
 
-  	  for (const spaceId of owner.spaces) {
+  	  for (const spaceId of spaceIds) {
   	    const space = await this.spaceRepository.find(spaceId)
   	    spaces.push(space)
   	  }

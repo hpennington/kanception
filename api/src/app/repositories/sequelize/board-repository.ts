@@ -1,17 +1,17 @@
 import BoardRepositoryInterface from '../board-repository-interface'
-import Board from '../../models/sequelize/board'
+import { Board } from '../../models/sequelize'
 import mongoose = require('mongoose')
 
 const ObjectId = mongoose.Types.ObjectId
 
 class BoardRepository implements BoardRepositoryInterface {
   async find(id: string): Promise<Board> {
-    const board = await Board.findById(new ObjectId(id))
+    const board = await Board.findOne({where: {_id: id}})
     return board
   }
 
   async findAll(criteria): Promise<Array<Board>> {
-  	const boards = await Board.find(criteria)
+  	const boards = await Board.findAll({where: criteria})
   	return boards
   }
 

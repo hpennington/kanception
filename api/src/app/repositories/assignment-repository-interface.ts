@@ -1,5 +1,5 @@
-import Assignment = require('../models/sequelize/assignment')
-import Board = require('../models/sequelize/board')
+import { Assignment }from '../models/sequelize'
+import { Board } from '../models/sequelize'
 
 interface AssignmentRepositoryInterface {
   findAll(criteria): Promise<Array<Assignment>>;

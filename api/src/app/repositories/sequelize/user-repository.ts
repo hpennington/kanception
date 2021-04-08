@@ -1,5 +1,5 @@
 import UserRepositoryInterface from '../user-repository-interface'
-import User from '../../models/sequelize/user'
+import { User } from '../../models/sequelize'
 
 class UserRepository implements UserRepositoryInterface {
   async create(properties): Promise<User> {

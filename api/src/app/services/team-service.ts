@@ -1,3 +1,4 @@
+import { uuid }from 'uuidv4'
 import BoardRepositoryInterface from '../repositories/board-repository-interface'
 import UserRepositoryInterface from '../repositories/user-repository-interface'
 import GroupRepositoryInterface from '../repositories/group-repository-interface'
@@ -32,7 +33,7 @@ class TeamService {
         throw new Error("User is null")
       }
 
-      const team = await this.teamRepository.create([owner._id], owner._id, title)
+      const team = await this.teamRepository.create(uuid(), [owner._id], owner._id, title)
 
       owner.spaces.push(team._id)
       owner.save()

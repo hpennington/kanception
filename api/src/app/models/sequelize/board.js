@@ -1,62 +1,66 @@
-const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../../config/config.json')[env];
+const { Model } = require('sequelize')
 
-const { Sequelize, Model, DataTypes } = require('sequelize');
-const sequelize = new Sequelize(config.database, config.username, config.password, config);
+module.exports = (sequelize, DataTypes) => {
+  class Board extends Model {}
 
-class Board extends Model {}
+  Board.init({
+    _id: {
+      allowNull: false,
+      autoIncrement: false,
+      primaryKey: true,
+      type: DataTypes.STRING,
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    description: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    project: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    owner: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    parent: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    group: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    order: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    start: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    end: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    count: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    comments: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false
+    },
+  }, {
+    sequelize,
 
-Board.init({
-  title: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  description: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  project: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  owner: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  parent: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  group: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  order: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  start: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  end: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  count: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  comments: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false
-  },
-}, {
-  sequelize,
+    modelName: 'Board'
+  })
 
-  modelName: 'Board'
-})
+  Board.assignees = []
 
-Board.assignees = []
-
-module.exports = Board
+  return Board
+}

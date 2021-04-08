@@ -1,5 +1,5 @@
 import ProjectRepositoryInterface from '../project-repository-interface'
-import Project from '../../models/sequelize/project'
+import { Project }from '../../models/sequelize'
 import mongoose = require('mongoose')
 
 const ObjectId = mongoose.Types.ObjectId

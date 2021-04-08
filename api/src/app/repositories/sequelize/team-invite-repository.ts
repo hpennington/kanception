@@ -1,5 +1,5 @@
 import TeamInviteRepositoryInterface from '../team-invite-repository-interface'
-import TeamInvite from '../../models/sequelize/team-invite'
+import { TeamInvite } from '../../models/sequelize'
 
 class TeamInviteRepository implements TeamInviteRepositoryInterface {
   async create(team, invitee): Promise<TeamInvite> {

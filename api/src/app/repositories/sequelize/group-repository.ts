@@ -1,5 +1,5 @@
 import GroupRepositoryInterface from '../group-repository-interface'
-import Group from '../../models/sequelize/group'
+import { Group } from '../../models/sequelize'
 import mongoose = require('mongoose')
 
 const ObjectId = mongoose.Types.ObjectId

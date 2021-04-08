@@ -1,4 +1,4 @@
-import Board = require('../models/sequelize/board')
+import { Board } = require('../models/sequelize')
 
 interface BoardRepositoryInterface {
   find(id: string): Promise<Board>;

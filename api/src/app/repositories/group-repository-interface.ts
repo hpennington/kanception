@@ -1,4 +1,4 @@
-import Group = require('../models/sequelize/group')
+import { Group } = require('../models/sequelize')
 
 interface GroupRepositoryInterface {
   create(title, owner, order, board): Promise<Group>;
