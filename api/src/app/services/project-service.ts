@@ -59,7 +59,7 @@ class ProjectService {
         comments: false,
       })
 
-      const groupBacklog = await this.groupRepository.create("backlog", owner._id, 0, projectRoot._id)
+      const groupBacklog = await this.groupRepository.create("Backlog", owner._id, 0, projectRoot._id)
       const groupTodo = await this.groupRepository.create("To-do", owner._id, 1, projectRoot._id)
       const groupInProgress = await this.groupRepository.create("In progress", owner._id, 2, projectRoot._id)
       const groupReview = await this.groupRepository.create("Review", owner._id, 3, projectRoot._id)
