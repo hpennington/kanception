@@ -31,6 +31,11 @@ class TeamRepository implements TeamRepositoryInterface {
   	const teams = await Team.find(criteria)
   	return teams
   }
+  
+  async findOne(criteria): Promise<Team> {
+  	const team = await Team.findOne(criteria)
+  	return team
+  }
 
   async delete(id: string) {
   	await Team.deleteOne({_id: id})

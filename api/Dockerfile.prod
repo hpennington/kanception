@@ -13,7 +13,8 @@ WORKDIR /home/ubuntu/api
 COPY package*.json ./
 RUN npm install
 RUN npm link typescript
-
 COPY --chown=ubuntu:ubuntu . /home/ubuntu/api
+RUN npm run build
+
 
 CMD ["npm", "run", "start"]

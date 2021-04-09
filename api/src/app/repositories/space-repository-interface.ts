@@ -1,4 +1,4 @@
-import { Space } = require('../models/sequelize')
+import { Space } from '../models/sequelize'
 
 interface SpaceRepositoryInterface {
   create(title, team, owner): Promise<Space>;

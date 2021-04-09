@@ -1,4 +1,4 @@
-import { Assignment }from '../models/sequelize'
+import { Assignment } from '../models/sequelize'
 import { Board } from '../models/sequelize'
 
 interface AssignmentRepositoryInterface {
