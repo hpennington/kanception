@@ -7,7 +7,7 @@
     "start": "node ./dist/bundle.js",
     "dev": "nodemon ./src/index.ts",
     "test": "jest",
-    "heroku-postbuild": "webpack -p --config ./webpack.config.js --progress"
+    "heroku-postbuild": "webpack --config ./webpack.config.js --progress"
   },
   "keywords": [],
   "author": "",
