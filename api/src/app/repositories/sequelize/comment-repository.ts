@@ -18,12 +18,12 @@ class CommentRepository implements CommentRepositoryInterface {
   }
 
   async findAll(criteria): Promise<Array<Comment>> {
-    const comments = await Comment.find(criteria)
+    const comments = await Comment.findAll({where: criteria})
     return comments
   }
 
   async deleteMany(criteria) {
-  	await Comment.deleteMany(criteria)
+  	await Comment.destroy({where: criteria})
   }
 }
 

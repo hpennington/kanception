@@ -121,7 +121,8 @@ const teamService = new TeamService(
   userRepository,
   groupRepository,
   spaceRepository,
-  teamRepository
+  teamRepository,
+  memberRepository
 )
 
 const userService = new UserService(

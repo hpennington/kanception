@@ -57,7 +57,9 @@ class UserService {
   public async readUser(sub) {
     try {
       const user = await this.userRepository.findOne({sub: sub})
-      return user
+      const members = await this.memberRepository.findAll({user: user._id})
+      const spaces = members.map(member => member.team)
+      return spaces
     } catch (error) {
       throw error
     }
@@ -71,19 +73,17 @@ class UserService {
         // res.sendStatus(503)
         return null
       }
-
-      const spaceResult = await this.spaceRepository.find(team)
-      const teamResult = await this.teamRepository.find(spaceResult.team)
-      if (teamResult === undefined || teamResult === null) {
-        // res.sendStatus(502)
-        return null
-      }
-
-      const members = (await this.memberRepository.findAll({team: teamResult._id}))
+      
+      console.log({team})
+      const members = (await this.memberRepository.findAll({team: team}))
         .map(member => member.user)
+
+      console.log({members})
+      console.log(user[0]._id)
 
       if (members.includes(user[0]._id) === false) {
         // res.sendStatus(501)
+        console.log('members does not include')
         return null
       }
 

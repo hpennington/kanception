@@ -4,6 +4,7 @@ import UserRepositoryInterface from '../repositories/user-repository-interface'
 import GroupRepositoryInterface from '../repositories/group-repository-interface'
 import SpaceRepositoryInterface from '../repositories/space-repository-interface'
 import TeamRepositoryInterface from '../repositories/team-repository-interface'
+import MemberRepositoryInterface from '../repositories/member-repository-interface'
 
 class TeamService {
   private boardRepository: BoardRepositoryInterface
@@ -11,19 +12,22 @@ class TeamService {
   private groupRepository: GroupRepositoryInterface
   private spaceRepository: SpaceRepositoryInterface
   private teamRepository: TeamRepositoryInterface
+  private memberRepository: MemberRepositoryInterface
 
   constructor(
     boardRepository: BoardRepositoryInterface,
     userRepository: UserRepositoryInterface,
     groupRepository: GroupRepositoryInterface,
     spaceRepository: SpaceRepositoryInterface,
-    teamRepository: TeamRepositoryInterface
+    teamRepository: TeamRepositoryInterface,
+    memberRepository: MemberRepositoryInterface
   ) {
     this.boardRepository = boardRepository
     this.userRepository = userRepository
     this.groupRepository = groupRepository
     this.spaceRepository = spaceRepository
     this.teamRepository = teamRepository
+    this.memberRepository = memberRepository
   }
 
   public async createTeam(sub, title) {
@@ -34,9 +38,9 @@ class TeamService {
       }
 
       const team = await this.teamRepository.create(uuid(), [owner._id], owner._id, title)
-
-      owner.spaces.push(team._id)
-      owner.save()
+      await this.memberRepository.create({_id: uuid(), team: team._id, user: owner._id})
+      // owner.spaces.push(team._id)
+      // owner.save()
 
       const groupBacklog = await this.groupRepository.create("Backlog", team._id, 0, undefined)
       const groupTodo = await this.groupRepository.create("To-do", team._id, 1, undefined)
@@ -91,13 +95,15 @@ class TeamService {
         return null
       }
 
-      const space = await this.spaceRepository.find(teamId)
-
-      if (owner.spaces.includes(space._id) === false) {
+      const space = await this.spaceRepository.findOne({team: teamId})
+      const members = await this.memberRepository.findAll({user: owner._id})
+      const spaces = members.map(member => member.team)
+      console.log({spaces})
+      if (spaces.includes(space._id) === false) {
         return null
       }
 
-      const team = await this.teamRepository.find(space.team)
+      const team = await this.teamRepository.find(space._id)
 
       if (team === null) {
         return null

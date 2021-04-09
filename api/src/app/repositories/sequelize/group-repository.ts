@@ -26,7 +26,7 @@ class GroupRepository implements GroupRepositoryInterface {
   }
 
   async delete(id: string) {
-  	await Group.deleteOne({where: {_id: id}})
+  	await Group.destroy({where: {_id: id}})
   }
 }
 

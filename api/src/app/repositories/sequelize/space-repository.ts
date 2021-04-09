@@ -24,7 +24,7 @@ class SpaceRepository implements SpaceRepositoryInterface {
   }
 
   async delete(id: string) {
-  	await Space.deleteOne({where: {_id: id}})
+  	await Space.destroy({where: {_id: id}})
   }
 }
 

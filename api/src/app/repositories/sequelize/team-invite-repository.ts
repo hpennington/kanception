@@ -1,9 +1,11 @@
+import { uuid } from 'uuidv4'
 import TeamInviteRepositoryInterface from '../team-invite-repository-interface'
 import { TeamInvite } from '../../models/sequelize'
 
 class TeamInviteRepository implements TeamInviteRepositoryInterface {
   async create(team, invitee): Promise<TeamInvite> {
     const invite = await TeamInvite.create({
+      _id: uuid(),
       team: team,
       invitee: invitee
     })
@@ -21,7 +23,7 @@ class TeamInviteRepository implements TeamInviteRepositoryInterface {
   }
 
   async deleteOne(criteria) {
-    await TeamInvite.deleteOne({where: criteria})
+    await TeamInvite.destroy({where: criteria})
   }
 }
 

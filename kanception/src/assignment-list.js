@@ -14,7 +14,7 @@ const AssignmentList = props => (
               <AssignmentListCell
                 checked={props.assignees && props.assignees.includes(member._id)}
                 userId={member._id}
-                name={member.name}
+                name={{first: member.firstName, last: member.lastName}}
                 email={member.email}
                 onAddAssignment={props.onAddAssignment}
                 onDeleteAssignment={props.onDeleteAssignment}

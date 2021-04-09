@@ -1,3 +1,4 @@
+import { uuid } from 'uuidv4'
 import { resetPassword, sendPasswordResetEmail } from '../util/reset-password'
 import { createAuth0User } from '../util/create-auth0-user'
 import TeamInviteRepositoryInterface from '../repositories/team-invite-repository-interface'
@@ -111,6 +112,7 @@ class TeamInviteService {
       } else {
 
         const invitedUser = await this.userRepository.create({
+          _id: uuid(),
           name: {
             first: first,
             last: last

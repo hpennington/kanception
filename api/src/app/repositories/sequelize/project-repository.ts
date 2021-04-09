@@ -24,7 +24,7 @@ class ProjectRepository implements ProjectRepositoryInterface {
   }
 
   async delete(id) {
-    const deleteResult = await Project.deleteOne({where: {_id: id}})
+    const deleteResult = await Project.destroy({where: {_id: id}})
     return deleteResult
   }
 }

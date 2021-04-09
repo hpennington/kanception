@@ -32,11 +32,11 @@ class TeamRepository implements TeamRepositoryInterface {
   }
 
   async delete(id: string) {
-  	await Team.deleteOne({where: {_id: id}})
+  	await Team.destroy({where: {_id: id}})
   }
 
   async deleteOne(criteria) {
-    await Team.deleteOne({where: criteria})
+    await Team.destroy({where: criteria})
   }
 }
 

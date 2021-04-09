@@ -1,3 +1,4 @@
+import { uuid } from 'uuidv4'
 import AssignmentRepositoryInterface from '../assignment-repository-interface'
 import { Board } from '../../models/sequelize'
 import { Assignment } from '../../models/sequelize'
@@ -14,16 +15,17 @@ class AssignmentRepository implements AssignmentRepositoryInterface {
   }
 
   async create(assignee, assigner, board): Promise<Assignment> {
-    const assignment = await Assignment.create({assignee, assigner, board})
+    const _id = uuid()
+    const assignment = await Assignment.create({_id, assignee, assigner, board})
     return assignment
   }
 
   async deleteMany(criteria) {
-  	await Assignment.deleteMany(criteria)
+  	await Assignment.destroy({where: criteria})
   }
 
   async deleteOne(criteria) {
-  	await Assignment.deleteOne(criteria)	
+  	await Assignment.destroy({where: criteria})	
   }
 }
 

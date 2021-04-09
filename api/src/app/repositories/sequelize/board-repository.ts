@@ -1,8 +1,5 @@
 import BoardRepositoryInterface from '../board-repository-interface'
 import { Board } from '../../models/sequelize'
-import mongoose = require('mongoose')
-
-const ObjectId = mongoose.Types.ObjectId
 
 class BoardRepository implements BoardRepositoryInterface {
   async find(id: string): Promise<Board> {
@@ -16,7 +13,7 @@ class BoardRepository implements BoardRepositoryInterface {
   }
 
   async findByParent(id: string): Promise<Array<Board>> {
-    const children = await Board.find({parent: id})
+    const children = await Board.findAll({where: {parent: id}})
     return children
   }
 
@@ -37,7 +34,7 @@ class BoardRepository implements BoardRepositoryInterface {
   }
 
   async delete(id: string) {
-    const deleteResult = await Board.deleteOne({_id: new ObjectId(id)})
+    const deleteResult = await Board.destroy({where: {_id: id}})
   }
 }
 
