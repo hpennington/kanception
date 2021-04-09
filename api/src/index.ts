@@ -175,7 +175,13 @@ const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.json')[env];
 
 const { Sequelize, Model, DataTypes } = require('sequelize');
-const sequelize = new Sequelize(config.database, config.username, config.password, config);
+
+let sequelize = null
+if (env === 'production') {
+  sequelize = new Sequelize(process.env.DATABASE_URL)
+} else {
+  sequelize = new Sequelize(config.database, config.username, config.password, config);  
+}
 
 (async () => {
   await sequelize.sync();
