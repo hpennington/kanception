@@ -5,7 +5,7 @@
   "main": "./src/index.ts",
   "scripts": {
     "build": "webpack --config config/webpack.config.js",
-    "start": "node ./dist/bundle.js",
+    "start": "node ./config/dist/bundle.js",
     "dev": "nodemon ./src/index.ts",
     "test": "jest"
   },
