@@ -239,5 +239,5 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
 
   app.post('/boards/add', boardController.createBoard)
 
-  app.listen(port, () => console.log(`API listening at http://localhost:${port}`))
+  app.listen(process.env.PORT || port, () => console.log(`API listening at http://localhost:${port}`))
 })()
