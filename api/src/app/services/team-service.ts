@@ -97,13 +97,13 @@ class TeamService {
 
       const space = await this.spaceRepository.findOne({team: teamId})
       const members = await this.memberRepository.findAll({user: owner._id})
-      const spaces = members.map(member => member.team)
-      console.log({spaces})
-      if (spaces.includes(space._id) === false) {
+      const teams = members.map(member => member.team)
+      console.log({teams})
+      if (teams.includes(teamId) === false) {
         return null
       }
 
-      const team = await this.teamRepository.find(space._id)
+      const team = await this.teamRepository.find(teamId)
 
       if (team === null) {
         return null

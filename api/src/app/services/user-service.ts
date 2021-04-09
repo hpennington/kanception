@@ -75,7 +75,8 @@ class UserService {
       }
       
       console.log({team})
-      const members = (await this.memberRepository.findAll({team: team}))
+      const space = await this.spaceRepository.findOne({_id: team})
+      const members = (await this.memberRepository.findAll({team: space.team}))
         .map(member => member.user)
 
       console.log({members})

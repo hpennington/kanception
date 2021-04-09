@@ -35,6 +35,12 @@ class UserController {
   public async readProfiles(req, res) {
     const sub = req.user.sub
     const team = req.query.team
+
+    if (team === null || team === undefined || team === 'undefined') {
+      res.sendStatus(400)
+      return
+    }
+
     try {
       
       const profiles = await this.userService.readProfiles(sub, team)

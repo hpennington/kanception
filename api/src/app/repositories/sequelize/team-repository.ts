@@ -26,6 +26,11 @@ class TeamRepository implements TeamRepositoryInterface {
     return team
   }
 
+  async findOne(criteria): Promise<Team> {
+    const team = await Team.findOne({where: criteria})
+    return team
+  }
+
   async findAll(criteria): Promise<Array<Team>> {
   	const teams = await Team.findAll({where: criteria})
   	return teams

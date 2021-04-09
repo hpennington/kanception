@@ -109,11 +109,28 @@ class BoardService {
 
     for (var node of nodes) {
       // Add assignees to board
+      console.log(node._id)
       const assignments = await this.assignmentRepository.findAll({board: node._id})
+      console.log({assignments})
       const assignees = assignments.map(assignment => assignment.assignee)
 
-      node.assignees = assignees
-      updatedNodes.push(node)
+      updatedNodes.push({
+        _id: node._id,
+        title: node.title,
+        description: node.description,
+        project: node.project,
+        owner: node.owner,
+        parent: node.parent,
+        group: node.group,
+        order: node.order,
+        start: node.start,
+        end: node.end,
+        count: node.count,
+        comments: node.comments,
+        createdAt: node.createdAt,
+        updatedAt: node.updatedAt,
+        assignees: assignees,
+      })
     }
 
     return updatedNodes

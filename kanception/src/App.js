@@ -122,7 +122,7 @@ const App = props => {
           console.log({node})
           const team = props.projects.find(project => project._id === node.project).space
           props.dispatch(setSelectedTeam({team: team._id}))
-          this.setSelectedProject(node.project, team)
+          setSelectedProject(node.project, team)
         }
 
       }

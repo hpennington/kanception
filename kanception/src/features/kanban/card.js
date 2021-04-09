@@ -110,7 +110,7 @@ const Card = props => {
             props.assignees.map(a => {
               return (
                 <CardMemberView
-                  text={props.members.find(m => m._id === a) != null && nameToInitials(props.members.find(m => m._id === a).name)}
+                  text={props.members.find(m => m._id === a) != null && nameToInitials({first: props.members.find(m => m._id === a).firstName, last: props.members.find(m => m._id === a).lastName})}
                 />
               )
             })
