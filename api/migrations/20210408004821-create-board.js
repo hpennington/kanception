@@ -11,11 +11,11 @@ module.exports = {
       },
       title: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       description: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       project: {
         type: Sequelize.STRING,

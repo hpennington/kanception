@@ -58,8 +58,8 @@ class UserService {
     try {
       const user = await this.userRepository.findOne({sub: sub})
       const members = await this.memberRepository.findAll({user: user._id})
-      const spaces = members.map(member => member.team)
-      return spaces
+      const teams = members.map(member => member.team)
+      return teams
     } catch (error) {
       throw error
     }

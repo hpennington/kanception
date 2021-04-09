@@ -12,11 +12,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     title: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     description: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     project: {
       type: DataTypes.STRING,

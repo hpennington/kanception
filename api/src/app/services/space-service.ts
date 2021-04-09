@@ -64,13 +64,15 @@ class SpaceService {
   	try {
 
   	  const owner = await this.userRepository.findOne({sub: sub})
-      const spaceIds = (await this.memberRepository.findAll({user: owner._id}))
+      const teams = (await this.memberRepository.findAll({user: owner._id}))
         .map(member => member.team)
+
+      console.log({teams})
 
   	  const spaces = []
 
-  	  for (const spaceId of spaceIds) {
-  	    const space = await this.spaceRepository.findOne({team: spaceId})
+  	  for (const team of teams) {
+  	    const space = await this.spaceRepository.findOne({team: team})
   	    spaces.push(space)
   	  }
 
