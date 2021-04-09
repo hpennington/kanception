@@ -4,6 +4,8 @@ import mongoose = require('mongoose')
 import bodyParser = require('body-parser')
 import jwt = require('express-jwt')
 import jwks = require('jwks-rsa')
+import pg = require('pg');
+pg.defaults.ssl = true;
 
 // Repos
 import UserRepository from './app/repositories/sequelize/user-repository'
@@ -178,7 +180,13 @@ const { Sequelize, Model, DataTypes } = require('sequelize');
 
 let sequelize = null
 if (env === 'production') {
-  sequelize = new Sequelize(process.env.DATABASE_URL)
+  const prodConfig = {
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": true
+  }}
+
+  sequelize = new Sequelize(process.env.DATABASE_URL, prodConfig)
 } else {
   sequelize = new Sequelize(config.database, config.username, config.password, config);  
 }
