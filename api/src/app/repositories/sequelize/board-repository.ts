@@ -23,13 +23,13 @@ class BoardRepository implements BoardRepositoryInterface {
   }
 
   async incrementCount(board, amount) {
-    await board.update({$inc: {count: amount}})
-    board.save()
+    await board.increment('count', {by: amount})
+    await board.save()
   }
 
   async merge(board, body) {
     const updatedBoard = Object.assign(board, body)
-    updatedBoard.save()
+    await updatedBoard.save()
     return updatedBoard
   }
 
