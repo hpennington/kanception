@@ -72,6 +72,7 @@ const commentService = new CommentService(
   projectRepository,
   spaceRepository,
   teamRepository,
+  memberRepository
 )
 
 const groupService = new GroupService(

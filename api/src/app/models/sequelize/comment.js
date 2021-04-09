@@ -19,12 +19,20 @@ module.exports = (sequelize, DataTypes) => {
     },
     text: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     timestamp: {
       type: DataTypes.STRING,
       allowNull: false
     },
+    createdAt: {
+      allowNull: false,
+      type: DataTypes.DATE
+    },
+    updatedAt: {
+      allowNull: false,
+      type: DataTypes.DATE
+    }
   }, {
     sequelize,
     modelName: 'Comment'

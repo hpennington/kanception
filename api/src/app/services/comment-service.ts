@@ -4,6 +4,7 @@ import BoardRepositoryInterface from '../repositories/board-repository-interface
 import ProjectRepositoryInterface from '../repositories/project-repository-interface'
 import SpaceRepositoryInterface from '../repositories/space-repository-interface'
 import TeamRepositoryInterface from '../repositories/team-repository-interface'
+import MemberRepositoryInterface from '../repositories/member-repository-interface'
 
 class CommentService {
   private userRepository: UserRepositoryInterface
@@ -12,6 +13,7 @@ class CommentService {
   private projectRepository: ProjectRepositoryInterface
   private spaceRepository: SpaceRepositoryInterface
   private teamRepository: TeamRepositoryInterface
+  private memberRepository: MemberRepositoryInterface
 
   constructor(
     userRepository: UserRepositoryInterface,
@@ -20,6 +22,7 @@ class CommentService {
     projectRepository: ProjectRepositoryInterface,
     spaceRepository: SpaceRepositoryInterface,
     teamRepository: TeamRepositoryInterface,
+    memberRepository: MemberRepositoryInterface,
   ) {
     this.userRepository = userRepository
     this.commentRepository = commentRepository
@@ -27,6 +30,7 @@ class CommentService {
     this.projectRepository = projectRepository
     this.spaceRepository = spaceRepository
     this.teamRepository = teamRepository
+    this.memberRepository = memberRepository
   }
 
   public async createComment(text, boardId, sub) {
@@ -55,11 +59,12 @@ class CommentService {
       const board = await this.boardRepository.find(boardId)
       const project = await this.projectRepository.find(board.project)
       const space = await this.spaceRepository.find(project.space)
-      const team = await this.teamRepository.find(space.team)
+      // const team = await this.teamRepository.find(space.team)
+      const members = (await this.memberRepository.findAll({team: space.team}))
+        .map(member => member._id)
 
-      if (team.members.includes(user._id)) {
+      if (members.includes(user._id)) {
         const comments = await this.commentRepository.findAll({board: boardId})
-        console.log(comments)
         return comments.sort((a, b) => +(parseInt(a.timestamp) < parseInt(b.timestamp)))
       }
 

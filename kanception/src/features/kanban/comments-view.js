@@ -75,7 +75,10 @@ const CommentsView = props => {
           comment =>
             <CommentBox
               timestamp={comment.timestamp}
-              name={props.members.find(m => m._id === comment.owner)?.name}
+              name={{
+                first: props.members.find(m => m._id === comment.owner)?.firstName,
+                last: props.members.find(m => m._id === comment.owner)?.lastName
+              }}
               text={comment.text}
             />
           )
