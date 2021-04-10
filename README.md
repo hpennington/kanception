@@ -14,6 +14,7 @@ The tech stack is React, NodeJS (TypeScript), Postgres. PERN.
 ### Roadmap
 
   - Add tests
+  - Add realtime features
 
 ### Getting started
 
