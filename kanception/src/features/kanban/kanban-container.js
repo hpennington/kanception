@@ -52,7 +52,7 @@ const KanbanContainer = props => {
       props.dispatch(setTree({tree: tree}))
 
       if (props.selectedNode.length > 20) {
-        const root = tree.find(node => node._id == props.selectedNode)
+        const root = props.tree.find(node => node._id == props.selectedNode)
         props.dispatch(setSelectedNode({id: root._id}))
         fetchGroups(root._id)
       }
