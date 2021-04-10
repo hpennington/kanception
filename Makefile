@@ -8,6 +8,3 @@ migrate:
 	docker exec -it kanception-api npx sequelize-cli db:migrate
 heroku-migrate:
 	heroku run npx sequelize-cli db:migrate --env production --app kanception
-heroku-deploy:
-	git subtree push --prefix api heroku master
-

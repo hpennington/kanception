@@ -9,7 +9,7 @@ www.kanception.io
 
 Come work on this project with us! It needs security hardening, performance optimizations, and lots of features added. Don't hesitate to make a PR!
 
-The tech stack is React, NodeJS (TypeScript), Postgres. PERN.
+The tech stack is React, NodeJS, & Postgres. AKA the PERN stack.
 
 ### Roadmap
 
