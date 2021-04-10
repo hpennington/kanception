@@ -21,6 +21,11 @@ class UserService {
     this.spaceRepository = spaceRepository
     this.teamRepository = teamRepository
     this.memberRepository = memberRepository
+
+    this.createUser = this.createUser.bind(this)
+    this.readUser = this.readUser.bind(this)
+    this.readProfiles = this.readProfiles.bind(this)
+    this.updateName = this.updateName.bind(this)
   }
 
   public async createUser(sub, token) {

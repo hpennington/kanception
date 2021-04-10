@@ -2,6 +2,13 @@ import UserRepositoryInterface from '../user-repository-interface'
 import { User } from '../../models/sequelize'
 
 class UserRepository implements UserRepositoryInterface {
+  constructor() {
+    this.create = this.create.bind(this)
+    this.findOne = this.findOne.bind(this)
+    this.findAll = this.findAll.bind(this)
+    this.find = this.find.bind(this)
+  }
+
   async create(properties): Promise<User> {
     const user = await User.create(properties)
     return user
