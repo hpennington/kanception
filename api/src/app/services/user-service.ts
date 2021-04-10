@@ -57,6 +57,7 @@ class UserService {
   public async readUser(sub) {
     try {
       const user = await this.userRepository.findOne({sub: sub})
+      console.log({user})
       const members = await this.memberRepository.findAll({user: user._id})
       const teams = members.map(member => member.team)
       return teams

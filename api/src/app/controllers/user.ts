@@ -24,6 +24,7 @@ class UserController {
   public async readUser(req, res) {
     try {
       const sub = req.user.sub
+      console.log({sub})
       const spaces = await this.userService.readUser(sub)
       res.send(spaces)
     } catch (error) {
