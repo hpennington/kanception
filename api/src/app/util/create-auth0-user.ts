@@ -7,8 +7,8 @@ const createAuth0User = async (email, first, last) => {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
-      "client_id": "",
-      "client_secret": "",
+      "client_id": process.env.AUTH0_CLIENT_ID,
+      "client_secret": process.env.AUTH0_CLIENT_SECRET,
       "audience": "https://kanception.auth0.com/api/v2/",
       "grant_type": "client_credentials"
     })
