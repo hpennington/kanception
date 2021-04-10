@@ -21,6 +21,8 @@ class UserService {
     this.spaceRepository = spaceRepository
     this.teamRepository = teamRepository
     this.memberRepository = memberRepository
+
+    this.readUser = this.readUser.bind(this)
   }
 
   public async createUser(sub, token) {
@@ -57,7 +59,6 @@ class UserService {
   public async readUser(sub) {
     try {
       const user = await this.userRepository.findOne({sub: sub})
-      console.log({user})
       const members = await this.memberRepository.findAll({user: user._id})
       const teams = members.map(member => member.team)
       return teams
