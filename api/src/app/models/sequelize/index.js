@@ -18,7 +18,7 @@ if (config.use_env_variable) {
 fs
   .readdirSync(path.join(__dirname, '../src/app/models/sequelize'))
   .filter(file => {
-    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
+    return (file.indexOf('.') !== 0) && (file !== 'index.js') && (file.slice(-3) === '.js');
   })
   .forEach(file => {
     const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
