@@ -183,7 +183,10 @@ if (env === 'production') {
   const prodConfig = {
     "dialect": "postgres",
     "dialectOptions": {
-      "ssl": true
+    "ssl": {
+        "require": true,
+        "rejectUnauthorized": false,
+      }
   }}
 
   sequelize = new Sequelize(process.env.DATABASE_URL, prodConfig)
