@@ -8,7 +8,7 @@
     "start": "node ./dist/bundle.js",
     "dev": "nodemon ./src/index.ts",
     "test": "jest",
-    "heroku-postbuild": "webpack --config ./webpack.config.js --progress"
+    "heroku-postbuild": "webpack --config ./webpack.config.js --progress && cp src/app/models/sequelize/*.js dist/"
   },
   "keywords": [],
   "author": "",
