@@ -16,3 +16,7 @@ body {
 body::-webkit-scrollbar {
   display: none;  /* Safari and Chrome */
 }
+
+.page-link {
+  color: black!important;
+}
