@@ -31,7 +31,12 @@ class CommentController {
       const sub = req.user.sub
 
       const comments = await this.commentService.readComments(sub, boardId)
-      res.send(comments)
+
+      if (comments != null) {
+        res.send(comments)  
+      } else {
+        res.sendStatus(500)
+      }
 
     } catch(error) {
       console.log(error)

@@ -61,8 +61,8 @@ class CommentService {
       const space = await this.spaceRepository.find(project.space)
       // const team = await this.teamRepository.find(space.team)
       const members = (await this.memberRepository.findAll({team: space.team}))
-        .map(member => member._id)
-
+        .map(member => member.user)
+        
       if (members.includes(user._id)) {
         const comments = await this.commentRepository.findAll({board: boardId})
         return comments.sort((a, b) => +(parseInt(a.timestamp) < parseInt(b.timestamp)))
