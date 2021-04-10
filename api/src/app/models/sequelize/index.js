@@ -7,7 +7,6 @@ const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../../../../config/config.json')[env];
 const db = {};
-const modelsPath = env === 'development' ? '' : '../src/app/models/sequelize'
 
 let sequelize;
 if (config.use_env_variable) {
@@ -16,21 +15,27 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
-fs
-  .readdirSync(path.join(__dirname, modelsPath))
-  .filter(file => {
-    return (file.indexOf('.') !== 0) && (file !== 'index.js') && (file.slice(-3) === '.js');
-  })
-  .forEach(file => {
-    const model = require(path.join(__dirname, modelsPath, file))(sequelize, Sequelize.DataTypes);
-    db[model.name] = model;
-  });
+const Assignment = require('./assignment')(sequelize, Sequelize.DataTypes)
+const Board = require('./board')(sequelize, Sequelize.DataTypes)
+const Comment = require('./comment')(sequelize, Sequelize.DataTypes)
+const Group = require('./group')(sequelize, Sequelize.DataTypes)
+const Member = require('./member')(sequelize, Sequelize.DataTypes)
+const Project = require('./project')(sequelize, Sequelize.DataTypes)
+const Space = require('./space')(sequelize, Sequelize.DataTypes)
+const TeamInvite = require('./team-invite')(sequelize, Sequelize.DataTypes)
+const Team = require('./team')(sequelize, Sequelize.DataTypes)
+const User = require('./user')(sequelize, Sequelize.DataTypes)
 
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
-});
+db['Assignment'] = Assignment
+db['Board'] = Board
+db['Comment'] = Comment
+db['Group'] = Group
+db['Member'] = Member
+db['Project'] = Project
+db['Space'] = Space
+db['TeamInvite'] = TeamInvite
+db['Team'] = Team
+db['User'] = User
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
