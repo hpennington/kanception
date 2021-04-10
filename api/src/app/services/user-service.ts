@@ -21,8 +21,6 @@ class UserService {
     this.spaceRepository = spaceRepository
     this.teamRepository = teamRepository
     this.memberRepository = memberRepository
-
-    this.readUser = this.readUser.bind(this)
   }
 
   public async createUser(sub, token) {
@@ -58,6 +56,13 @@ class UserService {
 
   public async readUser(sub) {
     try {
+      console.log("++++++++++++++++++++++++++++ REPOS ********************")
+      console.log("++++++++++++++++++++++++++++ REPOS ********************")
+      console.log("++++++++++++++++++++++++++++ REPOS ********************")
+      console.log("++++++++++++++++++++++++++++ REPOS ********************")
+      console.log("++++++++++++++++++++++++++++ REPOS ********************")
+      console.log(this.userRepository)
+      console.log(this.memberRepository)
       const user = await this.userRepository.findOne({sub: sub})
       const members = await this.memberRepository.findAll({user: user._id})
       const teams = members.map(member => member.team)
