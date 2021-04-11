@@ -16,7 +16,7 @@ const CommentsView = props => {
     getTokenSilently()
       .then(token => {
 
-        const socket = io.connect('ws://127.0.0.1:4000', {
+        const socket = io.connect('ws://api.kanception.io:4000', {
           "transports": ['websocket'],
         })
 
