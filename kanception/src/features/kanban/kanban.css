@@ -23,7 +23,7 @@
 .column {
   width: 300px;
   min-height: 50px;
-  max-height: calc(100vh - 200px);
+  max-height: calc(100vh - 225px);
   background: var(--foreground-color);
   margin: 10px;
   border: solid var(--foreground-color) 10px;
