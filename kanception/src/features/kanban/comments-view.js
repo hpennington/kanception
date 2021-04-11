@@ -5,6 +5,7 @@ import CommentBoxSubmit from './comment-box-submit'
 import TextAreaAutoSize from 'react-textarea-autosize'
 import { setComments } from '../comments/commentsSlice'
 import { useAuth0 } from '../../react-auth0-spa'
+import { io } from 'socket.io-client'
 import './comments-view.css'
 
 const CommentsView = props => {
@@ -12,6 +13,16 @@ const CommentsView = props => {
 
   useEffect(() => {
     fetchComments()
+
+    getTokenSilently()
+      .then(token => {
+        const socket = io.connect('ws://localhost:4000')
+        socket.on('connect', () => {
+          socket.emit('authenticate', { token: token })
+          socket.send('message')
+        })
+      })
+    
   }, [props.board])
 
   const fetchComments = async () => {

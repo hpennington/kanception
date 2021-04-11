@@ -5,6 +5,7 @@ import bodyParser = require('body-parser')
 import jwt = require('express-jwt')
 import jwks = require('jwks-rsa')
 import pg = require('pg')
+import socketioJwt = require('socketio-jwt');
 
 // Repos
 import UserRepository from './app/repositories/sequelize/user-repository'
@@ -144,20 +145,22 @@ const teamInviteController = new TeamInviteController(teamInviteService)
 const teamController = new TeamController(teamService)
 const userController = new UserController(userService)
 
-const port = 4000
+const devPort = 4000
 
 const authConfig = {
   domain: 'kanception.auth0.com',
   audience: 'https://kanception.auth0.com/api/v2/',
 }
 
+const secret = jwks.expressJwtSecret({
+  cache: true,
+  rateLimit: true,
+  jwksRequestsPerMinute: 5,
+  jwksUri: `https://${authConfig.domain}/.well-known/jwks.json`
+})
+
 const jwtCheck = jwt({
-  secret: jwks.expressJwtSecret({
-    cache: true,
-    rateLimit: true,
-    jwksRequestsPerMinute: 5,
-    jwksUri: `https://${authConfig.domain}/.well-known/jwks.json`
-  }),
+  secret: secret,
   audience: authConfig.audience,
   issuer: `https://${authConfig.domain}/`,
   algorithms: ['RS256'],
@@ -171,6 +174,14 @@ app.use(cors())
 app.use(bodyParser())
 app.use(express.json())
 app.use(jwtCheck)
+
+const httpServer = require("http").createServer(app);
+
+const io = require("socket.io")(httpServer, {
+  cors: {
+    origin: 'http://localhost:3000'
+  },
+})
 
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.json')[env];
@@ -195,8 +206,18 @@ if (env === 'production') {
   sequelize = new Sequelize(config.database, config.username, config.password, config);  
 }
 
+
 (async () => {
   await sequelize.sync();
+  
+  io.on('connection', socketioJwt.authorize({
+    secret: '',
+    timeout: 15000 // 15 seconds to send the authentication message
+  }))
+  .on('authenticated', (socket) => {
+    console.log(`hello! ${socket.decoded_token.name}`);
+  })
+
   app.get('/comments', commentController.readComments)
 
   app.post('/comments', commentController.createComment)
@@ -257,5 +278,5 @@ if (env === 'production') {
 
   app.post('/boards/add', boardController.createBoard)
 
-  app.listen(process.env.PORT || port, () => console.log(`API listening at http://localhost:${port}`))
+  httpServer.listen(process.env.PORT || devPort, () => console.log(`API listening at http://localhost:${devPort}`))
 })()
