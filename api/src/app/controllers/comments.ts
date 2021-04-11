@@ -1,10 +1,13 @@
 import CommentService from '../services/comment-service'
+import SocketIO from 'socket.io'
 
 class CommentController {
   private commentService: CommentService
+  private io: any
 
-  constructor(commentService: CommentService) {
+  constructor(commentService: CommentService, io: any) {
     this.commentService = commentService
+    this.io = io
 
     this.createComment = this.createComment.bind(this)
     this.readComments = this.readComments.bind(this)
@@ -17,6 +20,7 @@ class CommentController {
       const sub = req.user.sub
       
       const comment = await this.commentService.createComment(text, boardId, sub)
+      this.io.to(boardId + '_comments').emit('create_comment', {comment})
       res.send(comment)
 
     } catch(error) {

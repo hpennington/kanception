@@ -448,21 +448,9 @@ const KanbanContainer = props => {
     }
   }
 
-  const onSubmitComment = async (text, board) => {
+  const onSubmitComment = async (comment, board) => {
     try {
 
-      const token = await getTokenSilently()
-      const url = process.env.REACT_APP_API + '/comments'
-        + '?text=' + text.replace(/\n/g, '%0A')
-        + '&board=' + board
-      const result = await fetch(url, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-
-      const comment = await result.json()
       props.dispatch(addComment({comment: comment}))
       props.dispatch(addCommentIcon({board: board}))
 

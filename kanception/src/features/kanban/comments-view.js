@@ -11,36 +11,56 @@ import './comments-view.css'
 const CommentsView = props => {
   const { getTokenSilently } = useAuth0()
 
-  useEffect(() => {
-    fetchComments()
 
+  useEffect(() => {
     getTokenSilently()
       .then(token => {
-        const socket = io.connect('ws://localhost:4000')
+
+        const socket = io.connect('ws://127.0.0.1:4000', {
+          "transports": ['websocket'],
+        })
+
+        socket.on('connect_error', (error) => {
+          console.log(error)
+        })
+
         socket.on('connect', () => {
-          socket.emit('authenticate', { token: token })
-          socket.send('message')
+          console.log('on connect')
+          socket.emit('authenticate_comments', { token: token, board: props.board })
+        })
+
+        socket.on('send_comments', (data) => {
+          console.log('send_comments')
+          console.log(data.comments)
+          props.dispatch(setComments({comments: data.comments}))
+        })
+        
+        socket.on('create_comment', (data) => {
+          console.log('test')
+          console.log({data})
+          const currentCommentIds = props.comments.map(comment => comment._id)
+          if (currentCommentIds.includes(data.comment._id) === false) {
+            props.onSubmitComment(data.comment, props.board)
+          }
         })
       })
     
   }, [props.board])
 
-  const fetchComments = async () => {
-    try {
-      const token = await getTokenSilently()
-      const url = process.env.REACT_APP_API + '/comments?board=' + props.board
-      const result = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+  const onSubmitComment = async text => {
+    const token = await getTokenSilently()
+    const url = process.env.REACT_APP_API + '/comments'
+      + '?text=' + text.replace(/\n/g, '%0A')
+      + '&board=' + props.board
+    const result = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
 
-      const comments = await result.json()
-      props.dispatch(setComments({comments: comments}))
-
-    } catch(error) {
-      console.log(error)
-    }
+    const comment = await result.json()
+    // await props.onSubmitComment(comment, props.board)
   }
 
   return (
@@ -79,7 +99,7 @@ const CommentsView = props => {
         <div className="comments-view-right">
           <h3>Comments</h3>
           
-          <CommentBoxSubmit onSubmit={props.onSubmitComment} />
+          <CommentBoxSubmit onSubmit={onSubmitComment} />
           <div className="comments-box">
           {
           props.comments && props.comments.map(

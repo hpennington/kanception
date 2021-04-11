@@ -5,7 +5,8 @@ import bodyParser = require('body-parser')
 import jwt = require('express-jwt')
 import jwks = require('jwks-rsa')
 import pg = require('pg')
-import socketioJwt = require('socketio-jwt');
+import socketioJwt = require('socketio-jwt')
+import jwt_decode from 'jwt-decode'
 
 // Repos
 import UserRepository from './app/repositories/sequelize/user-repository'
@@ -40,6 +41,44 @@ import SpaceController from './app/controllers/spaces'
 import UserController from './app/controllers/user'
 import TeamController from './app/controllers/team'
 import TeamInviteController from './app/controllers/team-invites'
+
+const devPort = 4000
+
+const authConfig = {
+  domain: 'kanception.auth0.com',
+  audience: 'https://kanception.auth0.com/api/v2/',
+}
+
+const expressSecretClient = jwks.expressJwtSecret({
+  cache: true,
+  rateLimit: true,
+  jwksRequestsPerMinute: 5,
+  jwksUri: `https://${authConfig.domain}/.well-known/jwks.json`
+})
+
+const jwtCheck = jwt({
+  secret: expressSecretClient,
+  audience: authConfig.audience,
+  issuer: `https://${authConfig.domain}/`,
+  algorithms: ['RS256'],
+  scope: 'openid profile email',
+})
+
+const app = express()
+
+// Middleware
+app.use(cors())
+app.use(bodyParser())
+app.use(express.json())
+app.use(jwtCheck)
+
+const httpServer = require("http").createServer(app);
+
+const io = require("socket.io")(httpServer, {
+  cors: {
+    origin: '*'
+  },
+})
 
 // Init repos 
 const userRepository = new UserRepository()
@@ -137,51 +176,13 @@ const userService = new UserService(
 // Init controllers
 const boardController = new BoardController(boardService)
 const assignmentController = new AssignmentController(assignmentService)
-const commentController = new CommentController(commentService)
+const commentController = new CommentController(commentService, io)
 const groupController = new GroupController(groupService)
 const projectController = new ProjectController(projectService) 
 const spaceController = new SpaceController(spaceService)
 const teamInviteController = new TeamInviteController(teamInviteService)
 const teamController = new TeamController(teamService)
 const userController = new UserController(userService)
-
-const devPort = 4000
-
-const authConfig = {
-  domain: 'kanception.auth0.com',
-  audience: 'https://kanception.auth0.com/api/v2/',
-}
-
-const secret = jwks.expressJwtSecret({
-  cache: true,
-  rateLimit: true,
-  jwksRequestsPerMinute: 5,
-  jwksUri: `https://${authConfig.domain}/.well-known/jwks.json`
-})
-
-const jwtCheck = jwt({
-  secret: secret,
-  audience: authConfig.audience,
-  issuer: `https://${authConfig.domain}/`,
-  algorithms: ['RS256'],
-  scope: 'openid profile email',
-})
-
-const app = express()
-
-// Middleware
-app.use(cors())
-app.use(bodyParser())
-app.use(express.json())
-app.use(jwtCheck)
-
-const httpServer = require("http").createServer(app);
-
-const io = require("socket.io")(httpServer, {
-  cors: {
-    origin: 'http://localhost:3000'
-  },
-})
 
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.json')[env];
@@ -206,16 +207,42 @@ if (env === 'production') {
   sequelize = new Sequelize(config.database, config.username, config.password, config);  
 }
 
+interface AuthToken {
+  iss: string,
+  sub: string,
+  aud: Array<string>,
+  iat: number,
+  exp, number,
+  azp: string,
+  scope: string,
+}
 
 (async () => {
   await sequelize.sync();
   
-  io.on('connection', socketioJwt.authorize({
-    secret: '',
-    timeout: 15000 // 15 seconds to send the authentication message
-  }))
-  .on('authenticated', (socket) => {
-    console.log(`hello! ${socket.decoded_token.name}`);
+  io.on('connection', (socket) => {
+    console.log('On connection')
+
+    socket.on('authenticate_comments', async (data) => {
+      const userInfo = jwt_decode<AuthToken>(data.token)
+      const sub = userInfo.sub
+      const boardId = data.board
+      
+      const user = await userRepository.findOne({sub: sub})
+      const board = await boardRepository.find(boardId)
+      const project = await projectRepository.find(board.project)
+      const space = await spaceRepository.findOne({_id: project.space})
+      const members = await memberRepository.findAll({team: space.team})
+      const memberIds = members.map(member => member.user)
+
+      if (memberIds.includes(user._id)) {
+        const room = boardId + '_comments'
+        socket.join(room)
+        const comments = await commentRepository.findAll({board: boardId})
+        socket.emit('send_comments', {comments})
+        
+      }
+    })
   })
 
   app.get('/comments', commentController.readComments)
