@@ -8,9 +8,6 @@ services:
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_USER: postgres
-  mongo:
-    container_name: 'mongo'
-    image: mongo
   kanception-api:
     container_name: 'kanception-api'
     build: ./api
