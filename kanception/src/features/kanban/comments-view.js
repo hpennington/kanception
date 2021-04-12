@@ -15,7 +15,7 @@ const CommentsView = props => {
     getTokenSilently()
       .then(token => {
 
-        const socket = io.connect('wss://api.kanception.io', {
+        const socket = io.connect(process.env.REACT_APP_API, {
           "transports": ['websocket'],
         })
 
@@ -28,15 +28,13 @@ const CommentsView = props => {
           socket.emit('authenticate_comments', { token: token, board: props.board })
         })
 
-        socket.on('send_comments', (data) => {
+        socket.on('send_comments', async (data) => {
           console.log('send_comments')
           console.log(data.comments)
-          props.dispatch(setComments({comments: data.comments}))
+          await props.dispatch(setComments({comments: data.comments}))
         })
         
         socket.on('create_comment', (data) => {
-          console.log('test')
-          console.log({data})
           const currentCommentIds = props.comments.map(comment => comment._id)
           if (currentCommentIds.includes(data.comment._id) === false) {
             props.onSubmitComment(data.comment, props.board)
@@ -127,4 +125,10 @@ const CommentsView = props => {
     )
 }
 
-export default connect()(CommentsView)
+const mapStateToProps = state => {
+  return {
+    comments: state.comments.comments,
+  }
+}
+
+export default connect(mapStateToProps)(CommentsView)
