@@ -11,7 +11,6 @@ import './comments-view.css'
 const CommentsView = props => {
   const { getTokenSilently } = useAuth0()
 
-
   useEffect(() => {
     getTokenSilently()
       .then(token => {
